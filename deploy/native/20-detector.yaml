@@ -1,0 +1,188 @@
+# Watermark detector: the reference detection server that ships with vLLM
+# (examples/basic/online_serving/watermark_detection_server.py, Apache-2.0), run
+# from the SAME image as the generator so the PRF/detector code matches exactly.
+# It needs no GPU and no model weights: only the tokenizer, the key, and the
+# context width used at generation. The script is embedded verbatim below so the
+# demo does not depend on the examples/ directory being present in the image.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: watermark-detector-src
+  namespace: watermark-demo
+data:
+  watermark_detection_server.py: |
+    # SPDX-License-Identifier: Apache-2.0
+    # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
+    
+    """Minimal reference server for watermark detection."""
+    
+    import argparse
+    
+    import uvicorn
+    from fastapi import FastAPI
+    from pydantic import BaseModel
+    
+    from vllm.tokenizers import TokenizerLike, cached_get_tokenizer
+    from vllm.v1.watermarking import GumbelWatermarkDetector
+    
+    app = FastAPI()
+    tokenizer: TokenizerLike | None = None
+    detector: GumbelWatermarkDetector | None = None
+    
+    
+    class DetectionRequest(BaseModel):
+        text: str
+    
+    
+    class DetectionResponse(BaseModel):
+        score: float
+        p_value: float
+        num_scored_tokens: int
+        is_watermarked: bool
+    
+    
+    @app.post("/detect")
+    def detect(request: DetectionRequest) -> DetectionResponse:
+        assert tokenizer is not None
+        assert detector is not None
+        token_ids = tokenizer.encode(request.text, add_special_tokens=False)
+        result = detector.detect(token_ids)
+        return DetectionResponse(
+            score=result.score,
+            p_value=result.p_value,
+            num_scored_tokens=result.num_scored_tokens,
+            is_watermarked=result.is_watermarked,
+        )
+    
+    
+    def parse_args() -> argparse.Namespace:
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument("--tokenizer", required=True)
+        parser.add_argument("--key", required=True, type=int)
+        parser.add_argument("--prf", choices=("philox",), default="philox")
+        parser.add_argument("--context-width", type=int, default=4)
+        parser.add_argument("--p-value-threshold", type=float, default=0.01)
+        parser.add_argument("--host", default="127.0.0.1")
+        parser.add_argument("--port", type=int, default=8000)
+        return parser.parse_args()
+    
+    
+    def main(args: argparse.Namespace) -> None:
+        global tokenizer, detector
+        tokenizer = cached_get_tokenizer(args.tokenizer)
+        detector = GumbelWatermarkDetector(
+            key=args.key,
+            context_width=args.context_width,
+            p_value_threshold=args.p_value_threshold,
+            prf=args.prf,
+        )
+        uvicorn.run(app, host=args.host, port=args.port)
+    
+    
+    if __name__ == "__main__":
+        main(parse_args())
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: watermark-detector
+  namespace: watermark-demo
+  labels:
+    app: watermark-detector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: watermark-detector
+  template:
+    metadata:
+      labels:
+        app: watermark-detector
+    spec:
+      # No nodeSelector or affinity: the detector needs no GPU and may land on any worker.
+      # In the recorded run the scheduler put it on a CPU worker because the GPU node did
+      # not exist yet. Add a nodeAffinity requiring `node-role.kubernetes.io/gpu` DoesNotExist
+      # if it must stay off the GPU node.
+      enableServiceLinks: false
+      containers:
+        - name: detector
+          image: vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 # tag: nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              exec python3 /app/watermark_detection_server.py
+              --tokenizer "$MODEL" --key "$WATERMARK_KEY" --context-width 4
+              --p-value-threshold 0.01 --host 0.0.0.0 --port 8080
+          env:
+            - name: MODEL
+              value: Qwen/Qwen2.5-1.5B-Instruct
+            - name: WATERMARK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: watermark-key
+                  key: WATERMARK_KEY
+            - name: HOME
+              value: /cache/home
+            - name: HF_HOME
+              value: /cache/hf
+            # No GPU on this pod: keep vLLM's platform probe quiet.
+            - name: CUDA_VISIBLE_DEVICES
+              value: ""
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "1"
+              memory: 3Gi
+            limits:
+              memory: 6Gi
+          volumeMounts:
+            - name: src
+              mountPath: /app
+            - name: cache
+              mountPath: /cache
+          readinessProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+            failureThreshold: 60
+      volumes:
+        - name: src
+          configMap:
+            name: watermark-detector-src
+        - name: cache
+          emptyDir:
+            sizeLimit: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: watermark-detector
+  namespace: watermark-demo
+spec:
+  selector:
+    app: watermark-detector
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# Internal-only by design in production (detection scores leak signal); exposed
+# here as a Route for the demo client. Delete the Route outside of the demo.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: watermark-detector
+  namespace: watermark-demo
+spec:
+  to:
+    kind: Service
+    name: watermark-detector
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

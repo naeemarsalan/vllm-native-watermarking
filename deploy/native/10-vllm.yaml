@@ -1,0 +1,144 @@
+# vLLM with native Gumbel-max text watermarking (upstream feature, PR #54053 / #56122).
+#
+# Image: upstream nightly build pinned by manifest-list digest. The tag encodes the
+# vLLM commit (cd10ed6f…, 2026-09-15), which contains both the base watermark
+# (merged 2026-09-10) and the dual-key/context-dedup follow-up (merged 2026-09-12).
+# Released v0.29.0 does NOT contain the feature; re-pin when the next stable ships.
+# Any replacement image must descend from the #56122 merge commit 7ee8a6dd (also tag
+# v0.29.1rc0): `gh api repos/vllm-project/vllm/compare/7ee8a6dd...<commit> --jq .status`
+# must print `ahead` or `identical` (that commit already contains #54053).
+#
+# The secret key never appears in this file: it is read from Secret `watermark-key`
+# (create it with: oc -n watermark-demo create secret generic watermark-key
+#   --from-env-file=cluster/gumbel-key.env --dry-run=client -o yaml | oc apply -f -
+#  so that re-runs update it) and spliced into --watermark-config by the shell
+# entrypoint. The key is an integer in [0, 2^64-1].
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-watermark
+  namespace: watermark-demo
+  labels:
+    app: vllm-watermark
+spec:
+  replicas: 1
+  # First start pulls the image (8.7 GB compressed on the wire, 21.8 GB unpacked on the
+  # node; 2026-09-16 measurement in EXPERIMENTS.md) and downloads the model: allow 30 min
+  # before the Deployment is marked ProgressDeadlineExceeded. Once it is, `oc rollout
+  # status` fails immediately until the pod is Ready; scripts/native-watermark-up.sh
+  # therefore falls back to `oc wait --for=condition=Available`.
+  progressDeadlineSeconds: 1800
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vllm-watermark
+  template:
+    metadata:
+      labels:
+        app: vllm-watermark
+    spec:
+      # Service names such as `vllm` would inject VLLM_PORT via service links and
+      # crash the engine; keep service links off regardless of naming.
+      enableServiceLinks: false
+      nodeSelector:
+        node-role.kubernetes.io/gpu: ""
+      # No-op on this cluster: scripts/create-gpu-machineset.sh labels the GPU node and adds
+      # no taint (the node had none on 2026-09-16). Kept for clusters whose GPU MachineSets
+      # taint their nodes nvidia.com/gpu:NoSchedule.
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 # tag: nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              exec vllm serve "$MODEL"
+              --host 0.0.0.0 --port 8000
+              --max-model-len 4096
+              --gpu-memory-utilization 0.85
+              --watermark-config "{\"algorithm\":\"gumbel\",\"key\":${WATERMARK_KEY}}"
+          env:
+            - name: MODEL
+              value: Qwen/Qwen2.5-1.5B-Instruct
+            - name: WATERMARK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: watermark-key
+                  key: WATERMARK_KEY
+            # restricted-v2 SCC runs the container as an arbitrary UID: HOME and the
+            # HF cache must point at a writable volume.
+            - name: HOME
+              value: /cache/home
+            - name: HF_HOME
+              value: /cache/hf
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              memory: 12Gi
+            requests:
+              nvidia.com/gpu: 1
+              cpu: "2"
+              memory: 8Gi
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+            - name: shm
+              mountPath: /dev/shm
+          # Model download + CUDA graph capture take minutes: generous startup probe,
+          # slow-but-tolerant liveness (watermark sampling is CPU-bound on load).
+          startupProbe:
+            httpGet: { path: /health, port: http }
+            periodSeconds: 10
+            failureThreshold: 90
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+      volumes:
+        - name: cache
+          emptyDir:
+            sizeLimit: 30Gi
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-watermark
+  namespace: watermark-demo
+spec:
+  selector:
+    app: vllm-watermark
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: vllm-watermark
+  namespace: watermark-demo
+spec:
+  to:
+    kind: Service
+    name: vllm-watermark
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

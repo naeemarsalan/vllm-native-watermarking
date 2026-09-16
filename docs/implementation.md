@@ -329,7 +329,7 @@ robustness/key-management work remain `OPEN` ([facts D2–D4 and D9–D10](facts
   regression and fuzz/stress execution recorded in [fact FZ1](facts.md). The changed
   runtime image has not been rebuilt or exercised on the cluster, and production
   workload sizing, GPU profiling, and broader adversarial robustness remain `OPEN`.
-- Compliance mapping doc: map the exact quoted Code language and sources in [`docs/quotes.md`](quotes.md) to what this implementation does (`OJ-VERBATIM` for the source text; implementation status tagged separately). The `EXPERIMENTS.md` log may contribute to required documentation only if it meets the applicable requirements; keep it audit-grade.
+- Compliance mapping doc: map the exact quoted Code language and sources in [`docs/quotes.md`](quotes.md) to what this implementation does (`OJ-VERBATIM` for the source text; implementation status tagged separately). The `EXPERIMENTS.md` log may contribute to required documentation only if it meets the applicable requirements; keep it audit-grade. **First version delivered 2026-08-11:** [`docs/compliance-map.md`](compliance-map.md) (obligation → status → evidence → verification command), backed by the executed local re-verification harness `scripts/verify-claims.py` (fact B25). Keep the map current with `facts.md` in the same commit as any status change; independent review of the map is still pending.
 
 **Acceptance status:** the D9 and D10 portions are met with command/raw evidence
 (`EXECUTED`; facts D9/D10 and the linked current-path and detector-rebuild records).

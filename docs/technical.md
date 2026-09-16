@@ -1,6 +1,6 @@
 # Technical landscape
 
-Verification tags per [`facts.md`](facts.md). Fetch dates: 2026-08-07/08.
+Verification tags per [`facts.md`](facts.md). Fetch dates: 2026-08-07/08; vendor-landscape addendum fetched 2026-08-13 (facts B26/B27).
 
 ## 1. vLLM's extension point
 
@@ -99,6 +99,8 @@ Cells are `STATIC`/`OFFICIAL-SRC` unless they explicitly say `EXECUTED` or
 - **SynthID-Text:** tournament sampling with trained Bayesian and untrained scoring options. It is Apache-2.0 and available in `transformers`; the cited production study reports a 20-million-response Gemini test and thumbs-rate changes of ±0.01–0.02 percentage points (`OFFICIAL-SRC`/`CORROBORATED`, B15). The repository's untrained weighted-mean scorer is `EXECUTED` (D8).
 - Gumbel/EXP, Unigram, DiPmark, SWEET, and other research algorithms are implemented in MarkLLM (`OFFICIAL-SRC`, B16); they are not current implementation targets (`STATIC`, package source).
 
+**Production-deployment landscape (updated 2026-08-13):** Anthropic announced that supported Claude models mark output — an imperceptible text watermark plus C2PA signed provenance metadata for generated .svg/.png/.jpg files — across its API, apps, Claude Code, and cloud-partner deployments, and states it has signed the EU AI Act's Article 50(2) Code of Practice (`OFFICIAL-SRC`, B26). Press coverage corroborates worldwide (not EU-only) application and reports roughly 190 Code of Practice signatories (`CORROBORATED`, B27). No algorithm, scheme, or public detector was published at the fetch date, so the mechanism is externally unverifiable and secondary-blog mechanism descriptions must not be cited (`OPEN`, B26/B27). Consequences for this repository's landscape facts: Gemini is no longer the only identified production text-watermark deployment (B15 uniqueness superseded), while B19's dated negative for self-hosted serving stacks stands — hosted frontier providers now ship text marking, but the reviewed self-hosted stacks still expose none, which remains the gap this repository addresses (B19/B20).
+
 **Known limitations and open questions:**
 
 1. **Entropy dependence.** The literature reports degradation in low-entropy settings such as greedy decoding, code, JSON, and structured output (`CORROBORATED`; arXiv 2405.14604 and 2506.06409). The recorded KGW delta-2 temperature-0 result is a model/configuration-specific `EXECUTED` exception (B18), and guided-JSON composition was executed only in the superseded delta≈4 window (B9).
@@ -127,3 +129,4 @@ That historical report says SynthID generation ran but detection was not attempt
 - "Scalable watermarking for identifying LLM outputs", Nature 634 (2024) — github.com/google-deepmind/synthid-text
 - arXiv 2303.11156 (paraphrase attacks) · arXiv 2508.20228 (SynthID back-translation) · arXiv 2303.13408 (retrieval defense) · arXiv 2405.14604 / 2506.06409 (low-entropy) · arXiv 2607.16010 (forensic-readiness outlier) · arXiv 2405.10051 (MarkLLM) · arXiv 2602.06754 (unified framework, eth-sri)
 - vLLM: docs.vllm.ai/en/latest/features/custom_logitsprocs/ · RFC #17799 · PRs #19912, #22919, #34400, #43672, #47585
+- Vendor landscape 2026-08-13: Anthropic, "How Claude marks AI-generated content" — support.claude.com/en/articles/16266773 (B26) · Euronews 2026-08-11 · The Next Web 2026-08-12 (B27)

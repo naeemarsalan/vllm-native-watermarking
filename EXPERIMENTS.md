@@ -4870,3 +4870,1139 @@ capped at 192 MiB; context history is capped at 16,384 tokens per row. The
 deployment resource constraints, not algorithmic compatibility or production
 capacity claims. The changed image has not been rebuilt or rerun on OpenShift;
 that deployment validation remains `OPEN`.
+
+## 2026-08-11 — Local re-verification harness: registered detection claims reproduce from committed corpora (EXECUTED)
+
+Adds `scripts/verify-claims.py` and `docs/compliance-map.md`. Purpose: make the
+registered detection evidence *independently re-derivable* — detection is a pure
+function of (text, tokenizer, key), the corpora behind the registered scheme
+comparison v2 table are committed, so every registered TPR/FPR/mean-z cell must
+reproduce bit-for-bit on local CPU with the detection key. It does.
+
+Environment: local workstation, Python 3.14.4, torch 2.9.1+cu128 (CPU),
+transformers 4.57.6 (same as B21). Key sourced from gitignored
+`cluster/watermark-key.env` (never printed). Tokenizer from local HF cache.
+
+### Recompute (exact registered invocation, fresh run)
+
+```
+$ set -a && . cluster/watermark-key.env && set +a && python3 benchmarks/compare_schemes.py \
+    --kgw-corpus benchmarks/data/corpus_kgw512_fixed.jsonl \
+    --synthid-corpus benchmarks/data/corpus_synthid512.jsonl \
+    --unwatermarked-corpus benchmarks/data/corpus_wm_off.jsonl \
+    --human-corpus benchmarks/data/human_corpus_512.jsonl \
+    --model-tokenizer Qwen/Qwen2.5-0.5B-Instruct \
+    --key-id poc-2026-08 \
+    --out <scratch>/scheme_reverify.md
+vllm_watermark import: sys.path fallback -> /home/anaeem/vllm-watermark/src (...)
+Scoring kgw corpus <- benchmarks/data/corpus_kgw512_fixed.jsonl (KGW detector)
+Scoring synthid corpus <- benchmarks/data/corpus_synthid512.jsonl (SynthID mean detector)
+Scoring unwatermarked corpus <- benchmarks/data/corpus_wm_off.jsonl (FPR, kgw det)
+Scoring unwatermarked corpus <- benchmarks/data/corpus_wm_off.jsonl (FPR, synthid det)
+Scoring human corpus <- benchmarks/data/human_corpus_512.jsonl (FPR, kgw det)
+Scoring human corpus <- benchmarks/data/human_corpus_512.jsonl (FPR, synthid det)
+wrote <scratch>/scheme_reverify.md
+wrote <scratch>/scheme_reverify.json
+```
+
+(~25 min wall clock, CPU-bound in KGW greenlist derivation.)
+
+### Assertion against the registered table
+
+```
+$ set -a && . cluster/watermark-key.env && set +a && python3 scripts/verify-claims.py --json <scratch>/scheme_reverify.json
+== 1. Corpus integrity (sha256 vs pinned values) ==
+  [PASS] benchmarks/data/corpus_kgw512_fixed.jsonl
+  [PASS] benchmarks/data/corpus_synthid512.jsonl
+  [PASS] benchmarks/data/corpus_wm_off.jsonl
+  [PASS] benchmarks/data/human_corpus_512.jsonl
+
+== 2. Registered-claim reproduction (vs EXPERIMENTS.md scheme comparison v2) ==
+  [PASS] kgw                          @200  n=120 mean_z=9.084 rate=0.9916666666666667
+  [PASS] kgw                          @256  n=116 mean_z=10.261 rate=1.0
+  [PASS] kgw                          @512  n=76 mean_z=14.317 rate=1.0
+  [PASS] synthid                      @200  n=120 mean_z=13.744 rate=1.0
+  [PASS] synthid                      @256  n=117 mean_z=15.651 rate=1.0
+  [PASS] synthid                      @512  n=96 mean_z=22.886 rate=1.0
+  [PASS] unwatermarked (kgw det)      @200  n=119 mean_z=-0.148 rate=0.0
+  [PASS] unwatermarked (kgw det)      @256  n=115 mean_z=-0.068 rate=0.0
+  [PASS] unwatermarked (kgw det)      @512  n=0 mean_z=None rate=None
+  [PASS] unwatermarked (synthid det)  @200  n=119 mean_z=-0.088 rate=0.0
+  [PASS] unwatermarked (synthid det)  @256  n=115 mean_z=-0.06 rate=0.0
+  [PASS] unwatermarked (synthid det)  @512  n=0 mean_z=None rate=None
+  [PASS] human (kgw det)              @200  n=150 mean_z=0.027 rate=0.0
+  [PASS] human (kgw det)              @256  n=150 mean_z=0.084 rate=0.0
+  [PASS] human (kgw det)              @512  n=150 mean_z=0.099 rate=0.0
+  [PASS] human (synthid det)          @200  n=150 mean_z=-0.087 rate=0.0
+  [PASS] human (synthid det)          @256  n=150 mean_z=-0.07 rate=0.0
+  [PASS] human (synthid det)          @512  n=150 mean_z=-0.098 rate=0.0
+
+ALL CHECKS PASSED (18/18 cells; source table: EXPERIMENTS.md 'Scheme comparison v2', 2026-08-08)
+```
+
+Corpus pins (sha256, also embedded in the script):
+```
+e65bef5b8c3eca9e36434150a238205c95ca65db51fb6d67a3ef66e6861a7c37  benchmarks/data/corpus_kgw512_fixed.jsonl
+54788b69476e5176707e18c4b27dc0c33544fdc2777dd1073ca0fbcd0bb45b69  benchmarks/data/corpus_synthid512.jsonl
+107ff38689f9904c877fc3eb01df56a946f6cb780a1a74ef34f2eeba7a61232e  benchmarks/data/corpus_wm_off.jsonl
+fbd9e945129d3ec2c504914d571a855d1cde98384c2acc1ce9599b1fc5d769b6  benchmarks/data/human_corpus_512.jsonl
+```
+
+### Demo mode (stakeholder-facing, seconds)
+
+```
+$ set -a && . cluster/watermark-key.env && set +a && python3 scripts/verify-claims.py --demo
+KGW detector demo — threshold z >= 4.0, key_id=poc-2026-08
+sample                                       tokens        z  verdict
+watermarked (corpus_kgw512_fixed row 0)         512   12.817  WATERMARK DETECTED   [text elided sha256:64b551969b24]
+human (human_corpus_512 row 0)                  512   -0.935  not detected   [text elided sha256:510da11ac1b0]
+```
+
+Note: the elided watermarked-sample digest `64b551969b24` is the same digest
+recorded in the NeMo PoC evidence transcript above (`http_checks5.py`, kgw
+sample) — the demo demonstrably runs on the registered evidence corpus.
+
+Scope: this reproduces *detection scoring* from committed corpora. It does not
+re-execute generation (`vllm serve`), which remains cluster evidence (D1/D8).
+Third-party reproduction requires the detection key by construction (keyed
+watermarking); detector-access conditions remain A14 (`OPEN`, counsel).
+
+
+## 2026-09-16 — Native Gumbel-max watermarking end-to-end on a fresh cluster (EXECUTED; redacted)
+
+**Purpose.** First execution of vLLM's native text watermarking (upstream PR #54053 merged
+2026-09-10 + #56122 merged 2026-09-12; not in any released vLLM as of this date) on a freshly
+provisioned OpenShift cluster, as the evidence base for
+[`docs/guide-native-watermarking.md`](docs/guide-native-watermarking.md). Everything below ran
+from this workstation against the cluster; secrets (AWS credentials, kubeadmin password, the
+watermark key) are redacted as `<redacted>`, the sandbox base domain as
+`<redacted-sandbox-domain>` and Route hosts as `<route>`. Assets: `deploy/native/*.yaml`,
+`scripts/native-watermark-up.sh`, `scripts/native-watermark-demo.py`.
+
+**Environment.** New AWS sandbox (base domain `<redacted-sandbox-domain>`); cluster `ocp-ai`
+created with `openshift-install create cluster --dir cluster` (installer 4.20.27, region
+us-east-1, 3× m6i.xlarge control plane, 2× m6i.xlarge workers; `Install complete` after
+`Time elapsed: 45m43s`). GPU node added with `GPU_REPLICAS=1 ./scripts/create-gpu-machineset.sh`
+(g5.xlarge, A10G); NFD + NVIDIA GPU Operator via `./scripts/install-gpu-operators.sh`.
+Image: `vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6`
+(tag `nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3`, CUDA 13.0.2; amd64 image-manifest digest
+`sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8`, the pod's Image ID).
+Model: `Qwen/Qwen2.5-1.5B-Instruct`. Key: 64-bit integer generated with `secrets.randbits(64)`
+into gitignored `cluster/gumbel-key.env`, delivered as Secret `watermark-key`.
+
+### Cluster facts (raw)
+
+```
+$ oc version
+Server Version: 4.20.27
+Kubernetes Version: v1.33.12
+$ oc get clusterversion
+NAME      VERSION   AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.20.27   True        False         6m58s   Cluster version is 4.20.27
+$ oc get nodes -L node.kubernetes.io/instance-type,nvidia.com/gpu.product,nvidia.com/cuda.driver-version.full,nvidia.com/cuda.runtime-version.full
+NAME                           STATUS   ROLES                  AGE     VERSION    INSTANCE-TYPE   GPU.PRODUCT   CUDA.DRIVER-VERSION.FULL   CUDA.RUNTIME-VERSION.FULL
+ip-10-0-150-204.ec2.internal   Ready    worker                 26m     v1.33.12   m6i.xlarge                                               
+ip-10-0-21-8.ec2.internal      Ready    control-plane,master   34m     v1.33.12   m6i.xlarge                                               
+ip-10-0-26-129.ec2.internal    Ready    gpu,worker             7m26s   v1.33.12   g5.xlarge       NVIDIA-A10G   595.91.07                  13.2
+ip-10-0-55-253.ec2.internal    Ready    control-plane,master   33m     v1.33.12   m6i.xlarge                                               
+ip-10-0-88-133.ec2.internal    Ready    control-plane,master   33m     v1.33.12   m6i.xlarge                                               
+ip-10-0-98-150.ec2.internal    Ready    worker                 26m     v1.33.12   m6i.xlarge                                               
+$ oc get csv -A | grep -E 'nfd|gpu'
+nvidia-gpu-operator                    gpu-operator-certified.v26.7.0   NVIDIA GPU Operator               26.7.0                gpu-operator-certified.v26.3.3   Succeeded
+openshift-nfd                          nfd.4.20.0-202609091330          Node Feature Discovery Operator   4.20.0-202609091330                                    Succeeded
+$ oc -n nvidia-gpu-operator get pods
+NAME                                           READY   STATUS      RESTARTS      AGE
+gpu-feature-discovery-scjzh                    1/1     Running     0             6m30s
+gpu-operator-7c7f969b75-wcrgb                  1/1     Running     0             10m
+nvidia-container-toolkit-daemonset-rwrm9       1/1     Running     0             6m33s
+nvidia-cuda-validator-gw4nf                    0/1     Completed   0             82s
+nvidia-dcgm-exporter-9t9cf                     0/1     Running     2 (38s ago)   6m31s
+nvidia-dcgm-sjfkb                              1/1     Running     0             6m31s
+nvidia-device-plugin-daemonset-2mzck           1/1     Running     0             6m32s
+nvidia-driver-daemonset-9.6.20260623-0-mz4mv   2/2     Running     0             6m33s
+nvidia-node-status-exporter-szqn5              1/1     Running     0             6m29s
+nvidia-operator-validator-8hb84                1/1     Running     0             6m32s
+$ oc -n openshift-machine-api get machineset
+NAME                             DESIRED   CURRENT   READY   AVAILABLE   AGE
+ocp-ai-wg9fl-gpu-us-east-1a      1         1         1       1           11m
+ocp-ai-wg9fl-worker-us-east-1a   0         0                             35m
+ocp-ai-wg9fl-worker-us-east-1b   0         0                             35m
+ocp-ai-wg9fl-worker-us-east-1c   0         0                             35m
+ocp-ai-wg9fl-worker-us-east-1d   1         1         1       1           35m
+ocp-ai-wg9fl-worker-us-east-1f   1         1         1       1           35m
+```
+
+### Deploy (raw)
+
+The first `oc apply` of the manifests happened while the GPU node was still booting (to
+overlap image pulls); the script run below is the recorded, idempotent path. Its rollout wait
+for vLLM hit the Deployment's default 600 s progress deadline because the first start pulls
+the image (8.7 GB compressed on the wire, 21.8 GB unpacked on the node; measured below) and
+downloads the model; `progressDeadlineSeconds: 1800` was added to
+`deploy/native/10-vllm.yaml` afterwards and re-applied (no pod restart, spec-level field).
+The script's `set -e` made it exit 1 at that point, before the Route URLs were printed; the
+`oc rollout status` / `oc wait` fallback added to the script afterwards has not been run on a
+fresh start (see "Startup timing" below for the read-only checks that were run).
+
+```
+$ ./scripts/native-watermark-up.sh
+namespace/watermark-demo unchanged
+secret/watermark-key configured
+deployment.apps/vllm-watermark configured
+service/vllm-watermark unchanged
+route.route.openshift.io/vllm-watermark unchanged
+configmap/watermark-detector-src unchanged
+deployment.apps/watermark-detector configured
+service/watermark-detector unchanged
+route.route.openshift.io/watermark-detector unchanged
+Waiting for the detector (CPU) and vLLM (GPU; first start downloads the model) ...
+deployment "watermark-detector" successfully rolled out
+Waiting for deployment "vllm-watermark" rollout to finish: 0 of 1 updated replicas are available...
+error: deployment "vllm-watermark" exceeded its progress deadline
+exit=1
+```
+
+vLLM engine startup lines (`oc -n watermark-demo logs deploy/vllm-watermark`, filtered):
+
+```
+(APIServer pid=1) INFO 09-16 05:20:50 [api_utils.py:286] non-default args: {'model_tag': 'Qwen/Qwen2.5-1.5B-Instruct', 'host': '0.0.0.0', 'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'max_model_len': 4096, 'gpu_memory_utilization': 0.85, 'watermark_config': '***'}
+(EngineCore pid=75) INFO 09-16 05:21:38 [core.py:123] Initializing a V1 LLM engine (v0.29.1rc1.dev128+gcd10ed6f9) with config: model='Qwen/Qwen2.5-1.5B-Instruct', speculative_config=None, tokenizer='Qwen/Qwen2.5-1.5B-Instruct', sk
+(EngineCore pid=75) INFO 09-16 05:21:42 [gpu_worker.py:441] Using V2 Model Runner
+(EngineCore pid=75) INFO 09-16 05:22:12 [default_loader.py:430] Loading weights took 5.48 seconds
+(EngineCore pid=75) INFO 09-16 05:22:46 [model_runner.py:1069] Graph capturing finished in 4 secs, took 0.30 GiB
+(EngineCore pid=75) INFO 09-16 05:22:49 [watermark_sample_warmup.py:130] Warming up watermark sampler kernel (vocab=151936, keys=1, dtypes=['torch.bfloat16', 'torch.float32'], skip_mask=[True]).
+(EngineCore pid=75) INFO 09-16 05:23:13 [model_runner.py:1069] Graph capturing finished in 5 secs, took 0.20 GiB
+(APIServer pid=1) WARNING 09-16 05:23:17 [model.py:1772] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.1, 'temperature': 0.7, 'top_k': 20, 'top_p': 0.8}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+(APIServer pid=1) INFO:     Waiting for application startup.
+(APIServer pid=1) INFO:     Application startup complete.
+```
+
+Pulled image: `docker.io/vllm/vllm-openai@sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8`.
+Detector pod logs ended with `Uvicorn running on http://0.0.0.0:8080`; its startup probe failed
+once (`connection refused`) while the vLLM import completed, then passed.
+
+### Startup timing, image size, wait semantics (raw; captured 2026-09-16 09:07–09:12Z from the same pod, restarts=0)
+
+Measured post hoc from the kubelet-recorded pod status and timestamped logs of the pod that
+served every run above. The namespace's Events had already been garbage-collected
+(`oc -n watermark-demo get events` → 0 items), so the kubelet `Pulled` event with the exact
+pull duration could not be recorded; the pull is bounded below by PodScheduled → container start.
+
+```
+$ oc -n watermark-demo get pod -l app=vllm-watermark -o jsonpath='{.items[0].metadata.name}'
+vllm-watermark-7dc9fb8f79-rzgxw
+$ oc -n watermark-demo get pod vllm-watermark-7dc9fb8f79-rzgxw -o jsonpath='{"created="}{.metadata.creationTimestamp}{"\n"}{range .status.conditions[*]}{.type}{"="}{.status}{" @"}{.lastTransitionTime}{"\n"}{end}{"containerStarted="}{.status.containerStatuses[0].state.running.startedAt}{"\nrestarts="}{.status.containerStatuses[0].restartCount}{"\nimageID="}{.status.containerStatuses[0].imageID}{"\nnode="}{.spec.nodeName}{"\n"}'
+created=2026-09-16T05:06:02Z
+PodReadyToStartContainers=True @2026-09-16T05:20:02Z
+Initialized=True @2026-09-16T05:15:13Z
+Ready=True @2026-09-16T05:23:24Z
+ContainersReady=True @2026-09-16T05:23:24Z
+PodScheduled=True @2026-09-16T05:15:13Z
+containerStarted=2026-09-16T05:20:01Z
+restarts=0
+imageID=docker.io/vllm/vllm-openai@sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8
+node=ip-10-0-26-129.ec2.internal
+$ oc -n watermark-demo get deploy vllm-watermark -o jsonpath='{"progressDeadlineSeconds="}{.spec.progressDeadlineSeconds}{"\n"}{range .status.conditions[*]}{.type}{"="}{.status}{" reason="}{.reason}{" @"}{.lastTransitionTime}{"\n"}{end}'
+progressDeadlineSeconds=1800
+Available=True reason=MinimumReplicasAvailable @2026-09-16T05:23:24Z
+Progressing=True reason=NewReplicaSetAvailable @2026-09-16T05:23:24Z
+$ oc -n watermark-demo logs deploy/vllm-watermark --timestamps | grep -i 'application startup'
+2026-09-16T05:23:17.406020278Z (APIServer pid=1) INFO:     Waiting for application startup.
+2026-09-16T05:23:17.718321517Z (APIServer pid=1) INFO:     Application startup complete.
+```
+
+Derived: pod created → scheduled (waiting for the GPU node) 9 min 11 s; scheduled → container
+started (image pull and sandbox) 4 min 48 s; container started → `Application startup complete`
+3 min 17 s; → pod Ready 3 min 23 s (10 s readiness probe period); created → Ready 17 min 22 s.
+The 600 s default progress deadline (clock from Deployment creation) therefore fired while the
+pod was still Pending.
+
+Image size (the manifest pins the manifest-list digest; the node stores the amd64 manifest):
+
+```
+$ skopeo inspect --raw docker://vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 | jq -r '.manifests[]|"\(.platform.os)/\(.platform.architecture) \(.digest)"'
+linux/arm64 sha256:c24efc18b169ee882463b01e20d17581f5ea3d953050eb9fb6a041711da0b88e
+linux/amd64 sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8
+$ skopeo inspect --raw docker://vllm/vllm-openai@sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8 | jq '{layers:(.layers|length), compressed_bytes:([.layers[].size]|add)}'
+{"layers": 37, "compressed_bytes": 8708612941}
+$ oc get node ip-10-0-26-129.ec2.internal -o json | python3 -c 'import json,sys; n=json.load(sys.stdin); [print(i["sizeBytes"], [x for x in i["names"] if "vllm-openai" in x]) for i in n["status"]["images"] if any("vllm-openai" in x for x in i["names"])]'
+21776624330 ['docker.io/vllm/vllm-openai@sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8', 'docker.io/vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6']
+```
+
+So 8.71 GB compressed over the wire, 21.78 GB unpacked on the node.
+
+CUDA toolkit of the image, from the image config (captured 2026-09-16 11:29Z; the source of
+the "CUDA 13.0.2" figure in the Environment paragraph and fact E3, and of the image's declared
+driver requirement that the guide's section 2 cites; the long `NVIDIA_REQUIRE_CUDA` brand list
+is truncated after its first clauses):
+
+```
+$ skopeo inspect --config docker://vllm/vllm-openai@sha256:0a329f66a92e19ad8c8e9b9a17bda6ecf70b1a8dcfd9c735360a251ce870d0d8 | jq -r '.config.Env[]' | grep -E '^(CUDA_VERSION|NV_CUDA_CUDART_VERSION|NVIDIA_REQUIRE_CUDA)='
+NVIDIA_REQUIRE_CUDA=cuda>=13.0 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 …
+NV_CUDA_CUDART_VERSION=13.0.96-1
+CUDA_VERSION=13.0.2
+```
+
+Wait semantics (read-only, against the now-Ready Deployment; the guide's statement that
+`oc rollout status` fails immediately while the Progressing reason is ProgressDeadlineExceeded
+is STATIC from kubectl `pkg/polymorphichelpers/rollout_status.go` L75-79 and kubernetes
+`pkg/controller/deployment/util/deployment_util.go` `DeploymentTimedOut`, release-1.33, not
+re-executed here):
+
+```
+$ oc version --client | head -1
+Client Version: 4.19.0-202511102034.p2.gb61226d.assembly.stream.el9-b61226d
+$ oc -n watermark-demo wait --for=condition=Available deployment/vllm-watermark --timeout=10s; echo "exit=$?"
+deployment.apps/vllm-watermark condition met
+exit=0
+$ oc -n watermark-demo rollout status deployment/vllm-watermark --timeout=10s; echo "exit=$?"
+deployment "vllm-watermark" successfully rolled out
+exit=0
+$ oc -n watermark-demo wait --for=condition=Bogus deployment/vllm-watermark --timeout=3s; echo "exit=$?"   # 2026-09-16 11:27Z: message form of the script's fallback wait when it expires (a condition the Deployment does not carry, so it must time out)
+error: timed out waiting for the condition on deployments/vllm-watermark
+exit=1
+$ oc diff -f deploy/native/10-vllm.yaml >/dev/null; echo "exit=$?"; oc diff -f deploy/native/20-detector.yaml >/dev/null; echo "exit=$?"
+exit=0
+exit=0
+```
+
+(`oc diff` exit 0 = the live objects match the manifests; a re-run of the script would change
+nothing.) Local check backing the guide's KUBECONFIG note (`~/.kube/config` exists on this
+workstation):
+
+```
+$ KUBECONFIG=/tmp/claude-1000/does-not-exist/kubeconfig oc get pods; echo "exit=$?"
+error: Missing or incomplete configuration info.  Please point to an existing, complete config file:
+exit=1
+$ KUBECONFIG=/tmp/claude-1000/does-not-exist/kubeconfig bash scripts/native-watermark-up.sh; echo "exit=$?"   # 2026-09-16 11:29Z: the deploy script pre-checks the file and never reaches oc
+KUBECONFIG=/tmp/claude-1000/does-not-exist/kubeconfig not found; export KUBECONFIG=<your kubeconfig> (oc does not fall back to ~/.kube/config)
+exit=2
+```
+
+ConfigMap detector script vs the upstream example at the pinned commit:
+
+```
+$ python3 - <<'EOF'
+import yaml,subprocess,base64
+cm=list(yaml.safe_load_all(open('deploy/native/20-detector.yaml')))[0]
+local=cm['data']['watermark_detection_server.py']
+up=base64.b64decode(subprocess.run(['gh','api','repos/vllm-project/vllm/contents/examples/basic/online_serving/watermark_detection_server.py?ref=cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3','--jq','.content'],capture_output=True,text=True).stdout).decode()
+print('identical:', local==up, 'local_lines:', local.count('\n'), 'upstream_lines:', up.count('\n'))
+EOF
+identical: True local_lines: 70 upstream_lines: 70
+```
+
+The same comparison with `diff` and `cmp` (2026-09-16 11:29Z; the guide's "`diff` and `cmp` …
+no differences" wording refers to this run), plus the live ConfigMap's copy:
+
+```
+$ python3 -c 'import yaml; cm=list(yaml.safe_load_all(open("deploy/native/20-detector.yaml")))[0]; open("local_det.py","w").write(cm["data"]["watermark_detection_server.py"])'
+$ gh api "repos/vllm-project/vllm/contents/examples/basic/online_serving/watermark_detection_server.py?ref=cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3" --jq .content | base64 -d > up_det.py
+$ diff local_det.py up_det.py; echo "exit=$?"
+exit=0
+$ cmp local_det.py up_det.py; echo "exit=$?"
+exit=0
+$ wc -l local_det.py up_det.py
+  70 local_det.py
+  70 up_det.py
+ 140 total
+$ sha256sum local_det.py up_det.py
+c81cc8e72555aee527dd40a4ec88db48ef547d40bf29c4d7ee3c0a6e386f338e  local_det.py
+c81cc8e72555aee527dd40a4ec88db48ef547d40bf29c4d7ee3c0a6e386f338e  up_det.py
+$ oc -n watermark-demo get configmap watermark-detector-src -o jsonpath='{.data.watermark_detection_server\.py}' | sha256sum
+c81cc8e72555aee527dd40a4ec88db48ef547d40bf29c4d7ee3c0a6e386f338e  -
+```
+
+Checks on the script edits made during this verification pass (deploy script: `KUBECONFIG`
+existence check, `oc rollout status` → `oc wait --for=condition=Available` fallback with
+diagnostics, vLLM timeout 35m; demo script: fail-fast on missing `--prompts`/`--human-jsonl`/
+`--human-text`). Not a fresh-start run of the deploy script:
+
+```
+$ bash -n scripts/native-watermark-up.sh && echo "bash -n ok"
+bash -n ok
+$ python3 -m py_compile scripts/native-watermark-demo.py && echo "py_compile ok"
+py_compile ok
+$ python3 scripts/native-watermark-demo.py --vllm-url x --detector-url y --human-jsonl /nonexistent.jsonl 2>&1 | tail -1
+native-watermark-demo.py: error: --human-jsonl /nonexistent.jsonl: file not found (generate it with benchmarks/fetch_human_corpus.py or omit the flag)
+```
+
+Further script edits after the review of the guide (2026-09-16 11:29–11:41Z): the deploy script
+now runs under `set -Eeuo pipefail` and requires the key file to have exactly one non-blank,
+non-comment line, matching `^WATERMARK_KEY=[0-9]+$`; the demo script's `--seed` help says it
+steers only positions sampled without the watermark. Why `-E`: without errtrace bash does not
+run the ERR trap for a command that fails inside a function, so `on_fail` (the pod list and log
+tail) would never print when `wait_for` fails. Local repro, GNU bash 5.3.0:
+
+```
+$ cat trap.sh
+set -euo pipefail
+wait_for() { false || false; }
+on_fail() { echo "on_fail ran"; }
+trap on_fail ERR
+wait_for
+echo "not reached"
+$ bash trap.sh; echo "exit=$?"
+exit=1
+$ sed 's/set -euo pipefail/set -Eeuo pipefail/' trap.sh > trap_E.sh; bash trap_E.sh; echo "exit=$?"
+on_fail ran
+exit=1
+```
+
+Key-file check: the `if` block now in `scripts/native-watermark-up.sh` (extracted with `sed`,
+wrapped in `set -euo pipefail; key_file="$1"` … `echo accept`) against nine synthetic files; the
+previous check, `grep -qE '^WATERMARK_KEY=[0-9]+$'`, accepted `extra`, `dup` and `comment` too.
+`grep` resolves to GNU grep 3.12 in a non-interactive bash on this workstation; the results were
+the same under ugrep 7.8.4. The real `cluster/gumbel-key.env` is accepted (`accept`, exit 0):
+
+```
+$ printf 'WATERMARK_KEY=123\n' > one.env; printf 'WATERMARK_KEY=123' > nonewline.env; printf 'WATERMARK_KEY=123\n\n' > trailingblank.env; printf '# comment\n\nWATERMARK_KEY=123\n' > comment.env; printf 'WATERMARK_KEY=123\nEXTRA=oops\n' > extra.env; printf 'WATERMARK_KEY=1\nWATERMARK_KEY=2\n' > dup.env; printf 'FOO=bar\n' > nokey.env; : > empty.env; printf 'WATERMARK_KEY=abc\n' > nonint.env
+$ sed -n '/^# oc --from-env-file/,/^fi/p' scripts/native-watermark-up.sh
+# oc --from-env-file skips blank and #-comment lines; every other line must be the single key line.
+if [[ $(grep -cvE '^[[:space:]]*(#|$)' "$key_file") -ne 1 ]] \
+   || ! grep -qE '^WATERMARK_KEY=[0-9]+$' "$key_file"; then
+  echo "$key_file must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>" >&2
+  exit 2
+fi
+$ for f in one nonewline trailingblank comment extra dup nokey empty nonint; do printf '%-14s ' $f; bash keycheck_real.sh $f.env 2>&1 | tr -d '\n'; echo "  exit=${PIPESTATUS[0]}"; done
+one            accept  exit=0
+nonewline      accept  exit=0
+trailingblank  accept  exit=0
+comment        accept  exit=0
+extra          extra.env must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>  exit=2
+dup            dup.env must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>  exit=2
+nokey          nokey.env must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>  exit=2
+empty          empty.env must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>  exit=2
+nonint         nonint.env must contain exactly one non-comment line: WATERMARK_KEY=<non-negative integer>  exit=2
+$ for f in one nonewline trailingblank comment extra dup nokey empty nonint; do printf '%-14s ' $f; if grep -qE '^WATERMARK_KEY=[0-9]+$' $f.env; then echo PASSES; else echo rejected; fi; done   # the previous check
+one            PASSES
+nonewline      PASSES
+trailingblank  PASSES
+comment        PASSES
+extra          PASSES
+dup            PASSES
+nokey          rejected
+empty          rejected
+nonint         rejected
+$ bash -n scripts/native-watermark-up.sh && echo "bash -n ok"
+bash -n ok
+$ python3 -m py_compile scripts/native-watermark-demo.py && echo "py_compile ok"
+py_compile ok
+$ oc diff -f deploy/native/10-vllm.yaml >/dev/null; echo "exit=$?"; oc diff -f deploy/native/20-detector.yaml >/dev/null; echo "exit=$?"   # 11:41Z, after adding comments to both manifests: still no drift
+exit=0
+exit=0
+```
+
+### Route TLS (raw)
+
+A fresh cluster's Routes use the self-signed ingress CA, so `curl` and Python fail
+verification until that CA is trusted. Extracting it:
+
+```
+$ oc -n openshift-ingress-operator get secret router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > cluster/router-ca.crt
+$ openssl x509 -in cluster/router-ca.crt -noout -subject -issuer -dates
+subject=CN=ingress-operator@1789533950
+issuer=CN=ingress-operator@1789533950
+notBefore=Sep 16 04:45:49 2026 GMT
+notAfter=Sep 15 04:45:50 2028 GMT
+$ curl -sS --cacert cluster/router-ca.crt -w '\nhttp=%{http_code}\n' $VLLM/v1/models
+{"object":"list","data":[{"id":"Qwen/Qwen2.5-1.5B-Instruct","object":"model","created":1789549679,"owned_by":"vllm","root":"Qwen/Qwen2.5-1.5B-Instruct","parent":null,"max_model_len":4096,"permission":[{"id":"modelperm-afb3d832013d592d","object":"model_permission","created":1789549679,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}
+http=200
+$ curl -sS --cacert cluster/router-ca.crt $VLLM/v1/models | python3 -c 'import json,sys; print([m["id"] for m in json.load(sys.stdin)["data"]])'
+['Qwen/Qwen2.5-1.5B-Instruct']
+```
+
+Correction before commit: the `/v1/models` line first written here was a hand-written paraphrase
+(`{"object": "list", "models": [...]}`), not command output; the response above was re-captured
+2026-09-16 09:07Z from the same pod. `created` and `permission[].id` are regenerated on every
+request, so those two values differ between captures.
+
+### 4.1 hand steps (raw)
+
+Detector smoke with a human sentence, then one watermarked completion and one opt-out
+completion for the same prompt, each scored by the detector:
+
+```
+$ curl -sS --cacert cluster/router-ca.crt -w ' http=%{http_code}\n' $DET/detect -H 'Content-Type: application/json' -d '{"text":"It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."}'
+{"score":19.542122906190592,"p_value":0.9070642274102403,"num_scored_tokens":26,"is_watermarked":false} http=200
+
+### 4.1 generate (watermarked, default)
+$ curl -s --cacert cluster/router-ca.crt $VLLM/v1/chat/completions -H 'Content-Type: application/json' -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","messages":[{"role":"user","content":"Explain how vaccines train the immune system."}],"max_tokens":300,"temperature":1.0,"top_p":1.0}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["choices"][0]["message"]["content"])' > wm.txt
+usage: {"prompt_tokens": 38, "total_tokens": 338, "completion_tokens": 300, "prompt_tokens_details": null, "completion_tokens_details": null}
+$ wc -w wm.txt; head -c 500 wm.txt
+228 wm.txt
+Vaccines work by teaching the immune system how to recognize and attack specific viruses or bacteria without actually causing disease. Here's a simplified explanation of how this happens:
+
+1. **Antigen Exposure**: The vaccine contains small pieces of the virus (antigens) that make up its outer coat. When an individual is vaccinated, these antigens enter their body.
+
+2. **Recognition**: Because the antigens resemble parts of the real virus inside host cells, they trigger an immediate response fro
+...
+$ python3 -c 'import json; print(json.dumps({"text": open("wm.txt").read()}))' | curl -s --cacert cluster/router-ca.crt $DET/detect -H 'Content-Type: application/json' -d @-
+{"score":617.807335901951,"p_value":2.704772159904535e-46,"num_scored_tokens":300,"is_watermarked":true}
+
+### 4.1 generate (opt-out: watermarking=false)
+$ curl -s --cacert cluster/router-ca.crt $VLLM/v1/chat/completions -H 'Content-Type: application/json' -d '{... same ..., "watermarking": false}' | python3 -c '...' > plain.txt
+usage: {"prompt_tokens": 38, "total_tokens": 338, "completion_tokens": 300, "prompt_tokens_details": null, "completion_tokens_details": null}
+$ wc -w plain.txt; head -c 300 plain.txt
+230 plain.txt
+Vaccines work to train the body's immune system in several ways so that if it encounters a real threat later, it can recognize and defend against it more effectively.
+
+1. **Antigen Presentation**: When a vaccine is administered, weakened forms or whole pathogens (viruses, bacteria, etc.) of the dise
+...
+$ python3 -c 'import json; print(json.dumps({"text": open("plain.txt").read()}))' | curl -s --cacert cluster/router-ca.crt $DET/detect -H 'Content-Type: application/json' -d @-
+{"score":317.3888859925337,"p_value":0.17178151881976203,"num_scored_tokens":301,"is_watermarked":false}
+```
+
+### 4.2 / 4.3 demo-script runs (raw)
+
+```
+### run A: T=1.0 top_p=1.0, n=10, human n=50
+$ python3 scripts/native-watermark-demo.py --vllm-url $VLLM --detector-url $DET --cacert cluster/router-ca.crt --n 10 --max-tokens 300 --temperature 1.0 --top-p 1.0 --human-jsonl benchmarks/data/human_corpus.jsonl --human-n 50 --json-out native-demo-t1.json
+vLLM: <route>  model: Qwen/Qwen2.5-1.5B-Instruct
+detector: <route>
+sampling: temperature=1.0 top_p=1.0 max_tokens=300
+
+[1/10] Explain how vaccines train the immune system to recognize pathogens it has never encounter
+  watermarked    tokens= 300  scored= 300  score=   622.52  p=2.342e-47  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   320.48  p=1.198e-01  -> not detected
+[2/10] Explain why the night sky is dark even though the universe contains an enormous number of 
+  watermarked    tokens= 300  scored= 300  score=   740.07  p=5.242e-76  -> WATERMARKED
+  opt-out        tokens= 272  scored= 271  score=   250.95  p=8.904e-01  -> not detected
+[3/10] Explain how compound interest can turn small, regular savings into significant wealth over
+  watermarked    tokens= 300  scored= 298  score=   446.12  p=3.553e-14  -> WATERMARKED
+  opt-out        tokens= 300  scored= 284  score=   309.29  p=6.974e-02  -> not detected
+[4/10] Explain the difference between weather and climate, and why one unusually cold winter does
+  watermarked    tokens= 300  scored= 300  score=   726.35  p=1.791e-72  -> WATERMARKED
+  opt-out        tokens= 293  scored= 292  score=   288.15  p=5.820e-01  -> not detected
+[5/10] Explain how a criminal trial in a common-law system moves from arrest to verdict.
+  watermarked    tokens= 300  scored= 300  score=   628.54  p=1.003e-48  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   295.98  p=5.847e-01  -> not detected
+[6/10] Explain why some metals conduct electricity so much better than others.
+  watermarked    tokens= 172  scored= 170  score=   354.48  p=3.804e-28  -> WATERMARKED
+  opt-out        tokens= 282  scored= 281  score=   302.62  p=1.007e-01  -> not detected
+[7/10] Explain how search engines decide which web pages to show first for a given query.
+  watermarked    tokens= 300  scored= 300  score=   631.73  p=1.861e-49  -> WATERMARKED
+  opt-out        tokens= 290  scored= 289  score=   308.91  p=1.221e-01  -> not detected
+[8/10] Explain why yeast makes bread dough rise and how that process changes the texture of the f
+  watermarked    tokens= 300  scored= 300  score=   665.92  p=1.762e-57  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   287.96  p=7.534e-01  -> not detected
+[9/10] Explain how tectonic plates move and why their motion causes earthquakes along certain fau
+  watermarked    tokens= 300  scored= 299  score=   662.83  p=4.360e-57  -> WATERMARKED
+  opt-out        tokens= 300  scored= 299  score=   299.67  p=4.769e-01  -> not detected
+[10/10] Explain how astronomers can detect a black hole even though no light escapes it.
+  watermarked    tokens= 296  scored= 295  score=   670.77  p=2.026e-60  -> WATERMARKED
+  opt-out        tokens= 300  scored= 299  score=   308.90  p=2.791e-01  -> not detected
+
+summary over 10 prompts: watermarked detected 10/10 (TPR 1.000); opt-out flagged 0/10 (FPR 0.000); elapsed 59s
+
+human-written passages (human_corpus.jsonl): flagged 1/50 (FPR 0.020); min p=4.062e-03 median p=5.211e-01
+
+wrote /tmp/claude-1000/-home-anaeem-vllm-watermark/3f94f42f-6d28-4614-b036-7e6a0f444d4b/scratchpad/native-demo-t1.json
+exit=0
+
+### run B: model defaults (temperature -1, top_p -1), n=10
+$ python3 scripts/native-watermark-demo.py --vllm-url $VLLM --detector-url $DET --cacert cluster/router-ca.crt --n 10 --max-tokens 300 --temperature -1 --top-p -1 --json-out native-demo-default.json
+vLLM: <route>  model: Qwen/Qwen2.5-1.5B-Instruct
+detector: <route>
+sampling: temperature=model default top_p=model default max_tokens=300
+
+[1/10] Explain how vaccines train the immune system to recognize pathogens it has never encounter
+  watermarked    tokens= 300  scored= 294  score=   355.20  p=3.797e-04  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   273.53  p=9.402e-01  -> not detected
+[2/10] Explain why the night sky is dark even though the universe contains an enormous number of 
+  watermarked    tokens= 300  scored= 300  score=   386.74  p=1.995e-06  -> WATERMARKED
+  opt-out        tokens= 200  scored= 199  score=   189.20  p=7.526e-01  -> not detected
+[3/10] Explain how compound interest can turn small, regular savings into significant wealth over
+  watermarked    tokens= 300  scored= 296  score=   332.49  p=1.976e-02  -> not detected
+  opt-out        tokens= 300  scored= 287  score=   283.84  p=5.664e-01  -> not detected
+[4/10] Explain the difference between weather and climate, and why one unusually cold winter does
+  watermarked    tokens= 269  scored= 268  score=   330.59  p=1.715e-04  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   305.97  p=3.588e-01  -> not detected
+[5/10] Explain how a criminal trial in a common-law system moves from arrest to verdict.
+  watermarked    tokens= 300  scored= 300  score=   387.93  p=1.505e-06  -> WATERMARKED
+  opt-out        tokens= 300  scored= 300  score=   330.65  p=4.168e-02  -> not detected
+[6/10] Explain why some metals conduct electricity so much better than others.
+  watermarked    tokens= 300  scored= 297  score=   414.10  p=5.913e-10  -> WATERMARKED
+  opt-out        tokens= 300  scored= 297  score=   288.12  p=6.918e-01  -> not detected
+[7/10] Explain how search engines decide which web pages to show first for a given query.
+  watermarked    tokens= 300  scored= 300  score=   419.13  p=3.819e-10  -> WATERMARKED
+  opt-out        tokens= 300  scored= 293  score=   309.82  p=1.626e-01  -> not detected
+[8/10] Explain why yeast makes bread dough rise and how that process changes the texture of the f
+  watermarked    tokens= 300  scored= 298  score=   416.77  p=3.821e-10  -> WATERMARKED
+  opt-out        tokens= 300  scored= 299  score=   314.04  p=1.908e-01  -> not detected
+[9/10] Explain how tectonic plates move and why their motion causes earthquakes along certain fau
+  watermarked    tokens= 300  scored= 299  score=   397.77  p=9.916e-08  -> WATERMARKED
+  opt-out        tokens= 282  scored= 276  score=   263.85  p=7.648e-01  -> not detected
+[10/10] Explain how astronomers can detect a black hole even though no light escapes it.
+  watermarked    tokens= 300  scored= 300  score=   406.89  p=1.205e-08  -> WATERMARKED
+  opt-out        tokens= 300  scored= 299  score=   303.91  p=3.814e-01  -> not detected
+
+summary over 10 prompts: watermarked detected 9/10 (TPR 0.900); opt-out flagged 0/10 (FPR 0.000); elapsed 59s
+
+wrote /tmp/claude-1000/-home-anaeem-vllm-watermark/3f94f42f-6d28-4614-b036-7e6a0f444d4b/scratchpad/native-demo-default.json
+exit=0
+
+### run C: greedy (temperature 0), n=5
+$ python3 scripts/native-watermark-demo.py --vllm-url $VLLM --detector-url $DET --cacert cluster/router-ca.crt --n 5 --max-tokens 300 --temperature 0 --top-p 1.0 --json-out native-demo-t0.json
+vLLM: <route>  model: Qwen/Qwen2.5-1.5B-Instruct
+detector: <route>
+sampling: temperature=0.0 top_p=1.0 max_tokens=300
+
+[1/5] Explain how vaccines train the immune system to recognize pathogens it has never encounter
+  watermarked    tokens= 267  scored= 261  score=   261.40  p=4.820e-01  -> not detected
+  opt-out        tokens= 267  scored= 261  score=   261.40  p=4.820e-01  -> not detected
+[2/5] Explain why the night sky is dark even though the universe contains an enormous number of 
+  watermarked    tokens= 300  scored= 299  score=   309.99  p=2.587e-01  -> not detected
+  opt-out        tokens= 300  scored= 299  score=   309.99  p=2.587e-01  -> not detected
+[3/5] Explain how compound interest can turn small, regular savings into significant wealth over
+  watermarked    tokens= 300  scored= 271  score=   287.21  p=1.621e-01  -> not detected
+  opt-out        tokens= 300  scored= 271  score=   287.21  p=1.621e-01  -> not detected
+[4/5] Explain the difference between weather and climate, and why one unusually cold winter does
+  watermarked    tokens= 300  scored= 299  score=   305.42  p=3.490e-01  -> not detected
+  opt-out        tokens= 300  scored= 299  score=   305.42  p=3.490e-01  -> not detected
+[5/5] Explain how a criminal trial in a common-law system moves from arrest to verdict.
+  watermarked    tokens= 275  scored= 271  score=   307.21  p=1.664e-02  -> not detected
+  opt-out        tokens= 275  scored= 271  score=   307.21  p=1.664e-02  -> not detected
+
+summary over 5 prompts: watermarked detected 0/5 (TPR 0.000); opt-out flagged 0/5 (FPR 0.000); elapsed 29s
+
+wrote /tmp/claude-1000/-home-anaeem-vllm-watermark/3f94f42f-6d28-4614-b036-7e6a0f444d4b/scratchpad/native-demo-t0.json
+exit=0
+```
+
+Engine warning emitted during run C (`oc -n watermark-demo logs deploy/vllm-watermark | grep -i greedy`):
+
+```
+(EngineCore pid=75) WARNING 09-16 05:27:32 [gpu_sampler.py:45] Watermarking is enabled, but greedy decoding (temperature=0) cannot be watermarked. This request will use ordinary greedy sampling.
+```
+
+Run C's watermarked and opt-out texts are byte-identical for all 5 prompts (greedy decoding is
+deterministic and bypasses the watermark, so the opt-out field changes nothing). Command run in
+the scratchpad directory the `wrote` lines name (the JSON files are not committed, per AGENTS.md
+§6, so this is reproducible only after re-running run C); run A's file is the control:
+
+```
+$ python3 -c 'import json; r=json.load(open("native-demo-t0.json"))["records"]; print(len(r), sum(x["watermarked"]["text"]==x["opt-out"]["text"] for x in r))'
+5 5
+$ python3 -c 'import json; r=json.load(open("native-demo-t1.json"))["records"]; print(len(r), sum(x["watermarked"]["text"]==x["opt-out"]["text"] for x in r))'
+10 0
+```
+
+### Key exposure check (raw)
+
+Correction before commit: this block originally recorded `watermark_config in /server_info:
+(not present)` and `digit-run that could be the key present? False`, computed by a
+`python3 -c` filter over the response body with `curl -s` (no status code). The body was a
+404 (`/server_info` is a development endpoint mounted only when `VLLM_SERVER_DEV_MODE=1`;
+`vllm/entrypoints/launchers/api_server/routers.py:34-37` and `vllm/envs.py:167` @cd10ed6f), so
+both lines carried no information about key exposure and are replaced by the raw captures
+below (2026-09-16 09:07–09:12Z, same pod). `/version` is the positive control.
+
+```
+$ curl -sS --cacert cluster/router-ca.crt -w '\nhttp=%{http_code}\n' $VLLM/server_info
+{"detail":"Not Found"}
+http=404
+$ curl -sS --cacert cluster/router-ca.crt -w '\nhttp=%{http_code}\n' "$VLLM/server_info?config_format=json"
+{"detail":"Not Found"}
+http=404
+$ curl -sS --cacert cluster/router-ca.crt -w '\nhttp=%{http_code}\n' $VLLM/version
+{"version":"0.29.1rc1.dev128+gcd10ed6f9"}
+http=200
+$ oc -n watermark-demo logs deploy/vllm-watermark | grep -o 'Route: [^,]*' | sort -u | tr '\n' ' '
+Route: /detokenize Route: /docs Route: /docs/oauth2-redirect Route: /generative_scoring Route: /health Route: /invocations Route: /is_scaling_elastic_ep Route: /load Route: /metrics Route: /openapi.json Route: /ping Route: /redoc Route: /scale_elastic_ep Route: /tokenize Route: /v1/chat/completions Route: /v1/chat/completions/batch Route: /v1/completions Route: /v1/messages Route: /v1/messages/count_tokens Route: /v1/models Route: /v1/responses Route: /v1/responses/{response_id} Route: /v1/responses/{response_id}/cancel Route: /version
+$ oc -n watermark-demo logs deploy/vllm-watermark | grep -c 'Development endpoints'
+0
+$ oc -n watermark-demo get deploy vllm-watermark -o jsonpath='{range .spec.template.spec.containers[0].env[*]}{.name}{" "}{end}'
+MODEL WATERMARK_KEY HOME HF_HOME
+$ oc -n watermark-demo logs deploy/vllm-watermark --timestamps | grep 'non-default args'
+2026-09-16T05:20:50.794839664Z (APIServer pid=1) INFO 09-16 05:20:50 [api_utils.py:286] non-default args: {'model_tag': 'Qwen/Qwen2.5-1.5B-Instruct', 'host': '0.0.0.0', 'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'max_model_len': 4096, 'gpu_memory_utilization': 0.85, 'watermark_config': '***'}
+$ oc -n watermark-demo logs deploy/vllm-watermark | grep 'core.py:123' | grep -o 'watermark[a-z_]*' | sort | uniq -c; echo "(line length: $(oc -n watermark-demo logs deploy/vllm-watermark | grep 'core.py:123' | wc -c))"
+(line length: 4116)
+```
+
+(The `grep -c server_info` count over the full log is non-zero only because of the reviewers'
+own `"GET /server_info HTTP/1.1" 404 Not Found` access-log lines.) Redaction sources at
+cd10ed6f (STATIC): `vllm/entrypoints/serve/utils/api_utils.py:271`
+`_SENSITIVE_ARG_FIELDS = frozenset({"api_key", "hf_token", "watermark_config"})`;
+`vllm/config/watermarking.py:31` `key: int = Field(ge=0, repr=False, exclude=True)`;
+`VllmConfig.__str__` (`vllm/config/vllm.py:2597`) contains no `watermark` reference, so the text
+form of `/server_info` would omit the block entirely even with dev mode on. What the JSON form
+would show with dev mode on was not executed.
+
+```
+$ oc -n watermark-demo get deploy vllm-watermark -o jsonpath='{.spec.template.spec.containers[0].args}'
+["exec vllm serve \"$MODEL\" --host 0.0.0.0 --port 8000 --max-model-len 4096 --gpu-memory-utilization 0.85 --watermark-config \"{\\\"algorithm\\\":\\\"gumbel\\\",\\\"key\\\":${WATERMARK_KEY}}\""]
+$ oc -n watermark-demo exec deploy/vllm-watermark -- sh -c 'ps -o args= -p 1 | sed -E "s/key[^0-9]*[0-9]+/key<redacted>/"'
+/usr/bin/python3 /usr/local/bin/vllm serve Qwen/Qwen2.5-1.5B-Instruct --host 0.0.0.0 --port 8000 --max-model-len 4096 --gpu-memory-utilization 0.85 --watermark-config {"algorithm":"gumbel","key":<reda
+```
+
+### generation_config defaults and per-field merge (raw; 2026-09-16 09:10Z)
+
+```
+$ curl -sSL https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/raw/main/generation_config.json
+{
+  "bos_token_id": 151643,
+  "pad_token_id": 151643,
+  "do_sample": true,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "repetition_penalty": 1.1,
+  "temperature": 0.7,
+  "top_p": 0.8,
+  "top_k": 20,
+  "transformers_version": "4.37.0"
+}
+$ oc -n watermark-demo logs deploy/vllm-watermark --timestamps | grep -i overridden
+2026-09-16T05:23:17.266792473Z (APIServer pid=1) WARNING 09-16 05:23:17 [model.py:1772] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.1, 'temperature': 0.7, 'top_k': 20, 'top_p': 0.8}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+$ curl -sSL https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/raw/main/generation_config.json   # 2026-09-16 11:29Z; the guide's "the 7B variant ships repetition_penalty 1.05"
+{
+  "bos_token_id": 151643,
+  "pad_token_id": 151643,
+  "do_sample": true,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "repetition_penalty": 1.05,
+  "temperature": 0.7,
+  "top_p": 0.8,
+  "top_k": 20,
+  "transformers_version": "4.37.0"
+}
+```
+
+Seeded opt-out requests (`temperature 1.0, top_p 1.0, seed 7, max_tokens 80, watermarking false`,
+prompt "Explain how vaccines train the immune system.") differing only in whether `top_k` /
+`repetition_penalty` are passed; `gen '<extra fields>'` = the §4.1 curl with those fields appended:
+
+```
+$ gen '' > gc_omit.txt; gen ',"top_k":20,"repetition_penalty":1.1' > gc_explicit.txt; gen ',"top_k":0,"repetition_penalty":1.0' > gc_neutral.txt; gen '' > gc_omit2.txt
+$ cmp -s gc_omit.txt gc_explicit.txt && echo identical || echo differ
+identical
+$ cmp -s gc_omit.txt gc_neutral.txt && echo identical || echo differ
+differ
+$ cmp -s gc_omit.txt gc_omit2.txt && echo identical || echo differ
+identical
+$ sha256sum gc_*.txt
+9755230999197c1ed5451c069674da4be6dd902b4bea51d396d838c339d1f3d7  gc_explicit.txt
+9755230999197c1ed5451c069674da4be6dd902b4bea51d396d838c339d1f3d7  gc_omit.txt
+9755230999197c1ed5451c069674da4be6dd902b4bea51d396d838c339d1f3d7  gc_omit2.txt
+f6515da93d546602ce16ad2d6763304402d4b80f2cfc3c3e06e9494164901ffe  gc_neutral.txt
+```
+
+So a request that sets only temperature/top_p still runs with the model's `top_k 20` and
+`repetition_penalty 1.1`; runs A, B, C and the §4.1 hand requests all did. STATIC source:
+`vllm/entrypoints/openai/chat_completion/protocol.py` `to_sampling_params` @cd10ed6f falls back
+to `default_sampling_params` per field (repetition_penalty L679, temperature L684, top_p L688,
+top_k L692).
+
+### Detector re-tokenization vs `completion_tokens` (raw; 2026-09-16 09:11Z)
+
+Why `num_scored_tokens` can differ from `usage.completion_tokens`. (a) A completion that stops
+naturally: `completion_tokens` counts the `<|im_end|>` stop token (id 151645), which is not in the
+returned text.
+
+```
+$ curl -s --cacert cluster/router-ca.crt $VLLM/v1/chat/completions -H 'Content-Type: application/json' -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","messages":[{"role":"user","content":"Reply with exactly one short sentence: what colour is the sky on a clear day?"}],"max_tokens":300,"temperature":1.0,"top_p":1.0,"seed":11,"return_token_ids":true}'
+finish_reason: stop  completion_tokens: 19
+token_ids len: 19  last3: [34615, 13, 151645]
+text: "The sky is typically blue on a clear day due to scattering of sunlight by air molecules."
+$ curl -s --cacert cluster/router-ca.crt $VLLM/tokenize -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","prompt":<that text>,"add_special_tokens":false}'
+count: 18  last3: [3720, 34615, 13]
+```
+
+A 300-token completion cut at `max_tokens` (seed 11, prompt "Explain why the sky is blue.")
+re-tokenized to exactly 300 (`return_token_ids` len 300, `/tokenize` count 300, same last ids
+`[11, 12299, 1526]`). (b) The §4.1 pipelines write the completion with `print(...)`, which appends
+a newline; on a completion cut mid-sentence that newline is one extra token. Re-scoring a
+300-token completion saved that way (`wm.txt`, a reviewer's re-run of the §4.1 request, 234 words):
+
+```
+$ python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))' < wm.txt | curl -s --cacert cluster/router-ca.crt $DET/detect -H 'Content-Type: application/json' -d @-
+{"score":618.1141308873476,"p_value":4.769335228500949e-46,"num_scored_tokens":301,"is_watermarked":true}
+$ python3 -c 'import sys; sys.stdout.write(open("wm.txt").read().rstrip("\n"))' | python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))' | curl -s --cacert cluster/router-ca.crt $DET/detect -H 'Content-Type: application/json' -d @-
+{"score":614.650557485355,"p_value":1.3802714481342609e-45,"num_scored_tokens":300,"is_watermarked":true}
+```
+
+(On a 259-token opt-out completion that ended in a full stop the same test gave 259 both ways: the
+newline merged into the final token.) The original §4.1 `plain.txt` (301 scored for 300 generated)
+was not re-scored because the file had been overwritten; the mechanism above is the most likely
+cause.
+
+Re-run of the §4.1 request with the full response saved first (2026-09-16 11:30–11:32Z), so the
+generator's `finish_reason` and `usage` back the "300-token completion" above: the `wm.txt` scored
+above is byte-identical to what it returned (`sha256sum wm2.txt wm.txt` → the same
+`6a9c4cfd…`), `/tokenize` gives 301 as written and 300 stripped (the extra id 198 is `"\n"`), and
+the detector gives the same 618.114 / 614.651 as above. Part (c): the detokenize/tokenize pairs
+behind the guide's "either direction" statement.
+
+```
+$ curl -s --cacert cluster/router-ca.crt $VLLM/v1/chat/completions -H 'Content-Type: application/json' -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","messages":[{"role":"user","content":"Explain how vaccines train the immune system."}],"max_tokens":300,"temperature":1.0,"top_p":1.0}' > wm_1.json
+$ python3 -c 'import json; print(json.load(open("wm_1.json"))["choices"][0]["message"]["content"])' > wm2.txt   # the guide's print(...) pipeline, applied to the saved response
+$ python3 -c 'import json,hashlib; d=json.load(open("wm_1.json")); c=d["choices"][0]; print(c["finish_reason"], json.dumps(d["usage"])); print("sha256(content)=", hashlib.sha256(c["message"]["content"].encode()).hexdigest())'
+length {"prompt_tokens": 38, "total_tokens": 338, "completion_tokens": 300, "prompt_tokens_details": null, "completion_tokens_details": null}
+sha256(content)= 5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c
+$ wc -w wm2.txt; sha256sum wm2.txt
+234 wm2.txt
+6a9c4cfdddcc756b2d97e78fa7ab61e8c108523d93da43b55871523ac2b41cbf  wm2.txt
+$ for f in wm_1 wm_2 wm_3 wm_seed1_a wm_seed1_b wm_seed2 wm_seed3 plain_1 plain_2 plain_3 plain_seed1_1 plain_seed1_2; do python3 -c 'import json,hashlib,sys; d=json.load(open(sys.argv[1])); print(hashlib.sha256(d["choices"][0]["message"]["content"].encode()).hexdigest(), sys.argv[1])' $f.json; done   # the responses of the "Fixed-key determinism" block below
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_1.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_2.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_3.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_seed1_a.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_seed1_b.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_seed2.json
+5b8a9a9418901e8e111c9facf9a36360a8ab14e8a908d482e696787c5e2b021c wm_seed3.json
+36c213b33d5998b804beb40e7532b3faa5cd14276c758b0abe576f6454f5cbf7 plain_1.json
+f6dbfd416c4ad770041f4dc901dc41419010576e2523ba4930ee7e48ff47d4a0 plain_2.json
+2577bdc7adf46675909b7fad4b2504bb311b52a8b5d5de99291cc66413f335e8 plain_3.json
+3655747be8ac98106ed290f3951d2171349f866c762378f06d7e51aa1389e65d plain_seed1_1.json
+3655747be8ac98106ed290f3951d2171349f866c762378f06d7e51aa1389e65d plain_seed1_2.json
+$ python3 -c 'import json,sys; print(json.dumps({"model":"Qwen/Qwen2.5-1.5B-Instruct","prompt":open("wm2.txt").read(),"add_special_tokens":False}))' | curl -s --cacert $CA $VLLM/tokenize -H "Content-Type: application/json" -d @- | python3 -c 'import json,sys; d=json.load(sys.stdin); print("as-written count:", d["count"], "last3:", d["tokens"][-3:])'
+as-written count: 301 last3: [69458, 3842, 198]
+$ python3 -c 'import json,sys; print(json.dumps({"model":"Qwen/Qwen2.5-1.5B-Instruct","prompt":open("wm2.txt").read().rstrip("\n"),"add_special_tokens":False}))' | curl -s --cacert $CA $VLLM/tokenize -H "Content-Type: application/json" -d @- | python3 -c 'import json,sys; d=json.load(sys.stdin); print("stripped count:", d["count"], "last3:", d["tokens"][-3:])'
+stripped count: 300 last3: [279, 69458, 3842]
+$ python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))' < wm2.txt | curl -s --cacert $CA $DET/detect -H "Content-Type: application/json" -d @-
+{"score":618.1141308873476,"p_value":4.769335228500949e-46,"num_scored_tokens":301,"is_watermarked":true}
+$ python3 -c 'import sys; sys.stdout.write(open("wm2.txt").read().rstrip("\n"))' | python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))' | curl -s --cacert $CA $DET/detect -H "Content-Type: application/json" -d @-
+{"score":614.650557485355,"p_value":1.3802714481342609e-45,"num_scored_tokens":300,"is_watermarked":true}
+$ # (c) a non-canonical token pair re-encodes to fewer or more tokens: /detokenize the pair, /tokenize the text
+$ curl -s --cacert $CA $VLLM/detokenize -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","tokens":[279, 265]}'
+{"prompt":" there"}
+$ curl -s --cacert $CA $VLLM/tokenize -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","prompt":" there","add_special_tokens":false}'
+{"count":1,"max_model_len":4096,"tokens":[1052],"token_strs":null}
+$ curl -s --cacert $CA $VLLM/detokenize -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","tokens":[45421, 2912]}'
+{"prompt":"Liopt"}
+$ curl -s --cacert $CA $VLLM/tokenize -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","prompt":"Liopt","add_special_tokens":false}'
+{"count":3,"max_model_len":4096,"tokens":[43,815,417],"token_strs":null}
+$ for t in 279 265 45421 2912 1052 43 815 417 198; do printf '[%s] ' $t; curl -s --cacert cluster/router-ca.crt $VLLM/detokenize -H 'Content-Type: application/json' -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","tokens":['$t']}'; echo; done
+[279] {"prompt":" the"}
+[265] {"prompt":"re"}
+[45421] {"prompt":"Li"}
+[2912] {"prompt":"opt"}
+[1052] {"prompt":" there"}
+[43] {"prompt":"L"}
+[815] {"prompt":"io"}
+[417] {"prompt":"pt"}
+[198] {"prompt":"\n"}
+$ sha256sum wm2.txt wm.txt
+6a9c4cfdddcc756b2d97e78fa7ab61e8c108523d93da43b55871523ac2b41cbf  wm2.txt
+6a9c4cfdddcc756b2d97e78fa7ab61e8c108523d93da43b55871523ac2b41cbf  wm.txt
+```
+
+### Nightly ancestry (GitHub compare API; 2026-09-16 09:10Z)
+
+```
+$ for p in 54053 56122; do gh api repos/vllm-project/vllm/pulls/$p --jq '"\(.number) merged_at=\(.merged_at) merge_commit=\(.merge_commit_sha)"'; done
+54053 merged_at=2026-09-10T04:00:15Z merge_commit=ea40bb9e905f8d552281dd1ec074f91865a0a242
+56122 merged_at=2026-09-12T18:42:02Z merge_commit=7ee8a6dd013819838da8012ca549d724bee7c6c6
+$ gh api repos/vllm-project/vllm/compare/ea40bb9e905f8d552281dd1ec074f91865a0a242...7ee8a6dd013819838da8012ca549d724bee7c6c6 --jq '{status,ahead_by,behind_by}'
+{"ahead_by":141,"behind_by":0,"status":"ahead"}
+$ gh api repos/vllm-project/vllm/git/ref/tags/v0.29.1rc0 --jq .object.sha
+7ee8a6dd013819838da8012ca549d724bee7c6c6
+$ gh api repos/vllm-project/vllm/compare/7ee8a6dd013819838da8012ca549d724bee7c6c6...v0.29.0 --jq '{status,ahead_by,behind_by}'
+{"ahead_by":14,"behind_by":596,"status":"diverged"}
+$ # Docker Hub daily nightly-<sha> tags with a September last_updated, and each one compared with both merge commits
+$ # (re-captured 2026-09-16 11:28Z with the exact commands; two hand-formatted lists stood here before and are replaced by this raw output)
+$ curl -s 'https://hub.docker.com/v2/repositories/vllm/vllm-openai/tags?page_size=100&name=nightly-' | jq -r '.count, .next'
+51
+null
+$ curl -s 'https://hub.docker.com/v2/repositories/vllm/vllm-openai/tags?page_size=100&name=nightly-' | jq -r '.results[]|select(.name|test("^nightly-[0-9a-f]{40}$"))|select(.last_updated|startswith("2026-09"))|"\(.last_updated) \(.name)"' | sort
+2026-09-05T06:16:31.617403Z nightly-e962733e08d10f7ca65dac4df99e116460b8b174
+2026-09-06T06:17:03.716835Z nightly-1970f3ed4be7fa8620e4ddc4a12c36a8384cfc27
+2026-09-07T06:16:01.102138Z nightly-d9105ea8001e0a6d77a96327d17515bb5791fb36
+2026-09-08T06:16:53.323512Z nightly-9ea8f3ffc354901b740f0b31988900897b7221d7
+2026-09-09T06:16:33.643746Z nightly-385dce36bcee42309924a5ece951a96db3dce7f2
+2026-09-10T06:17:13.892169Z nightly-2a02f6efe319c885e3ccbcecde402e0028f9ec1e
+2026-09-11T06:18:48.451548Z nightly-e7edf17cea217e52701f913cd8491fcacf2d9490
+2026-09-12T06:16:44.776152Z nightly-eed1f3d0c6043bd494424a22443ee198dd56f657
+2026-09-13T06:15:10.189688Z nightly-2671fedfc7ae604761990603fc736c0c4f21de57
+2026-09-14T06:15:25.054268Z nightly-dc36fcce902a63eab06c1b93a5c4a5ee178a0c56
+2026-09-15T06:18:57.060717Z nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+2026-09-16T06:20:11.695298Z nightly-af1c01499b289be555c475669ba50a88e96d846e
+
+$ for sha in $(awk '{sub("nightly-","",$2); print $2}' <that list>); do for m in ea40bb9e905f8d552281dd1ec074f91865a0a242 7ee8a6dd013819838da8012ca549d724bee7c6c6; do printf "%s...%s " "${m:0:8}" "${sha:0:8}"; gh api "repos/vllm-project/vllm/compare/$m...$sha" --jq '"\(.status) ahead=\(.ahead_by) behind=\(.behind_by)"'; done; done
+ea40bb9e...e962733e behind ahead=0 behind=190
+7ee8a6dd...e962733e behind ahead=0 behind=331
+ea40bb9e...1970f3ed behind ahead=0 behind=176
+7ee8a6dd...1970f3ed behind ahead=0 behind=317
+ea40bb9e...d9105ea8 behind ahead=0 behind=155
+7ee8a6dd...d9105ea8 behind ahead=0 behind=296
+ea40bb9e...9ea8f3ff behind ahead=0 behind=111
+7ee8a6dd...9ea8f3ff behind ahead=0 behind=252
+ea40bb9e...385dce36 behind ahead=0 behind=47
+7ee8a6dd...385dce36 behind ahead=0 behind=188
+ea40bb9e...2a02f6ef ahead ahead=1 behind=0
+7ee8a6dd...2a02f6ef behind ahead=0 behind=140
+ea40bb9e...e7edf17c ahead ahead=54 behind=0
+7ee8a6dd...e7edf17c behind ahead=0 behind=87
+ea40bb9e...eed1f3d0 ahead ahead=116 behind=0
+7ee8a6dd...eed1f3d0 behind ahead=0 behind=25
+ea40bb9e...2671fedf ahead ahead=150 behind=0
+7ee8a6dd...2671fedf ahead ahead=9 behind=0
+ea40bb9e...dc36fcce ahead ahead=188 behind=0
+7ee8a6dd...dc36fcce ahead ahead=47 behind=0
+ea40bb9e...cd10ed6f ahead ahead=269 behind=0
+7ee8a6dd...cd10ed6f ahead ahead=128 behind=0
+ea40bb9e...af1c0149 ahead ahead=328 behind=0
+7ee8a6dd...af1c0149 ahead ahead=187 behind=0
+```
+
+Partition: nightlies up to 2026-09-09 contain neither PR (09-05 through 09-09 are `behind` both
+merges); 2026-09-10 to 09-12 contain only #54053; 2026-09-13 onward contain both (the 09-16
+nightly `af1c0149…`, pushed 06:20:11Z on the day of this run, is `ahead` of both). A compare
+against `7ee8a6dd` alone suffices because it descends from `ea40bb9e`.
+
+### Fixed-key determinism: repeated requests, `seed`, opt-out and `n` (raw; 2026-09-16 11:30–11:34Z)
+
+Sequential requests, one at a time, with no other client of ours running (one vLLM pod). `gen <extra-json>
+<file>` is the §4.1 curl (`max_tokens 300, temperature 1.0, top_p 1.0`) with the extra fields
+appended and the full JSON response saved; `summ` prints `finish_reason`, `usage.completion_tokens`,
+the word count, the first 16 hex digits of sha256(content) and the first 60 characters. Full hashes
+of every response are in the re-tokenization block above.
+
+```
+# gen <extra-json> <file> = the §4.1 curl with the extra fields appended, full JSON response saved; summ = finish_reason, usage.completion_tokens, word count, sha256(content)[:16], first 60 chars
+$ gen "" wm_1.json; summ wm_1.json
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen "" wm_2.json; summ wm_2.json
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen "" wm_3.json; summ wm_3.json
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen ',"seed":1' wm_seed1_a.json; summ
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen ',"seed":1' wm_seed1_b.json; summ
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen ',"seed":2' wm_seed2.json; summ
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen ',"seed":3' wm_seed3.json; summ
+length completion_tokens=300 words=234 sha256=5b8a9a9418901e8e head='Vaccines work by teaching the immune system how to recognize'
+$ gen ',"watermarking":false' plain_1.json; summ
+length completion_tokens=300 words=227 sha256=36c213b33d5998b8 head='Vaccines work by exposing the immune system to parts of a vi'
+$ gen ',"watermarking":false' plain_2.json; summ
+length completion_tokens=300 words=254 sha256=f6dbfd416c4ad770 head='Vaccines work by training the immune system to recognize and'
+$ gen ',"watermarking":false' plain_3.json; summ
+length completion_tokens=300 words=181 sha256=2577bdc7adf46675 head='Vaccines stimulate an immune response to create immunity wit'
+$ gen ',"watermarking":false,"seed":1' plain_seed1_1.json; summ
+length completion_tokens=300 words=241 sha256=3655747be8ac9810 head='Vaccines work by exposing the immune system to harmless part'
+$ gen ',"watermarking":false,"seed":1' plain_seed1_2.json; summ
+length completion_tokens=300 words=241 sha256=3655747be8ac9810 head='Vaccines work by exposing the immune system to harmless part'
+```
+
+Result: 7 of 7 watermarked completions byte-identical (`5b8a9a94…`), including `seed` 1, 1, 2 and 3;
+the three unseeded opt-out completions all differ; the two opt-out completions with `seed` 1 are
+identical (`3655747b…`). The completion is the 234-word `wm.txt` scored in the re-tokenization block,
+not the 228-word one captured for §4.1 earlier in this section (score 617.807), so the fixed key gives
+near-determinism, not a guarantee; what changed between the two captures was not isolated. Second
+prompt, same shape (short `stop` completions):
+
+```
+# second prompt: "Write two sentences about the ocean." (same curl shape as 4.1; sha256 of content)
+$ gen ""
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ""
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ""
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ',"seed":1'
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ',"seed":1'
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ',"seed":2'
+stop completion_tokens=50 sha256=5fbe32bc8d926da6 head='The vastness of the ocean is truly breathtaking - '
+$ gen ',"watermarking":false'
+stop completion_tokens=76 sha256=1a9e7e402907c6e3 head='The vastness of the ocean, covering approximately '
+$ gen ',"watermarking":false'
+stop completion_tokens=53 sha256=af29a07648f75333 head='1. The vast expanse of the ocean is home to millio'
+$ gen ',"watermarking":false'
+stop completion_tokens=77 sha256=6cd72afc2c919048 head='1. The blue expanse of the sea is both tranquil an'
+$ gen ',"watermarking":false,"seed":1'
+stop completion_tokens=44 sha256=772a1245aeadd1c1 head="The ocean is vast and powerful, shaping the earth'"
+$ gen ',"watermarking":false,"seed":1'
+stop completion_tokens=44 sha256=772a1245aeadd1c1 head="The ocean is vast and powerful, shaping the earth'"
+```
+
+6 of 6 watermarked completions identical (`5fbe32bc…`), with and without `seed`; unseeded opt-out
+completions differ, `seed 1` opt-out completions match. Finally `n: 2` on the §4.1 prompt: two
+different completions, neither equal to the single-request `5b8a9a94…` text (the two sequences share
+a batch; vLLM is not batch-invariant by default, `VLLM_BATCH_INVARIANT` in `vllm/envs.py` L92
+@cd10ed6f, STATIC; whether that is the cause was not tested, OPEN):
+
+```
+$ curl -s --cacert $CA $VLLM/v1/chat/completions -H "Content-Type: application/json" -d '{"model":"Qwen/Qwen2.5-1.5B-Instruct","messages":[{"role":"user","content":"Explain how vaccines train the immune system."}],"max_tokens":300,"temperature":1.0,"top_p":1.0,"n":2}' | python3 -c 'import json,sys,hashlib; d=json.load(sys.stdin); [print(i, c["finish_reason"], "sha256="+hashlib.sha256(c["message"]["content"].encode()).hexdigest()[:16], repr(c["message"]["content"][:50])) for i,c in enumerate(d["choices"])]; print("usage:", json.dumps(d["usage"]))'
+0 length sha256=5262933374e0575a 'Vaccines work by teaching the immune system how to'
+1 length sha256=c77c5d12a84643ad 'Vaccines work by teaching the immune system how to'
+usage: {"prompt_tokens": 38, "total_tokens": 638, "completion_tokens": 600, "prompt_tokens_details": null, "completion_tokens_details": null}
+```
+
+STATIC sources for why `seed` does not reach watermarked positions (all @cd10ed6f): the keyed draw is
+`philox_gumbel_sample(logits, contexts, self.prf.key)` (`vllm/v1/watermarking/gumbel.py` L64-67);
+the mixed kernel `vllm/v1/worker/gpu/sample/watermark.py` L364-371 loads `seeds_ptr` only inside its
+`if tl.load(skip_mask_ptr + row)` branch; `vllm/v1/watermarking/gpu_sampler.py` L91-104 builds that
+`skip_mask` from non-watermarking requests, `temperature == 0` and repeated contexts. RFC #53916
+"Note on diversity": "a _catastrophic_ loss of diversity (determinism, given a fixed key and input).
+The proposed Gumbel-max algorithm, given its simplicity, does exhibit this behaviour."
+
+### Port-forward alternative (raw; 2026-09-16 11:36Z)
+
+The guide's section 4.0 alternative to the Routes, with and without `-n` (the installer-written
+kubeconfig has no current project; local ports 18000/18080 used so as not to collide with anything):
+
+```
+$ timeout 10 oc port-forward svc/vllm-watermark 18000:8000; echo "exit=$?"
+Error from server (NotFound): services "vllm-watermark" not found
+exit=1
+$ (timeout 20 oc -n watermark-demo port-forward svc/vllm-watermark 18000:8000 >/dev/null &); sleep 4; curl -s http://localhost:18000/v1/models | python3 -c ...
+['Qwen/Qwen2.5-1.5B-Instruct']
+$ (timeout 20 oc -n watermark-demo port-forward svc/watermark-detector 18080:8080 >/dev/null &); sleep 4; curl -s http://localhost:18080/detect -H "Content-Type: application/json" -d '{"text":"It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."}'
+{"score":19.542122906190592,"p_value":0.9070642274102403,"num_scored_tokens":26,"is_watermarked":false}
+```
+
+### Human corpus provenance (raw; local workstation, 2026-09-16 11:29Z)
+
+`benchmarks/data/human_corpus.jsonl` (gitignored) is the file run A scored. Its only recorded
+generation before today was the `--chunk-tokens 512` variant (2026-08-08, line 555); the file's
+mtime is 2026-08-08 03:06 and `benchmarks/fetch_human_corpus.py` is unchanged since ef3b0e4. The
+2026-08-08 record[0] prefix at line 941 (`sha256:d93033d39053`, 1107 bytes) does not match the
+current file's record[0] `text` (`74f6a8b5cd92`, 1107 bytes) under sha256 of the UTF-8 text, so the
+full-file hash below is the authoritative identity. Regeneration with the script defaults
+(`Qwen/Qwen2.5-0.5B-Instruct` tokenizer, n=150, seed=42, 256 tokens) and with the served model's
+tokenizer both reproduce it byte-for-byte; the two models' tokenizer files at HF `main` are
+sha256-identical, which is why. Environment: local workstation, Python 3.14.4, transformers 4.57.6,
+tokenizers 0.22.2, requests 2.32.5; HF `main` revisions at the time are listed last.
+
+```
+$ python3 benchmarks/fetch_human_corpus.py --out hc_default.jsonl; echo "exit=$?"
+Token indices sequence length is longer than the specified maximum sequence length for this model (173297 > 131072). Running this sequence through the model will result in indexing errors
+Loading tokenizer 'Qwen/Qwen2.5-0.5B-Instruct' ...
+Fetching Gutenberg #1342: 'Pride and Prejudice' ...
+  676 candidate 256-token windows: kept 651, dropped 25
+Fetching Gutenberg #84: 'Frankenstein; or, The Modern Prometheus' ...
+  383 candidate 256-token windows: kept 382, dropped 1
+Fetching Gutenberg #11: "Alice's Adventures in Wonderland" ...
+  145 candidate 256-token windows: kept 139, dropped 6
+Fetching Gutenberg #2701: 'Moby-Dick; or, The Whale' ...
+  1207 candidate 256-token windows: kept 1195, dropped 12
+
+=== Summary ===
+total filtered chunks available across all books: 2367
+sampled (seed=42): 150
+tokens per chunk: min=256 max=256 (all == --chunk-tokens by construction)
+chunks per source:
+    11  gutenberg:11:Alice's Adventures in Wonderland
+    45  gutenberg:1342:Pride and Prejudice
+    66  gutenberg:2701:Moby-Dick; or, The Whale
+    28  gutenberg:84:Frankenstein; or, The Modern Prometheus
+wrote hc_default.jsonl
+
+real	0m25.859s
+user	0m17.755s
+sys	0m2.185s
+exit=0
+$ python3 benchmarks/fetch_human_corpus.py --model-tokenizer Qwen/Qwen2.5-1.5B-Instruct --out hc_15b.jsonl; echo "exit=$?"
+Token indices sequence length is longer than the specified maximum sequence length for this model (173297 > 131072). Running this sequence through the model will result in indexing errors
+Loading tokenizer 'Qwen/Qwen2.5-1.5B-Instruct' ...
+Fetching Gutenberg #1342: 'Pride and Prejudice' ...
+  676 candidate 256-token windows: kept 651, dropped 25
+Fetching Gutenberg #84: 'Frankenstein; or, The Modern Prometheus' ...
+  383 candidate 256-token windows: kept 382, dropped 1
+Fetching Gutenberg #11: "Alice's Adventures in Wonderland" ...
+  145 candidate 256-token windows: kept 139, dropped 6
+Fetching Gutenberg #2701: 'Moby-Dick; or, The Whale' ...
+  1207 candidate 256-token windows: kept 1195, dropped 12
+
+=== Summary ===
+total filtered chunks available across all books: 2367
+sampled (seed=42): 150
+tokens per chunk: min=256 max=256 (all == --chunk-tokens by construction)
+chunks per source:
+    11  gutenberg:11:Alice's Adventures in Wonderland
+    45  gutenberg:1342:Pride and Prejudice
+    66  gutenberg:2701:Moby-Dick; or, The Whale
+    28  gutenberg:84:Frankenstein; or, The Modern Prometheus
+wrote hc_15b.jsonl
+exit=0
+$ sha256sum benchmarks/data/human_corpus.jsonl hc_default.jsonl hc_15b.jsonl; wc -l benchmarks/data/human_corpus.jsonl hc_default.jsonl hc_15b.jsonl
+8601024c868eb704bfe5f2b3e7c536ae4eb1a7f3970bcf524619d24039a04195  benchmarks/data/human_corpus.jsonl
+8601024c868eb704bfe5f2b3e7c536ae4eb1a7f3970bcf524619d24039a04195  hc_default.jsonl
+8601024c868eb704bfe5f2b3e7c536ae4eb1a7f3970bcf524619d24039a04195  hc_15b.jsonl
+   150 benchmarks/data/human_corpus.jsonl
+   150 hc_default.jsonl
+   150 hc_15b.jsonl
+   450 total
+$ cmp benchmarks/data/human_corpus.jsonl hc_default.jsonl && cmp benchmarks/data/human_corpus.jsonl hc_15b.jsonl && echo IDENTICAL
+IDENTICAL
+$ ls -l --time-style=full-iso benchmarks/data/human_corpus.jsonl
+-rw-r--r--. 1 anaeem anaeem 183550 2026-08-08 03:06:21.675947196 +0100 benchmarks/data/human_corpus.jsonl
+$ python3 -c "import json,hashlib; t=json.loads(open(\"benchmarks/data/human_corpus.jsonl\").readline())[\"text\"]; print(len(t.encode()), hashlib.sha256(t.encode()).hexdigest()[:12])"
+1107 74f6a8b5cd92
+$ for m in Qwen2.5-0.5B-Instruct Qwen2.5-1.5B-Instruct; do for f in tokenizer.json vocab.json merges.txt tokenizer_config.json; do printf "%s %s " $m $f; curl -sSL https://huggingface.co/Qwen/$m/resolve/main/$f | sha256sum | cut -c1-64; done; done
+Qwen2.5-0.5B-Instruct tokenizer.json c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539
+Qwen2.5-0.5B-Instruct vocab.json ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910
+Qwen2.5-0.5B-Instruct merges.txt 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3
+Qwen2.5-0.5B-Instruct tokenizer_config.json 5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583
+Qwen2.5-1.5B-Instruct tokenizer.json c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539
+Qwen2.5-1.5B-Instruct vocab.json ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910
+Qwen2.5-1.5B-Instruct merges.txt 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3
+Qwen2.5-1.5B-Instruct tokenizer_config.json 5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583
+$ for m in Qwen2.5-0.5B-Instruct Qwen2.5-1.5B-Instruct; do printf "%s main sha=" $m; curl -sSL https://huggingface.co/api/models/Qwen/$m/revision/main | jq -r .sha; done
+Qwen2.5-0.5B-Instruct main sha=7ae557604adf67be50417f59c2c2f167def9a775
+Qwen2.5-1.5B-Instruct main sha=989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+```
+
+### Detector pod placement and GPU MachineSet state (raw; 2026-09-16 11:27Z)
+
+The detector Deployment has no nodeSelector or affinity; it ran on a CPU worker because it was
+created (05:06:03Z) before the GPU node existed (05:08:40Z), not because the manifest requires it.
+The GPU node carries no taint (the `nvidia.com/gpu` toleration in `10-vllm.yaml` is inert here).
+The GPU MachineSet was created at replicas=1 and never scaled (generation 1; its Machine has the
+same creation timestamp), so `scripts/scale-gpu.sh` did not run on this cluster.
+
+```
+$ oc -n watermark-demo get pods -o wide
+NAME                                 READY   STATUS    RESTARTS   AGE     IP            NODE                           NOMINATED NODE   READINESS GATES
+vllm-watermark-7dc9fb8f79-rzgxw      1/1     Running   0          6h21m   10.129.2.17   ip-10-0-26-129.ec2.internal    <none>           <none>
+watermark-detector-d4b8c9766-sfdzp   1/1     Running   0          6h21m   10.131.0.24   ip-10-0-150-204.ec2.internal   <none>           <none>
+$ oc -n watermark-demo get pod -l app=watermark-detector -o jsonpath=...
+name=watermark-detector-d4b8c9766-sfdzp created=2026-09-16T05:06:03Z node=ip-10-0-150-204.ec2.internal restarts=0
+$ oc -n watermark-demo get deploy watermark-detector -o jsonpath=nodeSelector/affinity
+nodeSelector= affinity= tolerations=
+$ oc get nodes -L node.kubernetes.io/instance-type -o custom-columns
+NAME                           ROLES    TYPE         CREATED                TAINTS
+ip-10-0-150-204.ec2.internal   <none>   m6i.xlarge   2026-09-16T04:49:09Z   <none>
+ip-10-0-21-8.ec2.internal      <none>   m6i.xlarge   2026-09-16T04:41:42Z   [map[effect:NoSchedule key:node-role.kubernetes.io/master]]
+ip-10-0-26-129.ec2.internal             g5.xlarge    2026-09-16T05:08:40Z   <none>
+ip-10-0-55-253.ec2.internal    <none>   m6i.xlarge   2026-09-16T04:43:04Z   [map[effect:NoSchedule key:node-role.kubernetes.io/master]]
+ip-10-0-88-133.ec2.internal    <none>   m6i.xlarge   2026-09-16T04:42:44Z   [map[effect:NoSchedule key:node-role.kubernetes.io/master]]
+ip-10-0-98-150.ec2.internal    <none>   m6i.xlarge   2026-09-16T04:49:22Z   <none>
+$ oc -n openshift-machine-api get machineset ocp-ai-wg9fl-gpu-us-east-1a -o custom-columns
+GEN   REPLICAS   CREATED
+1     1          2026-09-16T05:04:19Z
+$ oc -n openshift-machine-api get machine -l machine.openshift.io/cluster-api-machineset=ocp-ai-wg9fl-gpu-us-east-1a -o custom-columns
+NAME                                CREATED                PHASE
+ocp-ai-wg9fl-gpu-us-east-1a-p4ptc   2026-09-16T05:04:19Z   Running
+```
+
+### Results summary
+
+| Run | Sampling | Watermarked detected (p ≤ 0.01) | Opt-out flagged | Human passages flagged |
+|---|---|---|---|---|
+| A | temperature 1.0, top_p 1.0, ≤300 tokens, n=10 (top_k 20 and repetition_penalty 1.1 from `generation_config.json` also in effect; the script does not set them) | 10/10 (TPR 1.000); p from 3.553e-14 to 5.242e-76 | 0/10 | 1/50 (min p 4.062e-03, median p 5.211e-01) |
+| B | model defaults (temperature 0.7, top_p 0.8; top_k 20 and repetition_penalty 1.1 from `generation_config.json`, as in A), n=10 | 9/10 (TPR 0.900); miss had p = 1.976e-02; detected p from 3.797e-04 to 3.819e-10 | 0/10 | — |
+| C | temperature 0 (greedy), n=5 | 0/5 (TPR 0.000); outputs identical to opt-out | 0/5 | — |
+
+Hand step: watermarked completion `p = 2.70e-46` over 300 scored tokens; opt-out
+`p = 0.172`; 26-token human sentence `p = 0.907`.
+
+**What this does and does not show.** It shows the native feature generating and detecting
+on OpenShift with the shipped detector, the opt-out field working, the greedy bypass, and the
+entropy dependence via temperature/top_p (run B vs A; `top_k 20` and `repetition_penalty 1.1` from
+`generation_config.json` were in force for every run, so run A was not unconstrained sampling).
+The human-corpus rate (1/50 at threshold 0.01) is a small
+sample and consistent with the documented calibration caveat; a production deployment must
+measure its own false-positive rate with its key. Not measured here: serving overhead vs. a
+watermark-off baseline, robustness to edits/paraphrase, speculative decoding, structured
+output, multi-replica behaviour. GPU node left running for the verification pass; scale to 0
+with `./scripts/scale-gpu.sh 0` when done.

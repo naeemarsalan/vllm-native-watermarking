@@ -4,6 +4,18 @@
 
 ## [Open the animated architecture and full article](https://naeemarsalan.github.io/vllm-watermark/)
 
+> [!NOTE]
+> **2026-09-16 — the approach has moved upstream.** vLLM now implements text
+> watermarking natively (Gumbel-max sampler plus a detector, merged upstream
+> 2026-09-10 and 2026-09-12; facts [E1–E9](docs/facts.md)). That supersedes the
+> out-of-tree logits-processor plugin this repository originally built.
+> **Start here: [Guide: native text watermarking in vLLM, end to end on OpenShift](docs/guide-native-watermarking.md)** —
+> executed on a fresh cluster on 2026-09-16, with deployable manifests in
+> [`deploy/native/`](deploy/native/) and a standalone client in
+> [`scripts/native-watermark-demo.py`](scripts/native-watermark-demo.py).
+> The rest of this README describes the original plugin work, kept for its
+> regulatory analysis and evidence base.
+
 This repository is an evidence-tracked proof of concept for generating and
 detecting KGW and SynthID-Text watermarks through vLLM, deploying the components
 on OpenShift AI, and continuously validating selected completed responses
@@ -235,6 +247,9 @@ Still unresolved for production (<code>OPEN</code>;
 |---|---|
 | [Animated article](https://naeemarsalan.github.io/vllm-watermark/) | Responsive article and animated reference architecture |
 | [<code>docs/blog.html</code>](docs/blog.html) | Self-contained source for the Pages article |
+| [<code>docs/guide-native-watermarking.md</code>](docs/guide-native-watermarking.md) | **Step-by-step guide to vLLM's native watermark** (deploy, generate, detect) |
+| [<code>deploy/native/</code>](deploy/native/) | Manifests for the native-watermark demo (vLLM + reference detector) |
+| [<code>scripts/native-watermark-demo.py</code>](scripts/native-watermark-demo.py) | Generate-and-detect client (stdlib only) |
 | [<code>docs/facts.md</code>](docs/facts.md) | Claim register with verification status and source |
 | [<code>docs/quotes.md</code>](docs/quotes.md) | Exact legal quotations with provenance |
 | [<code>docs/technical.md</code>](docs/technical.md) | vLLM extension point, watermarking design and limitations |
