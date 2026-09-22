@@ -1,0 +1,1096 @@
+{
+ "experiment": "length-sweep",
+ "model": "Qwen/Qwen2.5-7B-Instruct",
+ "lengths": [
+  50,
+  100,
+  150
+ ],
+ "temperatures": [
+  1.0
+ ],
+ "n_per_cell": 12,
+ "top_p": 1.0,
+ "records": [
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Vaccines introduce a harmless part of a pathogen or a weakened form of the entire pathogen to stimulate the immune system, which then produces an immune response and creates memory cells, allowing for a faster and more effective response if the actual pathogen",
+   "detection": {
+    "score": 55.79469633196272,
+    "p_value": 0.20142514933511652,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 46,
+   "finish_reason": "stop",
+   "text": "Vaccines introduce harmless parts of pathogens or weakened pathogens to the immune system, which then produces a immune response and creates memory cells, enabling a faster and more effective response if the actual pathogen is encountered in the future.",
+   "detection": {
+    "score": 53.17835533986147,
+    "p_value": 0.11482416031206284,
+    "num_scored_tokens": 45,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 45,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark due to the finite age and size of the observable universe; light from distant stars has not had enough time to reach us since the Big Bang, despite the vast number of stars in the universe.",
+   "detection": {
+    "score": 60.07879518608311,
+    "p_value": 0.012940284213240035,
+    "num_scored_tokens": 44,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 43,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark because the universe is finite and old enough that light from distant stars hasn't had time to reach Earth, and because interstellar dust absorbs and scatters much of the light between stars.",
+   "detection": {
+    "score": 40.39375600288714,
+    "p_value": 0.5790453124257467,
+    "num_scored_tokens": 42,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 43,
+   "finish_reason": "stop",
+   "text": "Compound interest allows small, regular savings to grow significantly over decades by earning interest not only on the principal amount but also on the accumulated interest from previous periods, effectively amplifying the growth of your savings over time.",
+   "detection": {
+    "score": 51.695155831921994,
+    "p_value": 0.07425611386778687,
+    "num_scored_tokens": 42,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 42,
+   "finish_reason": "stop",
+   "text": "Compound interest allows your savings to grow exponentially over time because you earn interest not only on the initial principal but also on the accumulated interest from previous periods, turning small, regular savings into significant wealth over decades.",
+   "detection": {
+    "score": 40.532808995433584,
+    "p_value": 0.5084187973255475,
+    "num_scored_tokens": 41,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Weather refers to the short-term atmospheric conditions in a specific location, such as temperature, precipitation, and humidity, which can vary day-to-day or season-to-season, while climate describes the average weather patterns in an area over a long period, typically ",
+   "detection": {
+    "score": 51.52126180966209,
+    "p_value": 0.39741656149162496,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Weather refers to short-term atmospheric conditions in a specific location, like temperature, rain, or snow, while climate is the average weather pattern over a longer period in a region, typically measured over 30 years or more. An unusually cold winter does",
+   "detection": {
+    "score": 50.85029710638306,
+    "p_value": 0.43381413867789664,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "In a common-law system, a criminal trial begins with an arrest, followed by charges being filed, preliminary hearing, plea bargain negotiations, jury selection, presentation of evidence, and ultimately a verdict by the jury or judge, unless a plea deal was reached",
+   "detection": {
+    "score": 73.95317643749445,
+    "p_value": 0.0013228299217871282,
+    "num_scored_tokens": 50,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 48,
+   "finish_reason": "stop",
+   "text": "In a common-law system, after an arrest, a defendant goes through arraignment, trial, and potential sentencing; if found guilty, the case moves to sentencing, or if acquit, the defendant is released with no conviction.",
+   "detection": {
+    "score": 47.34215931920567,
+    "p_value": 0.46080518492180056,
+    "num_scored_tokens": 47,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 32,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity better than others because they have more freely movable electrons in their outer shell, which allows for easier electrical conductivity through the metal's structure.",
+   "detection": {
+    "score": 35.44133054266196,
+    "p_value": 0.20561778428259023,
+    "num_scored_tokens": 31,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 32,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity better than others because they have more loosely bound electrons in their outer shells, which can move freely through the material, facilitating electrical conductivity.",
+   "detection": {
+    "score": 34.222353074220635,
+    "p_value": 0.26787702739553726,
+    "num_scored_tokens": 31,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 48,
+   "finish_reason": "stop",
+   "text": "Search engines decide which web pages to show first for a given query by evaluating various factors such as relevance, authority, and recency of the content, as well as the user's search history and location, then ranking the pages accordingly.",
+   "detection": {
+    "score": 62.073293445076246,
+    "p_value": 0.02032138600871374,
+    "num_scored_tokens": 47,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 43,
+   "finish_reason": "stop",
+   "text": "Search engines decide which web pages to show first for a given query by evaluating various factors such as relevance, authority, and recency of the content, along with user engagement metrics and the page's technical quality.",
+   "detection": {
+    "score": 41.95768257899401,
+    "p_value": 0.4820791638398331,
+    "num_scored_tokens": 42,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Yeast makes bread dough rise by producing carbon dioxide gas as it consumes sugars in the dough, creating air pockets that expand during fermentation, causing the dough to rise. This process also leads to the development of complex flavors and improves the texture of the final",
+   "detection": {
+    "score": 53.598830917346035,
+    "p_value": 0.2931808426343187,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Yeast makes bread dough rise by consuming sugars in the dough and producing carbon dioxide gas as a byproduct, which creates bubbles that expand when heated, causing the dough to Rise. This process, known as fermentation, changes the texture of the final loaf",
+   "detection": {
+    "score": 41.61256380235439,
+    "p_value": 0.8872418091810071,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Tectonic plates move very slowly, typically a few centimeters per year, due to convection currents in the Earth's mantle, and when these plates collide, slide past each other, or pull apart, they can create stress along fault lines,",
+   "detection": {
+    "score": 56.67989918544002,
+    "p_value": 0.17047928304001245,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move very slowly, typically a few centimeters per year, due to convection currents in the Earth's mantle, and their interaction at boundaries can cause stress buildup and release, resulting in earthquakes along faults where stresses are relieved.",
+   "detection": {
+    "score": 51.87284067676785,
+    "p_value": 0.32633250823909016,
+    "num_scored_tokens": 49,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "stop",
+   "text": "Astronomers can detect black holes by observing their effects on nearby matter or stars, such as intense gravitational forces that cause accretion disks and jets of particles, or by measuring the motion of stars influenced by the black hole's gravity.",
+   "detection": {
+    "score": 69.26530743231862,
+    "p_value": 0.004431848125779436,
+    "num_scored_tokens": 49,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 48,
+   "finish_reason": "stop",
+   "text": "Astronomers detect black holes indirectly by observing their gravitational effects on nearby matter or stars, and by analyzing the X-rays and other radiation emitted from hot accretion discs around black holes or from material being ejected at high speeds.",
+   "detection": {
+    "score": 44.473472752523385,
+    "p_value": 0.6279706330491702,
+    "num_scored_tokens": 47,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Antibiotic resistance spreads quickly in hospital settings because hospitals house patients with various infections, many of whom are immunocompromised or have extended hospital stays, creating an ideal environment for resistant bacteria to thrive and spread through person-to-person contact, medical equipment",
+   "detection": {
+    "score": 60.20609807175509,
+    "p_value": 0.08048483057033409,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "length",
+   "text": "Antibiotic resistance spreads quickly in hospital settings because hospitals house a high concentration of sick individuals, often with weakened immune systems, and the frequent use of antibiotics creates an environment where resistant bacteria can thrive and spread through direct contact or by contaminating surfaces and",
+   "detection": {
+    "score": 52.212314189649824,
+    "p_value": 0.3611594151632143,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 36,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it becomes more expensive for businesses and consumers to borrow money, which reduces spending and investment, helping to curb demand and thus tame inflation.",
+   "detection": {
+    "score": 42.6115116044922,
+    "p_value": 0.10400860927722394,
+    "num_scored_tokens": 35,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 50,
+   "temperature": 1.0,
+   "completion_tokens": 26,
+   "finish_reason": "stop",
+   "text": "Raising interest rates makes borrowing more expensive, which reduces consumer spending and business investment, thereby slowing economic growth and controlling inflation.",
+   "detection": {
+    "score": 32.22656640716777,
+    "p_value": 0.08212567656111383,
+    "num_scored_tokens": 25,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 57,
+   "finish_reason": "stop",
+   "text": "Vaccines introduce a harmless part of a pathogen or a weakened form of the entire pathogen to stimulate the immune system, which then produces an immune response and creates memory cells, allowing for a faster and more effective response if the actual pathogen is encountered in the future.",
+   "detection": {
+    "score": 64.47135660380296,
+    "p_value": 0.13060440030552398,
+    "num_scored_tokens": 56,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 51,
+   "finish_reason": "stop",
+   "text": "Vaccines introduce a harmless piece of a pathogen or a weakened form of the whole pathogen to stimulate an immune response without causing the disease. This primes the immune system to quickly recognize and combat the actual pathogen if encountered in the future.",
+   "detection": {
+    "score": 65.722303184181,
+    "p_value": 0.019149497855823705,
+    "num_scored_tokens": 50,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 45,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark due to the finite age and size of the observable universe; light from distant stars has not had enough time to reach us since the Big Bang, despite the vast number of stars in the universe.",
+   "detection": {
+    "score": 60.07879518608311,
+    "p_value": 0.012940284213240035,
+    "num_scored_tokens": 44,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 41,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark because the universe is not old enough for light from distant stars to have reached us, and the light from many stars eventually gets absorbed or scattered by dust and gas in space.",
+   "detection": {
+    "score": 39.670471496138006,
+    "p_value": 0.4997904180310684,
+    "num_scored_tokens": 40,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 43,
+   "finish_reason": "stop",
+   "text": "Compound interest allows small, regular savings to grow significantly over decades by earning interest not only on the principal amount but also on the accumulated interest from previous periods, effectively amplifying the growth of your savings over time.",
+   "detection": {
+    "score": 51.695155831921994,
+    "p_value": 0.07425611386778687,
+    "num_scored_tokens": 42,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "stop",
+   "text": "Compound interest allows your initial savings and the accumulated interest to earn more interest over time, exponentially growing your wealth. Regular small savings, when compounded, grow significantly over decades due to the power of earning interest on both the principal and previously earned interest.",
+   "detection": {
+    "score": 45.209432370603786,
+    "p_value": 0.6943375431533643,
+    "num_scored_tokens": 49,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 93,
+   "finish_reason": "stop",
+   "text": "Weather refers to the short-term atmospheric conditions in a specific location, such as temperature, precipitation, and humidity, which can vary day-to-day or season-to-season, while climate describes the average weather patterns in an area over a long period, typically 30 years or more. An unusually cold winter does not disprove long-term warming because climate change involves consistent trends over extended periods, and a single event is not sufficient to negate broader patterns of rising temperatures.",
+   "detection": {
+    "score": 115.35217286088621,
+    "p_value": 0.011048381335351786,
+    "num_scored_tokens": 92,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 76,
+   "finish_reason": "stop",
+   "text": "Weather refers to the short-term state of the atmosphere in a specific place (hours to weeks), while climate describes the average weather pattern in an area over a long period (decades to centuries). An unusually cold winter does not disprove long-term warming because climate change indicates a trend of increasing average temperatures over many years, which can still allow for variation in individual weather events.",
+   "detection": {
+    "score": 89.97300622122903,
+    "p_value": 0.04810011732647135,
+    "num_scored_tokens": 75,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 70,
+   "finish_reason": "stop",
+   "text": "In a common-law system, a criminal trial begins with an arrest based on evidence or a warrant, progresses through preliminary hearings and arraignments, culminates in a prosecution presenting its case before a judge or jury, followed by the defense rebuttal, and concludes with a verdict rendered by the jury or judge, if there is no jury.",
+   "detection": {
+    "score": 101.02142245085163,
+    "p_value": 0.0003129378739147152,
+    "num_scored_tokens": 69,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 71,
+   "finish_reason": "stop",
+   "text": "In a common-law system, after an arrest, the process moves to charging and arraignment, followed by pre-trial hearings where evidence is reviewed. If the case proceeds, it goes to trial where the prosecution must prove guilt beyond a reasonable doubt, after which a verdict is rendered by the jury or determined by the judge in a bench trial.",
+   "detection": {
+    "score": 79.08557753329143,
+    "p_value": 0.13970243173747565,
+    "num_scored_tokens": 70,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 32,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity better than others because they have more freely movable electrons in their outer shell, which allows for easier electrical conductivity through the metal's structure.",
+   "detection": {
+    "score": 35.44133054266196,
+    "p_value": 0.20561778428259023,
+    "num_scored_tokens": 31,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 40,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity better than others because their atoms have more freely moving electrons, which can flow more easily through the material, and because of differences in the metallic bonding structure that affect electron mobility.",
+   "detection": {
+    "score": 38.17337426127662,
+    "p_value": 0.5318057150258634,
+    "num_scored_tokens": 39,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 48,
+   "finish_reason": "stop",
+   "text": "Search engines decide which web pages to show first for a given query by evaluating various factors such as relevance, authority, and recency of the content, as well as the user's search history and location, then ranking the pages accordingly.",
+   "detection": {
+    "score": 62.073293445076246,
+    "p_value": 0.02032138600871374,
+    "num_scored_tokens": 47,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 46,
+   "finish_reason": "stop",
+   "text": "Search engines determine which web pages to show first for a given query by analyzing various factors including relevance, authority, freshness, and user experience, then ranking pages based on an algorithm that prioritizes the most relevant and useful results.",
+   "detection": {
+    "score": 34.51954070901426,
+    "p_value": 0.9507933043632393,
+    "num_scored_tokens": 45,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 67,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise by producing carbon dioxide gas as it consumes sugars in the dough, creating air pockets that expand during fermentation, causing the dough to rise. This process also leads to the development of complex flavors and improves the texture of the final loaf by creating a more open crumb structure with softer, more elastic bread.",
+   "detection": {
+    "score": 74.57285941919181,
+    "p_value": 0.14608965324624296,
+    "num_scored_tokens": 66,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 47,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise through fermentation, where it consumes sugars in the dough and produces carbon dioxide, which creates air pockets; this process, called proofing, results in a lighter, more porous texture in the final loaf.",
+   "detection": {
+    "score": 41.77918481386599,
+    "p_value": 0.7233723959957878,
+    "num_scored_tokens": 46,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 65,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move due to convection currents in the Earth's mantle, causing them to drift at rates of a few centimeters per year; this movement results in stresses building up along fault lines, which can lead to sudden releases of energy in the form of earthquakes when the stress exceeds the strength of the rocks.",
+   "detection": {
+    "score": 85.8517522130677,
+    "p_value": 0.006012291707297915,
+    "num_scored_tokens": 64,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 52,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move over the Earth's surface due to convection currents in the mantle, and when these plates collide, slide past each other, or pull apart, they can cause stress and strain in the crust, leading to earthquakes along fault lines.",
+   "detection": {
+    "score": 59.46882279897273,
+    "p_value": 0.12059401891755771,
+    "num_scored_tokens": 51,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 50,
+   "finish_reason": "stop",
+   "text": "Astronomers can detect black holes by observing their effects on nearby matter or stars, such as intense gravitational forces that cause accretion disks and jets of particles, or by measuring the motion of stars influenced by the black hole's gravity.",
+   "detection": {
+    "score": 69.26530743231862,
+    "p_value": 0.004431848125779436,
+    "num_scored_tokens": 49,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 44,
+   "finish_reason": "stop",
+   "text": "Astronomers detect black holes by observing their effects on nearby matter or stars, such as strong gravitational lensing, accretion disk emissions, or jets of particles propelled by the black hole's immense gravity.",
+   "detection": {
+    "score": 49.42902562152746,
+    "p_value": 0.16214607674991535,
+    "num_scored_tokens": 43,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 56,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads quickly in hospital settings because hospitals house patients with various infections, many of whom are immunocompromised or have extended hospital stays, creating an ideal environment for resistant bacteria to thrive and spread through person-to-person contact, medical equipment, and environmental surfaces.",
+   "detection": {
+    "score": 65.11477239261251,
+    "p_value": 0.09134058672453627,
+    "num_scored_tokens": 55,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 52,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads quickly in hospital settings because hospitals house a high concentration of sick patients with weakened immune systems, providing opportunities for resistant bacteria to proliferate and transfer resistance genes to other bacteria, and improper or excessive use of antibiotics accelerates this process.",
+   "detection": {
+    "score": 44.108422314677064,
+    "p_value": 0.832732748292074,
+    "num_scored_tokens": 51,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 36,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it becomes more expensive for businesses and consumers to borrow money, which reduces spending and investment, helping to curb demand and thus tame inflation.",
+   "detection": {
+    "score": 42.6115116044922,
+    "p_value": 0.10400860927722394,
+    "num_scored_tokens": 35,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 100,
+   "temperature": 1.0,
+   "completion_tokens": 29,
+   "finish_reason": "stop",
+   "text": "Raising interest rates makes borrowing more expensive, which reduces consumer spending and business investment, thus slowing down demand and ultimately helping to curb inflation.",
+   "detection": {
+    "score": 37.33402331837203,
+    "p_value": 0.04841040936476193,
+    "num_scored_tokens": 28,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 134,
+   "finish_reason": "stop",
+   "text": "Vaccines train the immune system to recognize and combat pathogens without causing the disease itself. They contain weakened or inactive pieces of the pathogen, such as proteins or sugars, called antigens. When these are introduced into the body, they trigger an immune response, including the production of antibodies and activation of immune cells like T cells. This response does not cause illness but creates a memory within the immune system. If the vaccinated individual encounters the actual pathogen later, their immune system is primed to recognize it quickly, produce antibodies more efficiently, and either prevent the disease or significantly reduce its severity. This process mimics a mild initial exposure and builds lasting immunity.",
+   "detection": {
+    "score": 203.3217446332255,
+    "p_value": 5.9539898946446785e-08,
+    "num_scored_tokens": 133,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 137,
+   "finish_reason": "stop",
+   "text": "Vaccines work by introducing a small, weakened, or inactivated piece of a pathogen, often a protein or a toxin, into the body. This harmless substance acts as an antigen, triggering an immune response without causing the disease. The immune system\u8bc6\u522b\u5e76\u4ea7\u751f\u7279\u5f02\u6027\u6297\u4f53\u6765\u5bf9\u6297\u8fd9\u4e9b\u6297\u539f\uff0c\u540c\u65f6\u4e5f\u523a\u6fc0\u514d\u75ab\u8bb0\u5fc6\u7ec6\u80de\u7684\u751f\u6210\u3002\u5f53\u771f\u6b63\u7684\u75c5\u539f\u4f53\u5165\u4fb5\u65f6\uff0c\u7531\u4e8e\u4e4b\u524d\u5df2\u7ecf\u201c\u7ec3\u4e60\u201d\u8fc7\u5982\u4f55\u54cd\u5e94\u8fd9\u79cd\u7279\u5b9a\u6297\u539f\uff0c\u514d\u75ab\u7cfb\u7edf\u80fd\u591f\u66f4\u5feb\u3001\u66f4\u6709\u6548\u5730\u8bc6\u522b\u548c\u6d88\u706d\u5b83\uff0c\u4ece\u800c\u9632\u6b62\u75be\u75c5\u7684\u53d1\u751f\u3002 Vaccines essentially teach the immune system what to look for and how to respond quickly and effectively when it encounters the actual pathogens later.",
+   "detection": {
+    "score": 148.53670130048485,
+    "p_value": 0.14185424272082217,
+    "num_scored_tokens": 136,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "The night sky appears dark despite the vast number of stars in the universe due to what astronomers refer to as Olbers' Paradox and its modern explanations. While the paradox initially suggests that a static, infinite universe filled with stars should appear as a bright sphere due to unobstructed line-of-sight in any direction, this is not observed. The key resolution lies in the finite age of the universe and its expansion. Because the universe has a finite age, light from distant stars has not had enough time to reach us yet. Additionally, the universe's expansion means that galaxies and their starlight can be redshifted into the infrared range, beyond our visible spectrum. Lastly, interstellar and intergalactic dust and gas can block or scatter",
+   "detection": {
+    "score": 206.9722511553265,
+    "p_value": 1.3768053241834016e-05,
+    "num_scored_tokens": 150,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "The night sky appears dark because, although the universe is filled with an enormous number of stars, the vast distances between them are even more significant. According to Olbers' Paradox, if the universe were infinite and static, every line of sight from Earth would eventually end on a star, making the night sky as bright as the surface of the Sun. However, our universe is finite, expanding, and mostly empty space, filled with vast voids. Additionally, the finite age of the universe means that light from distant stars has not yet had time to reach us, and matter and energy can be obscured by the cosmic microwave background radiation, dust, and the expansion of space itself. These factors combine to create the dark night sky we observe from Earth",
+   "detection": {
+    "score": 133.69015312964348,
+    "p_value": 0.9124181347741572,
+    "num_scored_tokens": 150,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "Compound interest is a powerful financial concept that significantly enhances the growth of your savings over time. It involves earning interest not only on the initial principal amount but also on the accumulated interest from previous periods. This means that as you save regularly and earn interest, each subsequent period's earnings are based on a larger principal, leading to exponential growth. Over decades, even modest, regular contributions can accumulate to substantial sums due to the compounding effect. For example, saving $100 monthly at an annual interest rate of 5% would grow to approximately $18,329 after 20 years, without making any additional deposits except the original monthly contributions\u2014demonstrating the potential of compound interest to transform small, consistent savings into significant",
+   "detection": {
+    "score": 201.9210646301905,
+    "p_value": 5.7485396965968746e-05,
+    "num_scored_tokens": 150,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 125,
+   "finish_reason": "stop",
+   "text": "Compound interest is a powerful financial concept that allows small, regular savings to grow significantly over time due to the exponential growth effect of earning interest on both the initial principal and the accumulated interest from previous periods. Essentially, with each compounding period, the interest earned itself starts to earn interest, amplifying the growth rate. This means that the longer the investment period, the more powerful the effect, as compounding has more time to work its magic. Even modest contributions made consistently, such as annual or monthly savings, can accumulate to substantial sums when compounded over several decades, transforming what might seem like minimal investments into meaningful wealth.",
+   "detection": {
+    "score": 125.1275538479877,
+    "p_value": 0.44793929784057984,
+    "num_scored_tokens": 124,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 138,
+   "finish_reason": "stop",
+   "text": "Weather refers to the short-term atmospheric conditions in a specific location, which can change rapidly and vary widely over a short period, such as days or weeks. Climate, on the other hand, is the long-term pattern of weather in a particular area, averaged out over decades or longer. An unusually cold winter does not disprove long-term warming because climate trends are observed over much longer periods than individual weather events. Long-term warming trends are evident from rising global temperatures, melting ice caps, and increasing sea levels, which are consistent with climate data collected over many years. Short-term cooling events are normal and expected within the variability of climatic systems but do not negate the overall warming trend.",
+   "detection": {
+    "score": 243.9718081202079,
+    "p_value": 3.224036366039029e-14,
+    "num_scored_tokens": 137,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 148,
+   "finish_reason": "stop",
+   "text": "Weather refers to the short-term atmospheric conditions in a specific location, such as temperature, precipitation, and humidity, which can change from day to day or even within hours. Climate, on the other hand, is the average weather pattern over a longer period, typically decades, characterized by broader trends and averages for an area. While an unusually cold winter may catch people off guard and challenge immediate perceptions of climate change, it does not disprove long-term warming trends because climate change involves gradual shifts and fluctuations around a rising baseline. Scientific data over many years consistently show increases in global average temperatures due to human activities, like emissions of greenhouse gases, which contribute to a warming planet. Thus, individual weather events do not invalidate these broader climate trends.",
+   "detection": {
+    "score": 130.37525820702393,
+    "p_value": 0.9190656187883659,
+    "num_scored_tokens": 147,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "In a common-law system, a criminal trial begins with an arrest based on probable cause or a warrant. After arrest, the accused is arraigned in court, where they are informed of the charges and enter a plea. If the plea is not guilty, the case proceeds to pre-trial proceedings including discovery and motions to dismiss or exclude evidence. The trial itself, consisting of opening statements, witness testimonies, and closing arguments, is held before a judge and jury (if it's a jury trial). After the trial, the jury deliberates and reaches a verdict, which can be either guilty or not guilty. For a conviction, the judge then imposes a sentence, which may include fines, imprisonment, or probation, based on the severity of the",
+   "detection": {
+    "score": 190.7641173016247,
+    "p_value": 0.0009879884565676613,
+    "num_scored_tokens": 150,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "In a common-law legal system, a criminal trial typically begins with an arrest, following the investigation of a suspected crime. Upon arrest, the individual must be brought before a judge to decide on release or detention pending trial, considering factors like flight risk and danger to the community. After indictment or formal charges are filed, the case proceeds to arraignment where the defendant enters a plea. If the defendant pleads not guilty, the matter moves to pretrial proceedings, which may include plea bargaining, motions, and other preparations. The actual trial commences, involving voir dire, opening statements, presentation of evidence by both prosecution and defense, examination and cross-examination of witnesses, and closing arguments. The jury then deliberates based on the evidence presented and",
+   "detection": {
+    "score": 155.29611232831286,
+    "p_value": 0.3247055163922153,
+    "num_scored_tokens": 150,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 129,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity much better than others due to their unique atomic structures and electron configurations. Metals, particularly those with closely packed, delocalized valence electrons, such as silver, copper, and aluminum, are excellent electrical conductors. These delocalized electrons can move freely throughout the metal lattice, allowing for the efficient transfer of electrical current. In contrast, metals with less delocalized electrons, such as steel (an alloy which includes carbon) or less dense metals like lead, have more restricted electron movement, leading to poorer conductivity. The specific arrangement and mobility of these free electrons are what primarily determine a metal's electrical conductivity.",
+   "detection": {
+    "score": 166.07030021279945,
+    "p_value": 0.0005227526822506293,
+    "num_scored_tokens": 126,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "stop",
+   "text": "The ability of metals to conduct electricity is largely due to the conduction of electrons within their atomic structure. Metals, particularly those at the left side of the periodic table such as sodium, potassium, and cesium, have a relatively high density of free electrons per atom. These free electrons can move easily throughout the metal lattice, allowing electrical current to flow freely. On the other hand, metals like gold and silver, though excellent conductors, have a slightly different electronic structure that enables even more efficient electron movement due to their specific crystal lattice arrangements and electron configurations. This difference in electron mobility and lattice configuration between metals explains why some conduct electricity better than others. Overall, the number and ease of movement of electrons dictate how well a metal conducts electricity.",
+   "detection": {
+    "score": 152.17608486116188,
+    "p_value": 0.3875796643483298,
+    "num_scored_tokens": 149,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 140,
+   "finish_reason": "stop",
+   "text": "Search engines determine which web pages to show first for a given query through a complex process that involves ranking algorithms. These algorithms analyze various factors such as the relevance of the page content to the user's query, the quality and authority of the website, the user experience (e.g., mobile-friendliness, loading speed), backlinks from other sites, and semantic signals related to the context and intent behind the query. The goal is to present the most relevant, authoritative, and useful information at the top of the search results, thereby providing the best possible user experience and delivering value based on the query intent. Updates to these algorithms are frequent to adapt to changes in internet usage patterns and emerging trends.",
+   "detection": {
+    "score": 185.95273248982656,
+    "p_value": 0.0001398416835702492,
+    "num_scored_tokens": 139,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 136,
+   "finish_reason": "stop",
+   "text": "Search engines use a combination of algorithms and data analysis to determine the relevance and ranking of web pages for a given query. They first analyze the keywords in the query and then scan through their massive index of web pages to find matching content. Factors influencing the ranking include the content's relevance to the query, the quality and authority of the website, the page's loading speed, user engagement signals like click-through rates, and its freshness (relevance of content). Additionally, user experience factors such as mobile-friendliness and secure connections (HTTPS) are also taken into account. Ultimately, the goal is to provide the most useful and accurate information at the top of the search results.",
+   "detection": {
+    "score": 125.22131826350947,
+    "p_value": 0.7978507997388079,
+    "num_scored_tokens": 135,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 125,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise through a process called fermentation. When yeast cells consume sugars present in the dough, they produce carbon dioxide gas and ethanol. The carbon dioxide gas forms bubbles within the dough, which expand as the gas is heated during baking, causing the dough to rise. This process also leads to changes in the bread's texture; the trapped gases create a network of air pockets, resulting in a lighter, more porous crumb structure. Additionally, the heat denatures proteins in the flour, helping to form gluten, which adds elasticity to the dough and contributes to the overall structure and texture of the baked loaf.",
+   "detection": {
+    "score": 158.75965186258398,
+    "p_value": 0.0018708883125224905,
+    "num_scored_tokens": 124,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 104,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise through a process called fermentation. When yeast cells consume the sugars present in the dough, they produce carbon dioxide gas as a byproduct. This gas forms bubbles within the dough, which expand as the gas heats up during baking, causing the bread to rise. As the bread bakes, the trapped air bubbles create a light, fluffy texture. The expansion of the yeast-produced gases leads to a porous structure, which gives the final loaf its soft, airy texture rather than a dense one.",
+   "detection": {
+    "score": 100.40102553176912,
+    "p_value": 0.5891462076117526,
+    "num_scored_tokens": 103,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 141,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move due to convection currents within the Earth's mantle, driven by heat from the planet's interior. These plates, which make up the Earth's lithosphere, float on the semi-fluid asthenosphere and drift at rates of a few centimeters per year. When these plates collide, slide past each other, or pull apart, they create various geological features including mountains, mid-ocean ridges, and trenches. Earthquakes occur primarily along fault lines where there is stress accumulated as these plates move against each other. As the stress exceeds the strength of the rocks, sudden movements along the fault lines release this built-up energy, generating seismic waves that we perceive as earthquakes.",
+   "detection": {
+    "score": 197.67429976700714,
+    "p_value": 6.563364736421946e-06,
+    "num_scored_tokens": 140,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 140,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move due to convection currents in the Earth's mantle, which results from the heat generated by the decay of radioactive elements in the Earth\u2019s interior. These currents cause the massive plates that make up the Earth's lithosphere to drift at rates of a few centimeters per year. As these plates interact with one another\u2014either colliding, pulling apart, or sliding past\u2014they can get stuck at their boundaries due to friction. The buildup of energy and stress continues until the plates eventually break free, releasing this energy in the form of seismic waves\u2014a process known as an earthquake. Fault lines are specific zones within the Earth where this interaction occurs, often leading to significant seismic activity.",
+   "detection": {
+    "score": 136.26950147222104,
+    "p_value": 0.581138775089477,
+    "num_scored_tokens": 139,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 129,
+   "finish_reason": "stop",
+   "text": "Astronomers can detect black holes indirectly through their gravitational effects on nearby matter and radiation emitted from the accretion disk and surrounding environment. As material is drawn into a black hole, it forms an accretion disk around the black hole, which heats up and emits intense X-rays as it spirals inward due to friction. The gravitational pull of a black hole also affects the orbits of nearby stars, allowing scientists to infer the presence and mass of the black hole. Observations of these phenomena, combined with theoretical models, provide strong evidence for the existence of black holes despite the fact that no light can escape past the event horizon.",
+   "detection": {
+    "score": 198.77219522835185,
+    "p_value": 2.083690416685517e-08,
+    "num_scored_tokens": 127,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 118,
+   "finish_reason": "stop",
+   "text": "Astronomers detect black holes through their gravitational effects on nearby matter and radiation. As material falls into a black hole, it forms an accretion disk heated to extremely high temperatures, emitting X-rays and other forms of radiation that can be detected by telescopes. Additionally, the presence of a black hole can cause significant warping of space-time, leading to observable gravitational lensing effects or disturbances in the orbits of stars and gas around it. By analyzing these phenomena, scientists can infer the location and properties of a black hole, even though no light can escape its event horizon.",
+   "detection": {
+    "score": 123.1238266367245,
+    "p_value": 0.22025736286404385,
+    "num_scored_tokens": 115,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 102,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads quickly in hospital settings due to multiple factors. Hospitals house a high concentration of individuals with compromised immune systems, making them more susceptible to infections. The frequent use of antibiotics in hospitals can disrupt the normal bacterial flora, allowing resistant bacteria to thrive and multiply. Additionally, the close proximity and shared environments facilitate the spread of resistant strains among patients and staff. Inadequate infection control measures and poor hand hygiene exacerbate this issue, contributing to the rapid dissemination of resistant bacteria within the hospital.",
+   "detection": {
+    "score": 143.1754197151014,
+    "p_value": 8.651718526372917e-05,
+    "num_scored_tokens": 101,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 138,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads quickly in hospital settings due to several factors. Hospitals house a diverse population, including immunocompromised patients, which makes them ideal breeding grounds for pathogens. Additionally, hospitals frequently use antibiotics, sometimes unnecessarily or improperly, contributing to the selective pressure that favors resistant bacteria over susceptible ones. The close quarters and frequent transfer of patients also facilitate the rapid spread of these resistant bacteria between individuals. Furthermore, poor hand hygiene among staff and visitors, lack of effective infection control measures, and the presence of multidrug-resistant organisms (MDROs) further accelerate the transmission of antibiotic resistance. These combined factors create an environment conducive to the rapid spread of antibiotic-resistant infections within hospitals.",
+   "detection": {
+    "score": 153.89098932066454,
+    "p_value": 0.06682183525907898,
+    "num_scored_tokens": 136,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 129,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it becomes more expensive for businesses and consumers to borrow money. This reduction in borrowing and spending can help to cool down an overheating economy and reduce demand for goods and services, thereby curbing inflation. Higher interest rates also make holding onto cash or savings accounts more attractive compared to investing or spending that money, which can further dampen consumer spending. Additionally, higher rates can strengthen a country's currency, making imported goods cheaper and potentially reducing inflationary pressures from abroad. Overall, the goal of raising interest rates is to manage economic growth and maintain price stability within the bounds of the central bank's targets.",
+   "detection": {
+    "score": 200.58864109076913,
+    "p_value": 1.680679797834809e-08,
+    "num_scored_tokens": 128,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 100,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it makes borrowing more expensive and saves relatively more attractive. This reduces consumer and business spending, thereby lowering the demand for goods and services in the economy. As demand decreases, prices tend to stabilize or fall, which helps to curb inflation. Additionally, higher interest rates encourage savings over consumption, further reducing the money supply in circulation and cooling off price increases. Overall, this monetary policy tool aims to balance economic growth with price stability by moderating inflationary pressures.",
+   "detection": {
+    "score": 118.13566010975649,
+    "p_value": 0.03254589377993173,
+    "num_scored_tokens": 99,
+    "is_watermarked": false
+   }
+  }
+ ]
+}

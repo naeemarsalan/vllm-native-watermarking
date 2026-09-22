@@ -1,0 +1,331 @@
+# Dual-key detectors at three key-B weights, so the generation/detection alpha
+# pairing can be measured. Generation runs at alpha=0.1 (upstream default);
+# upstream's DETECTOR default is 0.2, so a02 is the "both defaults" case.
+# Detector for the 7B lab run. Identical to 20-detector.yaml except the
+# tokenizer, which MUST match the generating engine: detection re-tokenizes
+# the text, so a mismatched tokenizer silently destroys the signal.
+# Reuses the ConfigMap created by 20-detector.yaml.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wm-det-dual-a01
+  namespace: watermark-demo
+  labels:
+    app: wm-det-dual-a01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wm-det-dual-a01
+  template:
+    metadata:
+      labels:
+        app: wm-det-dual-a01
+    spec:
+      # No nodeSelector or affinity: the detector needs no GPU and may land on any worker.
+      # In the recorded run the scheduler put it on a CPU worker because the GPU node did
+      # not exist yet. Add a nodeAffinity requiring `node-role.kubernetes.io/gpu` DoesNotExist
+      # if it must stay off the GPU node.
+      enableServiceLinks: false
+      containers:
+        - name: detector
+          image: vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 # tag: nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              exec python3 /app/detector_server_dual.py
+              --tokenizer "$MODEL" --key "$WATERMARK_KEY" --algorithm dual_key_gumbel --alpha 0.1 --context-width 4
+              --p-value-threshold 0.01 --host 0.0.0.0 --port 8080
+          env:
+            - name: MODEL
+              value: Qwen/Qwen2.5-7B-Instruct
+            - name: WATERMARK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: watermark-key
+                  key: WATERMARK_KEY
+            - name: HOME
+              value: /cache/home
+            - name: HF_HOME
+              value: /cache/hf
+            # No GPU on this pod: keep vLLM's platform probe quiet.
+            - name: CUDA_VISIBLE_DEVICES
+              value: ""
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "1"
+              memory: 3Gi
+            limits:
+              memory: 6Gi
+          volumeMounts:
+            - name: src
+              mountPath: /app
+            - name: cache
+              mountPath: /cache
+          readinessProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+            failureThreshold: 60
+      volumes:
+        - name: src
+          configMap:
+            name: watermark-detector-dual-src
+        - name: cache
+          emptyDir:
+            sizeLimit: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wm-det-dual-a01
+  namespace: watermark-demo
+spec:
+  selector:
+    app: wm-det-dual-a01
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# Internal-only by design in production (detection scores leak signal); exposed
+# here as a Route for the demo client. Delete the Route outside of the demo.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wm-det-dual-a01
+  namespace: watermark-demo
+spec:
+  to:
+    kind: Service
+    name: wm-det-dual-a01
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+---
+# Detector for the 7B lab run. Identical to 20-detector.yaml except the
+# tokenizer, which MUST match the generating engine: detection re-tokenizes
+# the text, so a mismatched tokenizer silently destroys the signal.
+# Reuses the ConfigMap created by 20-detector.yaml.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wm-det-dual-a02
+  namespace: watermark-demo
+  labels:
+    app: wm-det-dual-a02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wm-det-dual-a02
+  template:
+    metadata:
+      labels:
+        app: wm-det-dual-a02
+    spec:
+      # No nodeSelector or affinity: the detector needs no GPU and may land on any worker.
+      # In the recorded run the scheduler put it on a CPU worker because the GPU node did
+      # not exist yet. Add a nodeAffinity requiring `node-role.kubernetes.io/gpu` DoesNotExist
+      # if it must stay off the GPU node.
+      enableServiceLinks: false
+      containers:
+        - name: detector
+          image: vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 # tag: nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              exec python3 /app/detector_server_dual.py
+              --tokenizer "$MODEL" --key "$WATERMARK_KEY" --algorithm dual_key_gumbel --alpha 0.2 --context-width 4
+              --p-value-threshold 0.01 --host 0.0.0.0 --port 8080
+          env:
+            - name: MODEL
+              value: Qwen/Qwen2.5-7B-Instruct
+            - name: WATERMARK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: watermark-key
+                  key: WATERMARK_KEY
+            - name: HOME
+              value: /cache/home
+            - name: HF_HOME
+              value: /cache/hf
+            # No GPU on this pod: keep vLLM's platform probe quiet.
+            - name: CUDA_VISIBLE_DEVICES
+              value: ""
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "1"
+              memory: 3Gi
+            limits:
+              memory: 6Gi
+          volumeMounts:
+            - name: src
+              mountPath: /app
+            - name: cache
+              mountPath: /cache
+          readinessProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+            failureThreshold: 60
+      volumes:
+        - name: src
+          configMap:
+            name: watermark-detector-dual-src
+        - name: cache
+          emptyDir:
+            sizeLimit: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wm-det-dual-a02
+  namespace: watermark-demo
+spec:
+  selector:
+    app: wm-det-dual-a02
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# Internal-only by design in production (detection scores leak signal); exposed
+# here as a Route for the demo client. Delete the Route outside of the demo.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wm-det-dual-a02
+  namespace: watermark-demo
+spec:
+  to:
+    kind: Service
+    name: wm-det-dual-a02
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+---
+# Detector for the 7B lab run. Identical to 20-detector.yaml except the
+# tokenizer, which MUST match the generating engine: detection re-tokenizes
+# the text, so a mismatched tokenizer silently destroys the signal.
+# Reuses the ConfigMap created by 20-detector.yaml.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wm-det-dual-a05
+  namespace: watermark-demo
+  labels:
+    app: wm-det-dual-a05
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wm-det-dual-a05
+  template:
+    metadata:
+      labels:
+        app: wm-det-dual-a05
+    spec:
+      # No nodeSelector or affinity: the detector needs no GPU and may land on any worker.
+      # In the recorded run the scheduler put it on a CPU worker because the GPU node did
+      # not exist yet. Add a nodeAffinity requiring `node-role.kubernetes.io/gpu` DoesNotExist
+      # if it must stay off the GPU node.
+      enableServiceLinks: false
+      containers:
+        - name: detector
+          image: vllm/vllm-openai@sha256:20a52b807cef7a3be15d2174d293b5642d437615b20b5930d78a927e709e6bb6 # tag: nightly-cd10ed6f9f6b37a8ace9cf380007e66fe12ec0c3
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              exec python3 /app/detector_server_dual.py
+              --tokenizer "$MODEL" --key "$WATERMARK_KEY" --algorithm dual_key_gumbel --alpha 0.5 --context-width 4
+              --p-value-threshold 0.01 --host 0.0.0.0 --port 8080
+          env:
+            - name: MODEL
+              value: Qwen/Qwen2.5-7B-Instruct
+            - name: WATERMARK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: watermark-key
+                  key: WATERMARK_KEY
+            - name: HOME
+              value: /cache/home
+            - name: HF_HOME
+              value: /cache/hf
+            # No GPU on this pod: keep vLLM's platform probe quiet.
+            - name: CUDA_VISIBLE_DEVICES
+              value: ""
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "1"
+              memory: 3Gi
+            limits:
+              memory: 6Gi
+          volumeMounts:
+            - name: src
+              mountPath: /app
+            - name: cache
+              mountPath: /cache
+          readinessProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket: { port: http }
+            periodSeconds: 10
+            failureThreshold: 60
+      volumes:
+        - name: src
+          configMap:
+            name: watermark-detector-dual-src
+        - name: cache
+          emptyDir:
+            sizeLimit: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wm-det-dual-a05
+  namespace: watermark-demo
+spec:
+  selector:
+    app: wm-det-dual-a05
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# Internal-only by design in production (detection scores leak signal); exposed
+# here as a Route for the demo client. Delete the Route outside of the demo.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wm-det-dual-a05
+  namespace: watermark-demo
+spec:
+  to:
+    kind: Service
+    name: wm-det-dual-a05
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

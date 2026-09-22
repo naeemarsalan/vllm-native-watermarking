@@ -1,0 +1,25 @@
+# native watermark paired serving benchmark
+date_utc: 2026-09-21T04:46:42Z
+base_url: https://<cluster-domain>/v1
+model: Qwen/Qwen2.5-7B-Instruct
+trials: 3  n: 50  concurrency: 8  max_tokens: 300
+temperature: 1.0  top_p: 1.0
+
+## paired serving results (same engine; baseline = per-request opt-out)
+
+| metric | watermark on | opt-out | delta |
+|---|---:|---:|---:|
+| output tokens/s | 327.698 | 328.386 | -0.21% |
+| wall time (s) | 45.636 | 45.581 | +0.12% |
+| latency mean (s) | 6.534 | 6.500 | +0.51% |
+| latency p50 (s) | 6.551 | 6.511 | +0.62% |
+| latency p95 (s) | 6.584 | 6.551 | +0.50% |
+| latency p99 (s) | 6.598 | 6.563 | +0.53% |
+
+per-arm output tok/s  on=[328.0, 326.3, 327.7]
+per-arm output tok/s off=[328.4, 328.1, 328.6]
+trials per arm: on=3 off=3; failed requests: 0
+
+GPU during the run: utilization mean 100.0% max 100% (54 samples)
+GPU memory: mean 40363 MiB, max 40363 MiB of 46068 MiB
+GPU power: mean 317 W, max 338 W

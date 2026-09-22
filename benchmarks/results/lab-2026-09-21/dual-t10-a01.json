@@ -1,0 +1,1096 @@
+{
+ "experiment": "length-sweep",
+ "model": "Qwen/Qwen2.5-7B-Instruct",
+ "lengths": [
+  150,
+  300,
+  512
+ ],
+ "temperatures": [
+  1.0
+ ],
+ "n_per_cell": 12,
+ "top_p": 1.0,
+ "records": [
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 135,
+   "finish_reason": "stop",
+   "text": "Vaccines work by introducing a weakened, dead, or pieces of a pathogen (such as its proteins or sugars) into the body. This \"fake\" infection prompts the immune system to produce an immune response, including the production of antibodies and activation of immune cells that specifically target the introduced pathogen components. When the actual pathogen enters the body later, the immune system recognizes it based on the memory cells and antibodies created during the vaccination, mounting a quicker and more effective response to eliminate it, thus preventing disease. This way, vaccines effectively train the immune system to recognize and fight off pathogens it hasn't encountered before, providing immunity without causing the disease itself.",
+   "detection": {
+    "score": 169.3216816173965,
+    "p_value": 0.0006199512179730544,
+    "num_scored_tokens": 133,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "Vaccines work by introducing a harmless form of a pathogen, such as a weakened or dead virus, bacteria, or a fragment of the microorganism, into the body. This triggers an immune response similar to what occurs during an actual infection but without causing the disease. The immune system recognizes these components as foreign and mounts a defensive response, producing antibodies and activating immune cells like T-cells to combat the simulated invader. After the vaccine stimulates this initial defense, the immune system \"remembers\" the specific pathogen, creating a memory pool of immune cells. If the real pathogen later enters the body, the immune system can quickly recognize and more effectively neutralize or destroy it, preventing the disease from developing. This immune training is",
+   "detection": {
+    "score": 151.91440095113367,
+    "p_value": 0.3871883433975009,
+    "num_scored_tokens": 149,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 117,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark despite the vast number of stars in the universe due to a concept known as Olber's Paradox. If the universe were both infinite and eternal with a uniform distribution of stars, every line of sight through the universe would end on a star, leading to a sky that would be as bright as the surface of the sun. However, the night sky appears dark because the universe has a finite age and size, and light from distant stars hasn't had enough time to reach us yet. Additionally, the expansion of the universe affects the visibility of distant stars.",
+   "detection": {
+    "score": 144.05783983504634,
+    "p_value": 0.002558670151445996,
+    "num_scored_tokens": 115,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 124,
+   "finish_reason": "stop",
+   "text": "The night sky appears dark despite the vast number of stars because of the finite size and age of the observable universe. Our visible universe has a finite age, approximately 13.8 billion years, and light from distant stars hasn't had time to reach us if they are far enough away. Additionally, the universe's expansion means that some sources of light have moved beyond our current observational limits or have red-shifted their light to wavelengths outside the visible spectrum. This, combined with the distribution and density of stars being insufficient to cause noticeable light pollution even from a global perspective, explains the darkness of the night sky.",
+   "detection": {
+    "score": 131.2733860773542,
+    "p_value": 0.20239493289246394,
+    "num_scored_tokens": 123,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 108,
+   "finish_reason": "stop",
+   "text": "Compound interest is the process where interest is earned not only on the initial principal but also on the accumulated interest from previous periods. This exponential growth allows small, regular savings to accumulate significantly over decades. For example, if you save $100 monthly at an annual interest rate of 5%, after 40 years, the total amount would be much more than $48,000 (assuming no inflation). The power of compounding magnifies returns as time progresses, making even modest savings potentially grow into substantial wealth.",
+   "detection": {
+    "score": 136.1593781518427,
+    "p_value": 0.0018856775963813728,
+    "num_scored_tokens": 107,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 112,
+   "finish_reason": "stop",
+   "text": "Compound interest is a powerful financial concept that allows small, regular savings to grow into significant wealth over time. When you save or invest money, you earn interest not only on your original principal but also on the accumulated interest from previous periods. This exponential growth accelerates as the duration increases and more interest is earned on previously earned interest. Over decades, this effect compels even modest contributions to grow substantially, demonstrating the \"miracle of compounding.\" Regular savings with compounding can transform insignificant monthly contributions into substantial sums through the magic of time and interest accumulation.",
+   "detection": {
+    "score": 110.98653980324066,
+    "p_value": 0.48913239220680654,
+    "num_scored_tokens": 111,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 130,
+   "finish_reason": "stop",
+   "text": "Weather refers to the day-to-day state of the atmosphere, including factors like temperature, humidity, wind, and precipitation, while climate is the average weather pattern over a longer period in a specific area, typically spanning decades or more. An unusually cold winter is part of the weather variability and does not represent a lasting change in overall climate trends. Long-term warming trends, observed globally through data from multiple decades, indicate an increasing average temperature trend. This warming is driven by various factors, including increased greenhouse gases, rather than single instances of colder weather. Therefore, individual extreme weather events should be analyzed within the context of larger, ongoing climatic patterns.",
+   "detection": {
+    "score": 192.0288348821332,
+    "p_value": 3.947611737719909e-08,
+    "num_scored_tokens": 129,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 130,
+   "finish_reason": "stop",
+   "text": "Weather refers to the short-term atmospheric conditions in a specific location, which can vary day-to-day or season-to-season. Climate, on the other hand, describes the average atmospheric conditions over a much longer period, typically spanning decades or more. An unusually cold winter is a result of short-term variability and does not contradict the overall trend of long-term warming. Global temperature records consistently show increases due to human activities, such as the burning of fossil fuels, which release greenhouse gases that trap heat in the atmosphere, leading to a gradual but ongoing rise in global temperatures. This long-term warming is evident despite year-to-year or seasonal fluctuations in weather patterns.",
+   "detection": {
+    "score": 124.88306376128314,
+    "p_value": 0.6472756798834459,
+    "num_scored_tokens": 129,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "In a common-law system, the process of a criminal trial begins with an arrest and charges being filed based on evidence gathered by law enforcement or other credible sources. Following arrest, the defendant goes through various stages including arraignment where they are formally informed of the charges, enter a plea, and may have bail set. Pretrial proceedings may involve motions to suppress evidence, discovery between parties, and negotiations for plea deals if applicable. If no deal is reached, the case proceeds to trial. At trial, the prosecution must prove guilt beyond a reasonable doubt. A jury (if one has been convened) evaluates evidence and testimony, while the judge oversees the legal proceedings. After deliberation, the jury returns a verdict of guilty or not guilty, which the",
+   "detection": {
+    "score": 207.26308799574525,
+    "p_value": 1.6898964864988305e-06,
+    "num_scored_tokens": 150,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 150,
+   "finish_reason": "length",
+   "text": "In a common-law system, the journey from arrest to verdict begins with police arresting a suspect based on probable cause or a warrant. The suspect is then arraigned in court, where charges are officially read and the defendant is informed of their rights. If the defendant pleads not guilty, the case proceeds to trial. During pre-trial proceedings, both the prosecution and defense engage in discovery, file motions, and potentially negotiate a plea bargain. If no plea deal is reached, the trial commences, usually consisting of a jury selection, opening statements, presentation of evidence, witness testimonies, and closing arguments. The jury deliberates and returns a verdict, which can be guilty, not guilty, or in some cases, a hung jury leading to a",
+   "detection": {
+    "score": 137.29009477540245,
+    "p_value": 0.8760069744424399,
+    "num_scored_tokens": 150,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 113,
+   "finish_reason": "stop",
+   "text": "Metals conduct electricity exceptionally well because their atoms have a high density of freely movable electrons. These delocalized electrons can move throughout the metal lattice when an electric field is applied, facilitating the flow of electrical current. The better conductivity of some metals over others is primarily due to differences in the number and mobility of these free electrons. For example, silver has more freely moving electrons compared to copper, which is why it has superior electrical conductivity among pure metals. Other factors include the crystal structure and presence of impurities, which can hinder electron movement and reduce conductivity.",
+   "detection": {
+    "score": 154.2132174921346,
+    "p_value": 3.5042532486206456e-05,
+    "num_scored_tokens": 112,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 121,
+   "finish_reason": "stop",
+   "text": "Some metals conduct electricity better than others due to differences in their atomic structure and electron configurations. Metals have a high number of free electrons that can move freely throughout the material's lattice structure. This is because the outermost electrons (valence electrons) in metallic atoms are loosely bound and can drift through the metal when an electric field is applied. The number and mobility of these free electrons vary among different metals. For example, copper and silver have more free electrons and allow for greater electrical conductivity compared to less conductive metals like iron or brass, which have fewer free electrons and thus poorer electrical conduction.",
+   "detection": {
+    "score": 119.5197308217625,
+    "p_value": 0.5083421431596981,
+    "num_scored_tokens": 120,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 135,
+   "finish_reason": "stop",
+   "text": "Search engines determine which web pages to show first for a given query through a complex process involving multiple factors such as relevance, authority, and user engagement. They crawl the web to index billions of web pages, then use algorithms like Google's PageRank and more recent ones like BERT to evaluate each page. Factors like keyword presence, high-quality content, backlinks, and mobile-friendliness are considered. Additionally, user signals like click-through rates, dwell time, and bounce rates provide insights into how relevant and engaging the content is perceived to be, further influencing ranking decisions. These dynamic processes ensure that the most useful and relevant information appears at the top of search results.",
+   "detection": {
+    "score": 193.01490905752678,
+    "p_value": 2.986315187888771e-07,
+    "num_scored_tokens": 134,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 143,
+   "finish_reason": "stop",
+   "text": "Search engines decide which web pages to show first for a given query through a complex algorithm that evaluates numerous factors. These include the relevance of the content to the query, the quality and authority of the website, the freshness of the content, and user engagement metrics. PageRank, a key Google metric, assesses page importance based on the number and quality of links pointing to it. Other signals like keyword usage, meta tags, and mobile-friendliness are also considered. Advanced techniques such as machine learning help in understanding context and providing more relevant results. User behavior data, like dwell time and interaction with ads or links, is used to refine rankings, ensuring the displayed results best meet the user's information needs.",
+   "detection": {
+    "score": 152.3699613364721,
+    "p_value": 0.1675870764829609,
+    "num_scored_tokens": 142,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 120,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise through a process called fermentation. When yeast cells consume sugars in the dough, they produce carbon dioxide gas as a byproduct. This gas forms bubbles within the dough, creating a network of air pockets. As the dough rises, these air pockets expand, giving the bread its light, airy texture. During baking, the heat causes the trapped gas to expand further, contributing to the bread's rise. After baking, the structure of the bread solidifies, maintaining the expanded, open crumb structure. This results in a softer, more tender loaf with an appealing texture.",
+   "detection": {
+    "score": 142.06363022430628,
+    "p_value": 0.012998664424140511,
+    "num_scored_tokens": 119,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 118,
+   "finish_reason": "stop",
+   "text": "Yeast makes bread dough rise through fermentation, a process where yeast cells break down sugars in the dough to produce carbon dioxide gas and ethanol. The carbon dioxide gas forms bubbles in the dough, causing it to expand and rise. As the bread bakes, the gases escape but the structure left behind by the bubbles creates a soft, airy texture in the final loaf. This process also produces flavors and aromas, enhancing the bread's taste. The resulting texture is characterized by a light and fluffy quality, with pockets of air distributing throughout the bread, making it easy to chew and digest.",
+   "detection": {
+    "score": 114.89709720488212,
+    "p_value": 0.5745778480255473,
+    "num_scored_tokens": 117,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 147,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move due to convection currents in the Earth's mantle, driven by the heat from the planet's core. These plates float on the semi-fluid asthenosphere beneath them and can move in various directions: spreading apart (divergent boundaries), colliding (convergent boundaries), or sliding past each other (transform boundaries). When plates move against or parallel to each other with significant friction, stress builds up along their boundaries, especially in fault zones. Eventually, this accumulated energy is released as seismic waves, causing the ground to shake and resulting in an earthquake. The specific pattern and frequency of these events are influenced by the type of boundary and the nature of the crustal material involved at the fault line.",
+   "detection": {
+    "score": 210.75717824254437,
+    "p_value": 7.96234404671297e-08,
+    "num_scored_tokens": 146,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 144,
+   "finish_reason": "stop",
+   "text": "Tectonic plates move due to convection currents in the Earth's mantle, which is driven by heat from the planet's core and radioactivity. These currents cause the thick, rigid plates\u2014comprising the lithosphere\u2014of the Earth's crust and upper mantle to glide over the semi-fluid asthenosphere beneath. As these plates converge, diverge, or slide past each other, stress accumulates at their boundaries, particularly along fault lines. When the stress exceeds the strength of the rock, it suddenly releases, causing the ground to shake\u2014a phenomenon known as an earthquake. This movement is continuously occurring but is often imperceptible; however, the release of built-up energy during an earthquake can be devastating.",
+   "detection": {
+    "score": 132.16708902277082,
+    "p_value": 0.8416890524227265,
+    "num_scored_tokens": 143,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 113,
+   "finish_reason": "stop",
+   "text": "Astronomers detect black holes indirectly through their gravitational effects and the influence they have on surrounding matter. When matter falls into a black hole, it forms an accretion disk around the black hole, which heats up and emitsX-rays that telescopes can detect. Additionally, black holes can also be inferred from the motion of nearby stars or gas being tidally disrupted by the black hole's strong gravitational pull. The distortion of space-time around a black hole can also cause gravitational lensing, bending light from background objects, which can be observed by astronomers.",
+   "detection": {
+    "score": 144.45359855250234,
+    "p_value": 0.000863936121143073,
+    "num_scored_tokens": 112,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 122,
+   "finish_reason": "stop",
+   "text": "Astronomers can detect black holes through their gravitational effects and the interactions they have with their environment. For example, black holes can pull gas and dust into them, forming an accretion disk around the black hole. This process heats up the material in the disk to extremely high temperatures, causing it to emit X-rays which telescopes on Earth or in space can detect. Additionally, black holes can influence nearby stars and gas clouds, altering their orbits or causing them to move in ways that deviate from expectations based on the visible mass alone, revealing the presence of the black hole's gravitational pull.",
+   "detection": {
+    "score": 121.2868735336241,
+    "p_value": 0.4376999876978833,
+    "num_scored_tokens": 120,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 115,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads quickly in hospital settings due to several factors. Hospitals house a high concentration of sick individuals, many of whom are immunocompromised and require frequent medical interventions, increasing the likelihood of infection. Healthcare workers, devices, and environments can easily transmit resistant bacteria between patients. Additionally, the overuse and misuse of antibiotics in hospitals contribute significantly to the development and spread of resistant strains. Inefficient hygiene practices, inadequate sterilization protocols, and the rapid patient flow exacerbate these issues, leading to a quicker spread of antibiotic-resistant infections among the susceptible population.",
+   "detection": {
+    "score": 155.2773972892684,
+    "p_value": 5.468998990902287e-05,
+    "num_scored_tokens": 114,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 122,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance spreads rapidly in hospital settings due to several factors. Hospitals house a high density of immuno-compromised patients who are more susceptible to infections, and they also host healthcare workers and visitors who can unintentionally spread pathogens. The frequent use and misuse of antibiotics in these settings contribute to the selection of resistant bacteria. Additionally, hospitals often have centralized systems for water and air circulation, which can facilitate the transmission of resistant pathogens between patients. The presence of multiple healthcare-associated infections (HAIs) and limited access to infection control practices can further exacerbate this issue, leading to widespread antibiotic resistance.",
+   "detection": {
+    "score": 106.59202526003637,
+    "p_value": 0.9306280003951308,
+    "num_scored_tokens": 121,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 107,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it makes borrowing money more expensive for consumers and businesses. This reduction in borrowing leads to decreased spending on goods and services, as people have less disposable income due to higher costs of loans, credit cards, and mortgages. As a result, the demand for goods and services decreases, which helps to lower prices and slow down inflation. Additionally, higher interest rates make saving more attractive compared to spending, further reducing the overall money supply in circulation and putting downward pressure on inflationary pressures in the economy.",
+   "detection": {
+    "score": 134.36923238855627,
+    "p_value": 0.0022843086524052796,
+    "num_scored_tokens": 106,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 150,
+   "temperature": 1.0,
+   "completion_tokens": 111,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it makes borrowing more expensive and saving more attractive for consumers and businesses. This reduces the overall money supply in circulation, decreasing consumer spending and investment since loans become costlier. As a result, there's less demand for goods and services, which can help bring inflation under control by reducing price pressures. Additionally, higher interest rates can strengthen the value of the national currency, making imports cheaper and further dampening domestic inflationary pressures. Overall, this policy tool aims to cool down an overheating economy and stabilize prices.",
+   "detection": {
+    "score": 108.34915623810944,
+    "p_value": 0.557990852525229,
+    "num_scored_tokens": 110,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Vaccines work by training our immune systems to recognize and fight off specific pathogens, like viruses or bacteria, even if those pathogens are ones the body has never encountered before. This is achieved through several stages that mimic the natural immune response without causing illness. Here\u2019s a detailed explanation of how this process works:\n\n1. **Introduction of an Antigen:**\n   - A vaccine introduces, either inactivated (dead), weakened (attenuated), or fragmented form, a small amount of a pathogen (or part of it) called an antigen into the body. For example, in vaccines for the flu, parts of the flu virus are used.\n   - The antigen is harmless but still recognizable to the immune system. This is crucial because the immune system can distinguish between foreign substances and its own cells, so it does not attack the body itself.\n\n2. **Activation of the Immune Response:**\n   - When the immune system encounters the introduced antigen, it begins to recognize it as foreign. Antigen-presenting cells (dendritic cells, macrophages) engulf and process the antigen, then display pieces of it on their surface.\n   - These processed pieces travel to lymph nodes where they encounter T-cells and B-cells. T-cells help activate B-cells and regulate other immune responses, while B-cells produce antibodies that specifically target the antigen.\n\n3. **Production of Memory Cells:**\n   - During this initial encounter, B-cells undergo a process that",
+   "detection": {
+    "score": 446.33047978538434,
+    "p_value": 6.520653456390057e-17,
+    "num_scored_tokens": 298,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Vaccines play a critical role in training the immune system to recognize and combat pathogens that it has never encountered before. Here's an explanation of the process:\n\n### 1. Introduction to Vaccines\n\nVaccines contain components of the pathogens (bacteria or viruses) that cause diseases. These components, known as antigens, are the key element that triggers the immune response. There are different types of vaccines, such as live attenuated, inactivated, subunit, and recombinant vaccines, each designed to provide information to the immune system but in different ways.\n\n### 2. Antigen Presentation\n\nWhen a vaccine is administered, the antigen is introduced into the body. The immune system recognizes these foreign antigens as threats. Antigen-presenting cells (APCs), such as dendritic cells and macrophages, are crucial in this process. They engulf the vaccine antigen and then present part of the antigen on their surface using major histocompatibility complex (MHC) molecules. This presentation is a vital step because it allows T cells and B cells from the immune system to recognize and remember the pathogen.\n\n### 3. Innate Immune Response\n\nFollowing the recognition of antigens by APCs, the innate immune response kicks off. White blood cells like neutrophils, macrophages, and natural killer cells immediately launch an attack against potential infections. This early defense helps to prevent the spread of the disease while the adaptive immune response is activated.\n\n### 4",
+   "detection": {
+    "score": 276.0614868262455,
+    "p_value": 0.9018331979960944,
+    "num_scored_tokens": 296,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "The fact that the night sky appears dark to us, despite the universe containing an extremely large and possibly infinite number of stars, is explained by the concept known as Olber's Paradox. This paradox was named after the German astronomer Heinrich Wilhelm Olbers, who discussed it in 1823, although similar conundrums were addressed by Johannes Kepler and others earlier.\n\nOlber's Paradox arises from the following considerations:\n\n1. **Infinite Number of Stars**: If the universe is infinite or significantly large, it would contain an infinite number of stars, all radiating light. Since every line of sight through the universe would end on a star, one might expect that the entire night sky should appear as bright as the surface of the Sun.\n\n2. **Expansion and Distance**: The observed phenomena in astronomy and the expansion of the universe introduce a key factor: not only does the universe have a certain distance between celestial objects, but it also has a finite age (approximately 13.8 billion years). Light travels at a finite speed (the speed of light), and as a result, some stars are too far away for their light to have reached us yet.\n\nHere's how the modern understanding fits into Olber's Paradox:\n\n- **Finite Age of the Universe**: The universe is not infinitely old, with the Big Bang being around 13.8 billion years ago. Thus, light from distant stars hasn't had time to reach us yet.\n  \n-",
+   "detection": {
+    "score": 445.05802550377155,
+    "p_value": 3.0587563124784362e-18,
+    "num_scored_tokens": 291,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "The fact that the night sky appears dark to us, despite the vast number of stars in the universe and our own galaxy (the Milky Way), is often referred to as Olbers' paradox, named after the 19th century astronomer Heinrich Wilhelm Olbers. However, this paradox can be resolved once we consider certain physical principles related to the nature of light, the finite age of the universe, and the expansion of the universe.\n\n### Key Factors Resolving Olbers' Paradox\n\n1. **Finite Age of the Universe:**\n   - The universe has a finite age, estimated to be around 13.8 billion years old. This means that light from distant stars cannot have had enough time to reach us yet. Stars far away from us are not old enough for their starlight to have traveled the vast distances to our location. Thus, there are parts of the sky that appear dark because they contain no stars that are bright or close enough to be visible to us.\n\n2. **Cosmic Expansion:**\n   - The expansion of the universe affects how we observe distant light. As the universe expands, the wavelengths of light from distant stars are stretched toward the red end of the spectrum, a phenomenon known as redshift. For very distant objects, this stretching can become so significant that the light is shifted into wavelengths that lie outside the visible spectrum. This means that much of the light from these distant stars does not reach us as the light may appear in the infrared or",
+   "detection": {
+    "score": 297.3464436376259,
+    "p_value": 0.43327911068926755,
+    "num_scored_tokens": 295,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Compound interest is a powerful financial concept that can significantly grow your savings over time, allowing small, regular contributions to potentially become significant wealth. Here\u2019s a detailed explanation of how this works:\n\n### What is Compound Interest?\n\nCompound interest refers to the process where the interest on a principal amount is added back to the principal, so that from that point onward, the interest is earned on the new, larger principal. Essentially, you earn interest on your interest as well as your principal.\n\n### Key Components of Compound Interest\n\n1. **Principal (P)**: The initial amount of money.\n2. **Interest Rate (r)**: The rate at which interest accrues on the principal.\n3. **Number of Times Interest Compounded Per Year (n)**: This could be annually, semi-annually, quarterly, monthly, etc.\n4. **Time (t)**: The number of years the money is invested.\n\n### Formula for Compound Interest\n\nThe formula to calculate the future value (A) of an investment with compound interest is:\n\n\\[ A = P \\left(1 + \\frac{r}{n}\\right)^{nt} \\]\n\nWhere:\n- \\( A \\) is the future value of the investment/loan, including interest.\n- \\( P \\) is the principal investment amount.\n- \\( r \\) is the annual interest rate (decimal).\n- \\( n \\) is the number of times interest is compounded per year.\n- \\( t \\) is the number of",
+   "detection": {
+    "score": 354.44655415243574,
+    "p_value": 0.0001535558547584171,
+    "num_scored_tokens": 295,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Compound interest is one of the most powerful and beneficial concepts in finance, allowing small, regular savings to grow into significant wealth over time. It works by generating earnings on both the initial principal and the accumulated interest from previous periods. This exponential growth is particularly effective when applied over extended periods due to the power of compounding.\n\n### How Compound Interest Works\n\n1. **Initial Investment**:\n   - You start with an initial sum of money (the principal).\n\n2. **Earnings**:\n   - Over the first period (e.g., monthly), you earn interest on the initial principal. \n\n3. **Reinvestment**:\n   - The interest earned is added back to the initial principal at the end of the period.\n\n4. **Subsequent Earnings**:\n   - In the next period, you now earn interest not only on the original principal but also on the previously earned interest. This process continues over time.\n\n### Example\n\nLet's say you invest $100 every month into an account that earns 5% annual interest, compounded monthly. Here\u2019s how your investment would grow over time:\n\n1. **Year 1:**\n   - Start with $1200 (total of 12 months * $100).\n   - At the end of Year 1 (without any reinvestment of interest), you have $1260.98.\n   - With compound interest included, you have approximately $1270.24.\n\n",
+   "detection": {
+    "score": 281.32104416719847,
+    "p_value": 0.8094382265917601,
+    "num_scored_tokens": 295,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Certainly! Weather and climate are closely related but refer to different aspects of atmospheric conditions over time.\n\n### Weather vs. Climate\n\n1. **Weather**: This refers to the day-to-day or short-term conditions of the atmosphere in a particular place. It includes variables like temperature, humidity, wind speed, and precipitation. Weather can change quickly and is influenced by various factors such as air pressure, solar radiation, and local geography.\n\n2. **Climate**: This is the long-term average of weather patterns in a region, typically calculated over 30 years or more. Climate describes the overall trends and characteristics of the atmosphere over large areas, such as continents or even globally. Climate is determined by factors including temperature, precipitation, and variability over extended periods.\n\n### Why Unusually Cold Winter Doesn\u2019t Disprove Long-Term Warming\n\nLong-term trends in global temperature, often discussed in terms of climate, show a clear warming pattern since the mid-20th century due to increasing greenhouse gas concentrations in the atmosphere. However, it's important to understand that this long-term trend does not mean every year or season will be warmer than the last. Here\u2019s why:\n\n1. **Natural Variability**: The Earth experiences natural variations in temperature and weather patterns, independent of human activities. Factors such as El Ni\u00f1o/La Ni\u00f1a events, volcanic eruptions, and natural climate oscillations (like the North Atlantic Oscillation) can cause short-term cooling or warming trends. These natural phenomena can lead to",
+   "detection": {
+    "score": 417.48585906088863,
+    "p_value": 9.996114467126032e-12,
+    "num_scored_tokens": 300,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Certainly! Understanding the differences between weather and climate is crucial for grasping broader environmental trends such as global warming. Here\u2019s an explanation of these concepts:\n\n### Weather\nWeather refers to the state of the atmosphere at a specific place and time, typically observed over short periods (days or hours). It includes various atmospheric conditions like temperature, humidity, precipitation, cloudiness, wind speed, and visibility. Weather can fluctuate widely within a season and from year to year due to numerous factors such as local geographical features, ocean currents, and atmospheric pressure systems.\n\n### Climate\nClimate, on the other hand, describes the long-term average weather patterns in a region, generally observed over 30 years or more. It encompasses typical conditions of atmospheric conditions and how they vary over time. Climate includes temperature averages, precipitation patterns, humidity rates, and frequency of extreme weather events. Climate reflects the overall stability and variability in weather conditions over extended periods.\n\n### Why One Unusually Cold Winter Doesn't Disprove Long-Term Warming\n\nWhile it's true that individual weather events can be cold or extreme in various ways due to natural variability, long-term trends in temperature are what define climate change. Here\u2019s why a single colder-than-normal winter does not prove that there is no overall trend toward warming:\n\n1. **Short-Term Fluctuations vs. Long-Term Trends**: Short-term weather events, especially those lasting just one season, often result from natural climate variability. This includes phenomena like La Ni\u00f1a,",
+   "detection": {
+    "score": 329.7904303404394,
+    "p_value": 0.031641726253303026,
+    "num_scored_tokens": 300,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "In a common-law system, the process of a criminal trial moves from arrest through several stages before reaching a verdict. Here\u2019s an overview of the key steps involved:\n\n### 1. Arrest and Initial Investigation\n- **Arrest:** Police or other law enforcement officials arrest a suspect based on probable cause or an arrest warrant issued by a judge.\n- **Initial Investigation:** The police gather evidence against the suspect, which can include statements, witnesses, forensic analysis, and search of property. At this stage, the police may also interview the suspect.\n\n### 2. Preliminary Hearing/Initial Appearance\n- In many jurisdictions, defendants who have been arrested and charged with a felony may appear before a judge for an initial appearance. This step, often called a preliminary hearing, is to determine if there\u2019s sufficient evidence to warrant a formal charge (indictment) or whether the case should proceed to grand jury proceedings.\n\n### 3. Formal Charges/Indictment\n- If the prosecutor believes there is enough evidence, they will file formal charges against the defendant. These charges are laid out in formal legal documents, known as indictments or informations.\n\n### 4. Arraignment\n- At the arraignment, the accused is formally charged and must enter a plea (guilty, not guilty, or nolo contendere). The judge explains the charges and the consequences of each possible plea.\n\n### 5. Pre-Trial Proceedings\n- **Discovery:** Both sides share information about their",
+   "detection": {
+    "score": 474.01186544007703,
+    "p_value": 1.1809035574977418e-21,
+    "num_scored_tokens": 300,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "In a common-law legal system, the process of moving from an arrest to a verdict is a formal and structured one, which involves several stages. The following is an overview of how this process typically unfolds:\n\n1. **Arrest**:\n   - A police officer or other law enforcement official has probable cause to believe that the suspect committed a crime. The suspect is arrested and taken into custody.\n\n2. **Initial Appearance/Bond Hearing (Misdemeanor Cases)**:\n   - For misdemeanor cases (less serious offenses), the suspect appears before a judge for the initial appearance or bond hearing. Here, the judge will determine whether the suspect should be held in custody or released on bail.\n\n3. **Arraignment**:\n   - For felony cases and some misdemeanors, an arraignment is also scheduled. During arraignment, the suspect is formally charged with the offense and asked to enter a plea (guilty, not guilty, or no contest). If the defendant pleads not guilty, the case proceeds to the next stage.\n\n4. **Pretrial Proceedings**:\n   - This phase includes various proceedings aimed at resolving disputes before trial and ensuring due process. Important steps include:\n     - **Plea negotiations**: The defense and prosecution may negotiate a plea bargain.\n     - **Discovery**: Both sides exchange information about evidence they plan to use at trial.\n     - **Motion hearings**: Various legal motions can be heard, such as motions to suppress evidence or change the venue of the",
+   "detection": {
+    "score": 273.79729775190236,
+    "p_value": 0.9257352692205744,
+    "num_scored_tokens": 296,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "The conductivity of metals is primarily determined by the arrangement and mobility of electrons in their crystal structures. Let's delve into why some metals conduct electricity better than others:\n\n### 1. **Metallic Bonding**\nMetals conduct electricity because they possess free electrons that can move throughout the metal lattice. These free electrons are not bound to any specific atom but are instead delocalized over the entire structure. This delocalization allows for the easy flow of electrons when an electric field is applied, facilitating electrical conduction.\n\n### 2. **Electron Configuration**\nThe ability of a metal to lose or share its outermost valence electrons easily affects its conductivity. Metals with fewer valence electrons (such as alkali metals like sodium) tend to be more conductive because it\u2019s easier to remove these outer electrons. In contrast, metals with a larger number of valence electrons might have fewer available electrons for conduction.\n\n### 3. **Crystal Structure**\nThe crystal structure influences how well electrons can move through a metal. Metals with a close-packed atomic structure often provide better pathways for electron movement. For instance:\n- **Face-Centered Cubic (FCC)** structure: Found in metals like copper, silver, and gold, which allow for efficient electron movement.\n- **Body-Centered Cubic (BCC)** and **Hexagonal Close-Packed (HCP)**: These structures also facilitate good conductivity but may not match the efficiency of FCC structures.\n\n### 4. **Atomic Size",
+   "detection": {
+    "score": 399.99572901499903,
+    "p_value": 7.717287658398553e-10,
+    "num_scored_tokens": 296,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "The ability of metals to conduct electricity is fundamentally related to their electronic structure and crystal lattice arrangement. To understand why some metals conduct electricity better than others, we need to look at the details of how electrons in different metal atoms move and share spaces within the crystal lattice.\n\n### 1. Electron Configuration and Band Theory\n\nIn metallic solids, the electrons in the valence band are delocalized, moving freely through the solid. This freedom of movement is key to electrical conductivity. Metals that have better electrical conductivity exhibit:\n\n- **Free Electrons**: A significant number of electrons from the outermost shell (valence electrons) are loosely bound and can move throughout the metal. This mobility is highest in some metals because their valence bands are nearly completely filled or empty.\n  \n- **Filled Valence Bands**: The closer a valence band is to being either fully filled or empty, the more freely electrons can transition between energy levels. This is why metals like copper and silver (with closely spaced valence bands) are very good conductors.\n\n### 2. Crystal Lattice Structure\n\nThe crystal lattice structure also plays a crucial role in determining the conductivity of a metal. Metals with a more regular and close-packed lattice structure generally conduct electricity better.\n\n- **Close-Packed Structures**: Metals such as gold, silver, platinum (FCC structure), and tungsten, molybdenum, and chromium (BCC structure) have close-packed crystal lattices. These structures create efficient pathways for",
+   "detection": {
+    "score": 295.3448477716939,
+    "p_value": 0.6106064528109908,
+    "num_scored_tokens": 300,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Search engines use complex algorithms to determine which web pages should be shown first for a given query. These algorithms take into account a variety of factors to rank the relevance and quality of the results. Here\u2019s an overview of the key processes involved:\n\n1. **Query Understanding**: When you enter a search term or phrase, the search engine tries to understand its meaning and context. It breaks down the query into keywords and phrases, often using natural language processing (NLP) techniques.\n\n2. **Crawling**: The search engine's software, known as a crawler or spider, regularly visits and indexes websites on the internet. This process allows the search engine to continuously update its database of available content.\n\n3. **Indexing**: Once a website is crawled, relevant snippets of text, structured data, images, video, and other content from that site are added to the search engine's index. Indexing is crucial as it helps the search engine quickly retrieve the most pertinent pieces of information in response to a user's query.\n\n4. **Relevancy Scoring**: When a user submits a query, the search engine examines each webpage in its index to determine which ones are most relevant to the user's search. The factors contributing to relevancy scoring include:\n   - **Keywords matching**: The closer the query\u2019s terms match those found on the page, the higher the ranking.\n   - **Proximity of keywords**: Keywords appearing close together on the page can increase relevancy.\n   - **Content quality",
+   "detection": {
+    "score": 433.490758720875,
+    "p_value": 1.1114291775770776e-14,
+    "num_scored_tokens": 298,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Search engines use complex algorithms to determine which web pages to display first when a user enters a query. These algorithms take into account various factors that are designed to provide the most relevant and valuable information to the user. Here's an overview of the main steps and components involved in this process:\n\n1. **Query Analysis**: When a user types in a query, the search engine begins by trying to understand the intent behind the words and phrases used. This involves processing natural language understanding and semantic analysis to capture the meaning of the query.\n\n2. **Index Matching**: The search engine references its index, which is essentially a massive database of web pages that have been previously scanned and stored according to their content. It looks for pages that match the query terms.\n\n3. **Relevancy Scoring**: For eligible pages (those that contain at least some of the query terms), the search engine calculates a relevance score. This score is based on several factors:\n   - **Word Frequency**: How often the words from the query appear on the page.\n   - **Proximity**: How close the words are to each other on the page.\n   - **Contextual Analysis**: Understanding the context in which the query terms appear. For example, if a term appears in a heading or in the opening sentence, it might be considered more relevant.\n   - **Keyword Density**: While traditionally important, the emphasis has shifted so that excessive keyword stuffing does not improve ranking.\n\n4. **Page Quality Metrics**: Search engines also evaluate",
+   "detection": {
+    "score": 277.8389022145508,
+    "p_value": 0.8660422390151811,
+    "num_scored_tokens": 295,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Yeast is a crucial component in the baking process, playing a key role in making bread dough rise and affecting its overall texture. This process involves several steps that transform the raw ingredients into a soft, fluffy loaf.\n\n### The Rise Process\n\n1. **Glycolysis and Fermentation**: When yeast is added to warm water with sugar or another fermentable substance, it consumes these nutrients through a process called glycolysis, which breaks down glucose (sugar) into pyruvate. Under conditions where oxygen is limited, yeast continues the breakdown process to produce carbon dioxide (CO2) and ethanol. This process is known as anaerobic respiration or fermentation.\n\n2. **Gas Production**: As the yeast ferments, it produces CO2 gas in the form of bubbles. These bubbles of CO2 get trapped within the gluten network formed by the proteins in the flour. The formation of these gas bubbles causes the dough to expand, effectively \"rising.\"\n\n3. **Oxygen Involvement (Optional)**: If oxygen is available, yeast also undergoes aerobic respiration, producing more energy but less CO2 than anaerobic fermentation. In large-scale fermentations, such oxygen involvement can be significant, though it's less important in smaller bread batches.\n\n### Textural Changes During the Baking Process\n\n1. **Maillard Reaction**: As the bread bakes, it encounters high heat, triggering the Maillard reaction between sugars (from flour and other ingredients) and proteins.",
+   "detection": {
+    "score": 462.10037808520724,
+    "p_value": 7.934096669954488e-20,
+    "num_scored_tokens": 298,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "The process by which yeast makes bread dough rise is rooted in the biological activity of the yeast cells. Yeast belongs to a group of microorganisms known as fungi, and it is a crucial component in baking because of its ability to produce carbon dioxide during fermentation.\n\n### How Yeast Makes Bread Dough Rise\n\n1. **Ingestion of Sugar:**\n   When yeast is mixed with warm water (or other suitable liquids) and flour, it becomes activated. Yeast cells feed on the sugars present in the flour or added through the liquid. These sugars are primarily glucose, maltose, and sucrose.\n\n2. **Fermentation Process:**\n   During fermentation, the yeast cells break down these sugars into two main products: alcohol and carbon dioxide gas. This process of breaking down sugar without oxygen is called anaerobic respiration or fermentation.\n\n3. **Gas Production:**\n   The carbon dioxide produced during this process accumulates within the dough as air bubbles. These bubbles expand as they warm up, leading to the rising of the dough. This expansion occurs due to the gas trapped within the gluten network of the dough.\n\n4. **Gluten Network Formation:**\n   As the yeast ferments, the dough also undergoes gluten development. Gluten, formed from proteins found in wheat flour (glutenin and gliadin), creates an elastic structure that traps the carbon dioxide bubbles produced by the yeast. As the dough rises, the gluten network gets stronger and more complex, contributing to the",
+   "detection": {
+    "score": 266.41221876125263,
+    "p_value": 0.9864288495539055,
+    "num_scored_tokens": 300,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Tectonic plates, which are massive sections of the Earth's lithosphere (the rigid outer layer consisting of the crust and upper mantle), move over the asthenosphere (the partially molten, more plastic layer of the upper mantle) due to various forces acting on them. These movements are a fundamental aspect of plate tectonics, a theory that explains the large-scale motions of the Earth's lithosphere.\n\nThere are several processes driving the movement of tectonic plates:\n\n1. **Convection in the Mantle**: The heat from the Earth's core drives convection currents within the mantle. As hot material rises towards the surface, it cools down and sinks back towards the core, creating circular movements known as convection cells. The rising and falling of these convection currents apply forces to the tectonic plates, causing them to move.\n\n2. **Differences in Density**: Tectonic plates can also be affected by variations in their density. For example, when denser oceanic crust subducts beneath less dense continental crust, this creates a dragging force that moves both parts of the plate.\n\n3. **Slab Pull**: This occurs in subduction zones where one tectonic plate is being forced under another. As the subducting plate sinks deeper into the mantle and becomes cooler and denser, gravity pulls it down further, exerting a pulling force on the remaining part of the plate.\n\nThe motion of these plates along the Earth\u2019s crust leads to",
+   "detection": {
+    "score": 406.93074010458724,
+    "p_value": 3.41065924419997e-11,
+    "num_scored_tokens": 294,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Tectonic plates move due to processes deep within the Earth, primarily driven by convection currents in the mantle. Here's an overview of how tectonic plates move and cause earthquakes:\n\n1. **Convection Currents in the Mantle**: The Earth's mantle is semi-fluid and flows over long periods due to heat from radioactive decay and residual heat from the formation of the planet. As the partially molten material in the upper mantle rises and cools at the base of the lithosphere (the rigid outer layer consisting of the crust and uppermost mantle), it becomes dense and sinks back toward the core. This rising and sinking motion drives horizontal movements of the tectonic plates that sit on top of these flows.\n\n2. **Types of Plate Boundaries**:\n   - **Divergent Boundaries**: Where two plates are moving away from each other, such as in the mid-ocean ridges. This movement can cause magmatic activity as new crust forms.\n   - **Convergent Boundaries**: Where one plate is being pushed under another, typically at subduction zones. This can lead to intense seismic activity and volcanic eruptions.\n   - **Transform Boundaries**: Where plates slide horizontally past each other, such as along faults like the San Andreas Fault. Motion here can also generate significant earthquakes due to the accumulation and release of stress.\n\n3. **Accumulation of Stress**: As the plates move, they can collide, grind past each other, or separate. At",
+   "detection": {
+    "score": 317.69355089932526,
+    "p_value": 0.04499772908225671,
+    "num_scored_tokens": 291,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Astronomers have indeed developed several ways to detect and study black holes despite the fact that they do not emit light on their own. This is achieved by observing the effects of their strong gravitational fields on nearby matter and other objects. Here are some key methods used:\n\n1. **Accretion Discs**: One way to detect a black hole is through the material that falls into it, known as an accretion disc. As material spirals inward towards a black hole, it heats up due to friction and releases large amounts of energy in the form of X-rays. Advanced telescopes like XMM-Newton and Chandra can observe these X-rays and infer the presence of a black hole.\n\n2. **Star Orbits**: Observations of the orbits of stars around an object can provide indirect evidence for a black hole\u2019s existence. If a star is orbiting what appears to be empty space, the mass being orbited must be enormous to keep the star in its orbit at such close distance. The gravity exerted by this unseen mass can only be explained if much of it is concentrated in a small area, which is consistent with the presence of a black hole.\n\n3. **High-Speed Jets**: Some black holes, especially those associated with supermassive black holes found at the centers of galaxies, can shoot out jets of particles at near-light speeds. These jets produce radio, X-ray, and gamma-ray emissions that can be detected by radio telescopes, X-ray observatories,",
+   "detection": {
+    "score": 432.5231613651492,
+    "p_value": 6.3512259409800914e-15,
+    "num_scored_tokens": 296,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Astronomers can indirectly detect the presence of black holes without actually seeing the black hole itself due to its properties and the effects it has on nearby matter and space-time. Here's an overview of how astronomers identify black holes:\n\n1. **Stellar Mass Black Holes and X-ray Emission:**\n   - Stellar mass black holes form when a massive star collapses at the end of its life cycle.\n   - If a star is a member of a binary system with another star, gas from the companion star can be drawn into the black hole via an accretion disk.\n   - As this gas falls towards the black hole, it heats up and emits vast amounts of X-rays and sometimes other types of radiation. These high-energy emissions are often detectable from Earth by specialized telescopes like those aboard the Chandra X-ray Observatory or XMM-Newton.\n\n2. **Supermassive Black Holes and Active Galactic Nuclei (AGN):**\n   - Supermassive black holes are found at the centers of most galaxies, including our own Milky Way.\n   - When such black holes engage in active accretion processes (referred to as Active Galactic Nuclei or AGN), they can emit immense amounts of energy across the electromagnetic spectrum.\n   - The strong gravitational pull of these supermassive black holes also affects the orbits of stars and gas around them, which can be observed using telescopes like the Keck Observatory and the Hubble Space Telescope.\n\n3.",
+   "detection": {
+    "score": 288.1140404952992,
+    "p_value": 0.6890494113899033,
+    "num_scored_tokens": 296,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Antibiotic resistance can spread quickly in hospital settings due to several key factors:\n\n1. **High Concentration of Pathogens**: Hospitals typically house individuals who are already sick and may be harboring various pathogens. This high density of microbial organisms creates an ideal environment for the rapid exchange and adaptation of genetic material, including genes that confer antibiotic resistance.\n\n2. **Use of Broad-Spectrum Antibiotics**: The overuse or misuse of broad-spectrum antibiotics, prescribed as preventive or treatment measures, accelerates the selection process for resistant bacteria. Broad-spectrum antibiotics target a wide range of microorganisms, often leading to collateral damage against beneficial bacteria. As a result, resistant bacteria can outcompete and multiply more than susceptible ones.\n\n3. **Immunocompromised Patients**: Hospital environments commonly include patients with weakened immune systems. These individuals are particularly vulnerable to infections and can easily acquire and spread resistant strains of bacteria.\n\n4. **Inadequate Hygiene Practices**: Poor infection control practices in hospitals, such as inadequate hand washing or disinfection procedures, can facilitate the transmission of resistant bacterial strains among patients and healthcare workers. This includes both person-to-person contact and environmental surfaces.\n\n5. **Environmental Factors**: Hospitals have a multitude of surfaces, equipment, and medical devices which can serve as reservoirs for bacteria. Proper disinfection and sterilization protocols are critical but sometimes overlooked, making these areas potential sources of resistant bacteria.\n\n6. **Travel and Mobility**: Patients and healthcare workers who travel to and from",
+   "detection": {
+    "score": 468.1049034675481,
+    "p_value": 1.6708899559578767e-20,
+    "num_scored_tokens": 300,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Antibiotic resistance can spread rapidly in hospital settings due to several interconnected factors:\n\n1. **High Prevalence of Infections and Antibiotics**: Hospitals often treat patients with various forms of infections, including bacterial, viral, and fungal infections. To combat these infections, hospitals extensively use antibiotics. This frequent exposure to antibiotics provides a selective pressure that favors the survival and proliferation of antibiotic-resistant bacteria.\n\n2. **Immunocompromised Patients**: Many patients in hospitals have weakened immune systems, either from their underlying condition or from medical treatments such as chemotherapy or immunosuppressive drugs. These patients are more susceptible to infections and are also less capable of clearing resistant pathogens. They therefore become vehicles for spreading resistant bacteria.\n\n3. **Invasive Medical Procedures**: Hospitals involve many invasive procedures, such as surgeries, catheter placements, and intubations. These procedures can introduce bacteria directly into sterile body sites where they would not normally be present, increasing the chance of infection. Moreover, if hygiene measures in the hospital aren't strictly followed, there's a higher risk of cross-infection among patients.\n\n4. **Close Proximity of Patients**: Hospitals house a large number of patients in close proximity, which facilitates the transmission of bacteria from one person to another. This is especially true in areas like intensive care units (ICUs), where patients may share common spaces and equipment.\n\n5. **Antibiotic Misuse and Inappropriate Use**: In hospitals, antibiotics are prescribed based on symptoms and sometimes without awaiting",
+   "detection": {
+    "score": 276.7607253209586,
+    "p_value": 0.933738334741731,
+    "num_scored_tokens": 300,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "When a central bank raises interest rates, it aims to reduce the overall level of spending in an economy, which can help control inflation. Here\u2019s how this process works:\n\n1. **Cost of Borrowing Increases**: When a central bank raises interest rates, it becomes more expensive for consumers and businesses to borrow money. This is because the cost of borrowing from commercial banks, which act as intermediaries between the central bank and the public, goes up. Commercial banks typically pass these higher costs on to their customers.\n\n2. **Reduced Consumption and Investment**: As borrowing becomes more expensive, individuals and businesses may choose to save more and spend less. This reduction in consumer spending can lead to lower demand for goods and services. Additionally, businesses might delay or cancel expansion plans, capital projects, or other investments that require borrowing, reducing their spending on new equipment, buildings, and other capital goods.\n\n3. **Slowed Economic Growth**: With reduced spending, both from consumers and businesses, the overall growth rate of the economy may slow down. This can help to reduce the upward pressure on prices (inflation).\n\n4. **Impact on Credit Availability**: Higher interest rates can also make it harder for borrowers who have less-than-perfect credit to obtain loans. This further reduces the amount of money circulating in the economy and can lead to slower economic growth.\n\n5. **Decreased Money Supply or Increased Interest Rates on Excess Reserves**: Some central banks also adjust the amount of money they hold back from circulation",
+   "detection": {
+    "score": 418.84143659597737,
+    "p_value": 4.729758411817245e-13,
+    "num_scored_tokens": 294,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 300,
+   "temperature": 1.0,
+   "completion_tokens": 300,
+   "finish_reason": "length",
+   "text": "Certainly! When a central bank raises interest rates, it aims to slow down economic growth and reduce inflation. Here's how this works:\n\n1. **Cost of Borrowing Increases**: By raising interest rates, the central bank makes borrowing more expensive for consumers and businesses. This means that loans, credit cards, mortgages, and other forms of debt become more costly to obtain and to maintain.\n\n2. **Reduction in Consumption**: As borrowing costs increase, consumers are less likely to spend their money on big-ticket items like cars or houses, or they might cut back on unnecessary expenses. With less consumer spending, there is less demand for goods and services, which can help to stabilize prices.\n\n3. **Impact on Investment and Business**: Higher interest rates also discourage investment from both domestic and foreign sources since the cost of financing such investments has gone up. Businesses may delay or scale back expansion plans as they have to pay more for the capital needed to grow. Additionally, higher interest rates make saving more attractive relative to spending, shifting spending behavior towards saving, which again reduces overall demand.\n\n4. **Weaker Consumer Spending**: With reduced purchasing power due to higher interest rates, consumer spending may decline. This can be further exacerbated if mortgage rates rise, making home purchases more expensive and thus restraining home purchases and renovations, which are significant contributors to economic activity.\n\n5. **Slower Economic Growth**: As consumption and investment slow down, the overall pace of economic growth tends to decelerate. With weaker economic growth",
+   "detection": {
+    "score": 318.26462652676236,
+    "p_value": 0.12322314485899616,
+    "num_scored_tokens": 300,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 0,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Vaccines work by training our immune systems to recognize and fight off specific pathogens, like viruses or bacteria, even if those pathogens are ones the body has never encountered before. This is achieved through several stages that mimic but are milder than an actual infection:\n\n1. **Introduction of an Antigen:**\n   - A vaccine introduces, either in whole or part, a substance called an antigen (a molecule, typically protein, but can be other molecules too) into the body. In many vaccines, this antigen is from the pathogen itself, but it's usually inactive (dead) or weakened so that it causes no harm.\n   - For example, in vaccines against influenza, instead of introducing the live virus, the vaccine might contain pieces of viral proteins.\n\n2. **Activation of the Immune Response:**\n   - Once the antigen enters the body, it\u2019s recognized as foreign by the immune system. This triggers the production of antibodies, which are specialized proteins designed to neutralize specific antigens.\n   - The immune system also activates T-cells, which include helper T-cells and killer T-cells. Helper T-cells assist in orchestrating the immune response, while killer T-cells can directly attack cells that have been infected by the pathogen.\n\n3. **Memory Cells Formation:**\n   - During this initial encounter with the antigen, some immune cells become memory cells. These memory cells retain information about the specific pathogen they encountered but were not activated during the first exposure.\n   - If the same pathogen invades the body at a later time, these memory cells can quickly recognize and respond effectively. They can ramp up the production of antibodies and activate T-cells much faster and more efficiently than when they first encountered the pathogen.\n   \n4. **Boosting Immunity:**\n   - Some vaccines are given as multiple doses over time. Each dose helps to boost the existing immune response, creating a memory pool of cells ready for rapid action.\n   - With subsequent doses, the immune system becomes even better prepared to deal with a real infection from that pathogen, leading to a stronger, faster, and more targeted response.\n\n5. **Protection and Prevention:**\n   - By providing the immune system with the necessary information to recognize and combat harmful pathogens, vaccines prevent disease or reduce its severity.\n   - This process also helps to lower the spread of the pathogen within communities because vaccinated persons are less likely to get sick and pass the infection to others.\n\nIn summary, vaccines train the immune system by presenting it with harmless",
+   "detection": {
+    "score": 837.082163084895,
+    "p_value": 8.710841539261295e-43,
+    "num_scored_tokens": 506,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 0,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Vaccines play a crucial role in training the immune system to recognize and fight off pathogens that it has never encountered before. This process involves several key components of the immune system, including B cells, T cells, and memory cells. Here's an overview of how vaccines achieve this:\n\n1. **Antigen Presentation**: Vaccines contain antigens, which are small pieces of the pathogen (such as proteins or sugars) that the immune system can recognize. These antigens are derived from various sources like killed or inactivated microbes, live-attenuated (weakened) microorganisms, or purified proteins.\n\n2. **Initiation of Immune Response**:\n    - **B Cells:** When B cells encounter the antigens in the vaccine, they get activated. Activated B cells start producing antibodies specific to those antigens. Antibodies are proteins that can bind to and neutralize the real pathogen.\n    - **T Cells:** There are two main types of T cells: helper T cells and cytotoxic T cells. Helper T cells play a critical role in activating other immune cells, particularly B cells and cytotoxic T cells. Cytotoxic T cells directly kill infected cells.\n\n3. **Memory Cell Formation**:\n    - After the initial activation and response, some B cells and T cells transform into memory cells. Memory B cells carry a specific antibody with an antigen-binding site tailored to recognize the pathogen\u2019s antigens. Similarly, memory T cells retain an active response to the specific antigen. These memory cells remain dormant in the body for extended periods and are ready to react quickly upon encountering the same pathogen again.\n\n4. **Reactivation and Rapid Response**:\n    - When the real pathogen enters the body later, either because of natural exposure or through another round of vaccination, the immune system can immediately recognize the antigens due to the presence of memory cells. This leads to a faster and more potent immune response. Memory B cells can rapidly produce large quantities of specific antibodies, and memory T cells can quickly activate and mobilize to eliminate the pathogen before it causes illness.\n\n5. **Different Types of Vaccines**:\n    - *Live-Attenuated Vaccines:* These vaccines contain weakened but still living forms of the pathogen. They provoke a strong initial immune response while also helping to establish long-term immunity.\n    - *Inactivated Vaccines:* These vaccines contain whole pathogens that have been killed. While effective, they often require multiple doses to generate a strong immune response.\n    - *Subunit",
+   "detection": {
+    "score": 488.9640533021628,
+    "p_value": 0.6319311780133507,
+    "num_scored_tokens": 496,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 1,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "The observation that the night sky is dark even though the universe contains an enormous number of stars is known as Olbers' Paradox. It was first formally described by German astronomer Heinrich Wilhelm Olbers in the 19th century, though variations on the paradox were discussed earlier and later.\n\nThe basic idea of Olbers' Paradox can be summarized as follows: If the universe were infinitely old, static (not expanding), and filled with an infinite number of stars that emit light indefinitely, then no matter where you look in the night sky, your line of sight should end at the surface of a star, making the entire sky as bright as the surface of the sun.\n\nHowever, the night sky appears relatively dark, which raises several questions about its resolution:\n\n1. **Expansion of the Universe**: The fact that our universe is not static but is instead expanding has a significant impact. As the universe expands, the light from distant stars travels through an ever-expanding volume of space. This means that there is a practical limit to how far we can see light from any given direction due to the finite speed of light. Therefore, the night sky does not have an endless number of stars within the observable universe.\n\n2. **Evolution of Stars and Galaxy Formation**: Stars do not shine forever. They form, evolve, and die. Once a massive star exhausts its nuclear fuel, it collapses and can eventually become a black hole, leaving no light. Also, smaller stars, like our Sun, will eventually turn into white dwarfs and red dwarfs, which emit very little light. Thus, the sky appears dark because not all stars are emitting light throughout their entire existence.\n\n3. **Galaxy Evolution and Structure**: In reality, the universe isn't uniformly distributed with stars. Instead, it's structured into clusters and superclusters of galaxies separated by vast empty regions called voids. Light from these distant clusters can be absorbed or blocked by dust and gas clouds within our galaxy, reducing the overall brightness of the night sky.\n\n4. **Finite Age of the Universe**: The universe is not infinitely old; it is about 13.8 billion years old. This means that light from objects more than approximately 13.8 billion light-years away cannot yet reach us. The visible universe has a finite size, and thus, there is a cutoff beyond which we cannot observe any source of starlight.\n\nIn summary, the night sky is dark not because there are fewer stars than one might think, but because of the age of the universe",
+   "detection": {
+    "score": 814.1549995565181,
+    "p_value": 1.349218826972279e-39,
+    "num_scored_tokens": 500,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 1,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 462,
+   "finish_reason": "stop",
+   "text": "The concept you're referring to is known as Olbers' Paradox. It was first formulated by the German astronomer Heinrich Olbers in the early 19th century. The paradox arises when one considers that, given the vast number of stars in the universe and the fact that light does not diminish with distance (in an idealized universe), the night sky should appear as bright as the surface of the Sun, due to all the light from the countless stars in every direction.\n\nHowever, the paradox is resolved by several key factors within our observable universe:\n\n1. **Finite Age of the Universe**: The universe is not eternal but has a finite age of approximately 13.8 billion years. This means that there isn\u2019t time for light from objects beyond a certain distance (known as the cosmological event horizon) to reach us yet.\n\n2. **Expansion of the Universe**: As the universe expands, it is cooling down. The expansion also causes the wavelength of light from distant objects to be shifted towards longer wavelengths (redshift). For sufficiently distant objects, this can shift their light into the infrared or microwave portions of the electromagnetic spectrum, which may make the light less visible to the human eye.\n\n3. **Absorption by Gas and Dust**: As light travels through interstellar and intergalactic space, it can be absorbed by dust and gas particles. This absorption limits how far we can see light sources, further contributing to the darkness of the night sky.\n\n4. **Finite Number of Stars**: Although the number of stars seems enormous from our perspective, they are distributed unevenly throughout the universe, and some stars have finite lifespans, leading to an evolving cosmos where stars are continuously forming and extinguishing over time.\n\n5. **Cosmic Dark Ages**: Before the first stars and galaxies formed, the universe was nearly dark. The first stars and luminous objects in the universe began to shine around 100-200 million years after the Big Bang, a period known as reionization. Before that, the universe was so dense and filled with hydrogen and helium that light could not travel freely.\n\nThese factors collectively explain why the night sky appears dark to us from the vantage point of Earth, despite the seemingly infinite number of stars in the known universe.",
+   "detection": {
+    "score": 461.2314841468791,
+    "p_value": 0.40825845465217514,
+    "num_scored_tokens": 457,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 2,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Compound interest is a powerful financial concept that can significantly grow your savings over time, allowing small, regular contributions to build up into a substantial amount of money. This growth occurs because not only do you earn interest on your initial principal, but you also earn interest on the interest you've already earned in previous periods.\n\n### How Compound Interest Works\n\n1. **Initial Investment:**\n   - You start with an initial amount of money, often considered as your principal.\n   - This principal earns interest over time.\n\n2. **Interest Earnings:**\n   - After each period (e.g., monthly, yearly), the interest earned is added to the principal.\n   - In the next period, you earn interest on this new total, which includes both the original principal and the previously earned interest.\n\n3. **Mathematical Example:**\n   - Let's say you invest $1,000 at an annual interest rate of 5%, compounded annually.\n   - After one year, you earn $50 in interest (5% of $1,000).\n   - At the end of the second year, you earn 5% on $1,050 ($52.50), and this process continues.\n\n### The Power of Compound Interest Over Decades\n\n- **Example with Small Regular Contributions:**\n  - Suppose you deposit $200 every month into a savings account with a 5% annual interest rate, compounded monthly.\n  - Without compounding, after 40 years, you would have saved $80,000 ($200 x 12 months x 40 years).\n  - But with compound interest, the final amount accumulated would be much higher:\n    \\[\n    FV = P \\times \\left( \\frac{(1 + r)^{n} - 1}{r} \\right)\n    \\]\n    Where:\n    - \\(FV\\) is the future value of the investment,\n    - \\(P\\) is the monthly contribution ($200),\n    - \\(r\\) is the monthly interest rate (\\(5\\%/12 = 0.004167\\)),\n    - \\(n\\) is the number of contributions (12 months/year * 40 years = 480).\n\n    Plugging in these values:\n    \\[\n    FV \\approx 200 \\times \\left( \\frac{(1 + 0.004167)^{4",
+   "detection": {
+    "score": 615.4496125132063,
+    "p_value": 2.20335735006039e-10,
+    "num_scored_tokens": 481,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 2,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Compound interest is a powerful financial concept that allows small, regular savings to grow into substantial wealth over time, especially when given enough time to work its magic. This happens because compound interest is calculated on the initial principal and also on the accumulated interest of previous periods.\n\nLet's break this down with an example:\n\n### Initial Setup:\n- **Principal (P):** Suppose you start with $100 saved in an account.\n- **Interest Rate (r):** Let's assume an annual interest rate of 5%.\n- **Time (t):** We'll look at the effect after 20 years.\n\n### Formula for Compound Interest:\nThe amount \\( A \\) in an account after \\( t \\) years, with an initial investment \\( P \\) that earns annual interest rate \\( r \\), compounded annually, is given by the formula:\n\\[ A = P (1 + r)^t \\]\n\n### Example Calculation:\nFor our example with \\( P = \\$100 \\), \\( r = 0.05 \\), and \\( t = 20 \\) years:\n\\[ A = 100 \\times (1 + 0.05)^{20} \\]\n\\[ A = 100 \\times (1.05)^{20} \\]\n\nCalculating \\( (1.05)^{20} \\):\n\\[ (1.05)^{20} \\approx 2.653 \\]\n\nSo,\n\\[ A \\approx 100 \\times 2.653 = \\$265.30 \\]\n\nThis means that initially saving $100 would grow to approximately $265.30 after 20 years at a 5% annual interest rate, purely from the power of compounding.\n\n### Impact of Regular Savings:\nIf you were to save a small amount regularly, say $10 per month at the same 5% interest rate, the total contributions over 20 years would be:\n\\[ \\$10 \\times 12 \\times 20 = \\$2400 \\]\n\nBut due to compound interest, these monthly contributions grow significantly:\n- **Monthly Contribution:** \\$10\n- **Total Contributions (including monthly interest):** $2400 plus interest\n\nAfter 20 years, with regular monthly contributions:\n\\[ A = P(1 + r/n)^{nt} - 1 / (1 + r/n) - ",
+   "detection": {
+    "score": 441.9506661397062,
+    "p_value": 0.7799296554818551,
+    "num_scored_tokens": 457,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 3,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Certainly! Weather and climate are closely related but distinct concepts in meteorology and climatology. Understanding differences between them is crucial for grasping how temperature changes can be interpreted.\n\n### Weather vs. Climate\n\n1. **Weather**: \n   - **Definition**: Weather refers to short-term atmospheric conditions such as temperature, humidity, wind, precipitation, and other phenomena at a specific time and place.\n   - **Duration**: It typically describes conditions over an interval ranging from minutes to days or weeks.\n   - **Examples**: A sunny day, a rainy spell, a snowstorm, or a cold snap.\n\n2. **Climate**:\n   - **Definition**: Climate encompasses the long-term average of weather patterns and conditions over decades or longer in a given area.\n   - **Duration**: It involves averaging weather data over periods from months to many years.\n   - **Examples**: Annual temperature ranges, typical rainfall levels, and seasonal variations.\n\n### Why One Unusually Cold Winter Doesn't Disprove Long-Term Warming\n\nThe concept of long-term warming (often associated with global warming) is based on trends observed over many decades and the accumulation of greenhouse gases like carbon dioxide in the atmosphere. Here\u2019s why one unusually cold winter wouldn\u2019t disprove such long-term trends:\n\n1. **Natural Variability**: Weather patterns are inherently variable and can produce cold winters even when overall global temperatures are trending upward. Natural factors such as solar cycles, volcanic eruptions, and natural climate variability contribute to these short-term variations.\n\n2. **Decadal Trends vs. Anomalies**: Short-term weather extremes do not negate the larger, longer-term climate trends. While individual weather events can be extreme, the trend line of average global surface temperatures has been steadily increasing over multiple decades due to rising concentrations of greenhouse gases.\n\n3. **Global vs. Local Effects**: Climate change refers to global trends. A single location or region might experience colder-than-average conditions, while the rest of the world may still exhibit warmer-than-average conditions. Conversely, even if a given season or year is relatively cold, it does not mean the overall warming trend has halted.\n\n4. **Scientific Consensus**: Hundreds of thousands of climate observations and numerous studies support the conclusion that Earth\u2019s average surface temperature has risen over the past century, primarily due to human activities such as burning fossil fuels and deforestation.\n\nIn summary, while unusually cold winters occur within the realm of natural variability, the overarching warming trend can still be accurately described by examining long-term climate data. Scientific consensus on global warming is supported by rigorous",
+   "detection": {
+    "score": 812.7122530793248,
+    "p_value": 4.842227432057631e-39,
+    "num_scored_tokens": 501,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 3,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Certainly! Understanding the distinction between weather and climate is fundamental to appreciating how Earth's climate systems function over time.\n\n### Weather vs. Climate\n\n1. **Weather**:\n   - **Definition**: Weather refers to the short-term atmospheric conditions in a specific place at a particular moment in time. It can change from hour to hour, day to day, or week to week.\n   - **Examples**: A sudden thunderstorm, a heatwave, or an unusually cool winter season.\n   - **Time Scale**: Typically measured over days, weeks, or even months.\n\n2. **Climate**:\n   - **Definition**: Climate refers to the long-term average pattern of weather in a region or on a global scale. It is determined by long-term trends, which include temperature, humidity, wind patterns, and other atmospheric factors over decades or longer.\n   - **Examples**: The average temperature and rainfall over a period of 30 years or more.\n   - **Time Scale**: Generally, data collected over at least 30 years are used to define climate.\n\n### Why an Unusually Cold Winter Doesn't Disprove Long-Term Warming\n\nThe concept of climate change is observed through long-term trends rather than isolated events. Here\u2019s why:\n\n1. **Natural Variability**:\n   - Weather patterns can cause fluctuations that temporarily appear to counter the trend of increasing temperatures. For example, natural climate oscillations (such as El Ni\u00f1o) can lead to cooler-than-average winters in certain regions, which does not negate the overall warming trend.\n\n2. **Global vs. Local Patterns**:\n   - While global warming causes an increase in the Earth's average temperature, local weather events can still vary widely and sometimes result in colder-than-average conditions in specific areas. This is because climate is affected by many different factors including local geography, ocean currents, and atmospheric circulation patterns.\n\n3. **Long-Term Data Trends**:\n   - Scientists look at temperature records over multiple decades to identify long-term trends. Even though some years might see cooler-than-expected temperatures due to various factors like volcanic eruptions or La Ni\u00f1a events, the overall trend toward increasing global temperatures remains evident when considered over a much broader timescale.\n\n4. **Scientific Consensus**:\n   - The overwhelming majority of scientific evidence supports anthropogenic (human-caused) global warming. Thousands of scientists have published studies corroborating this view, based on extensive data from weather stations, satellites, sea-level measurements, and polar ice melting rates, among others.\n\nIn summary, while",
+   "detection": {
+    "score": 510.64854078429363,
+    "p_value": 0.20281161136004575,
+    "num_scored_tokens": 494,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 4,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "In a common-law system, the process of a criminal trial moves from arrest through several stages before reaching a verdict. Here\u2019s an overview of the key steps involved:\n\n1. **Investigation**: Before a suspect is arrested, law enforcement conducts an investigation to gather evidence that supports probable cause. This can include interviews, searches, and the gathering of physical evidence.\n\n2. **Arrest**: If sufficient evidence has been gathered, law enforcement will make an arrest. The defendant is taken into custody, often read their Miranda rights (right to remain silent, right to an attorney, etc.), and booked at a local jail or police station.\n\n3. **Initial Appearance**: Within a specified time frame (usually 24-48 hours), the suspect must appear in court for an initial appearances. At this stage, the judge may decide whether to set bail and determine whether there is enough evidence to justify holding the defendant without bail. The defendant will also be formally advised of the charges against them.\n\n4. **arraignment**: At the arraignment, the charges are formally presented to the defendant, who then enters a plea of guilty, not guilty, or nolo contendere (no contest). If the defendant pleads not guilty, the case proceeds to trial.\n\n5. **Plea Bargaining**: Many cases are resolved not at trial but through plea bargaining, where the defendant agrees to plead guilty or no contest to lesser charges or to have a recommended sentence. This step saves time and resources for both the prosecution and defense, as well as the court system. However, if a plea deal is not reached, the trial proceeds.\n\n6. **Pretrial motions**: Both the defense and prosecution may file various motions to challenge evidence, procedures, or other aspects of the case before it goes to trial. These motions can be related to discovery, jurisdiction, admissibility of evidence, and more.\n\n7. **Trial Proceedings**:\n   - **Voir Dire**: Potential jurors are questioned by the judge and attorneys to determine if they will be fair and impartial.\n   - **Opening statements**: Attorneys for both sides provide an introduction to the case and summarize their expected evidence or arguments.\n   - **Presentation of evidence**: The prosecution presents its case first, followed by the defense. Each side may call witnesses to testify and introduce physical evidence.\n   - **Cross-examination**: After direct examination, the opposing side may cross-examine witnesses regarding their testimony.\n   - **Closing arguments**: Attorneys summarize and conclude their cases, emphasizing points made during the",
+   "detection": {
+    "score": 753.0646239409341,
+    "p_value": 7.101225629787279e-26,
+    "num_scored_tokens": 509,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 4,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "In a common-law system, the process of handling a criminal case typically follows these steps from arrest to verdict:\n\n1. **Arrest**: A person is arrested when a police officer or other authorized individual has probable cause to believe that the person has committed a crime. After an arrest, the detainee is taken into custody and is usually brought before a magistrate or judge.\n\n2. **Arraignment**: At the initial arraignment, the suspect appears before a judge. The judge will read the charges against the defendant, and the defendant is given the opportunity to enter a plea\u2014guilty, not guilty, or no contest (nolo contendere). If the defendant cannot afford an attorney, one will be appointed by the court.\n\n3. **Bail Hearing**: In most cases, a bail hearing follows the initial arraignment. Here, the judge determines whether the defendant can be released on bail, considering factors such as the nature of the crime, the defendant's ties to the community, and the likelihood that they will commit another crime if released.\n\n4. **Pre-Trial Proceedings**: Before the trial begins, there are several key proceedings that occur:\n   - **Discovery**: Both the prosecution and the defense exchange information about the case, including witness statements, evidence, and relevant documents.\n   - **Motions**: Either party may file motions with the court, seeking rulings on issues such as the admissibility of evidence, dismissal of charges, or suppression of evidence.\n   - **Preliminary Hearings**: If applicable, these hearings determine whether there is enough evidence to justify the case going to trial. In jurisdictions without grand juries, preliminary hearings can help decide if an indictment should proceed.\n\n5. **Plea Bargaining**: Often, many cases do not go to trial and are instead resolved through plea bargaining. The defense and prosecution negotiate terms for the defendant to plead guilty to certain charges, which often involves a reduced sentence or lesser charges.\n\n6. **Trial**: If the defendant pleads not guilty or if a plea deal is not reached, the case proceeds to trial. During the trial, both sides present evidence and testimony. The jury (or sometimes a judge, in non-jury trials) listens to the arguments and decides whether the prosecution has proven the defendant's guilt beyond a reasonable doubt.\n\n7. **Verdict**: After deliberation, the jury (if there is one) or the judge delivers a verdict. In a jury trial, at least 12 jurors must agree to find the defendant guilty or not",
+   "detection": {
+    "score": 509.34939764954504,
+    "p_value": 0.4878432288536797,
+    "num_scored_tokens": 509,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 5,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "The conductivity of metals is primarily determined by the ability of electrons to move freely through the material's atomic lattice. Here\u2019s an in-depth explanation of why certain metals conduct electricity better than others:\n\n### 1. **Metallic Bonding**\nMetals conduct electricity because they possess a delocalized sea of electrons, which means that the valence electrons are shared and can move throughout the metal's structure. This phenomenon is a hallmark of metallic bonding.\n\n### 2. **Electron Density**\n- **Free Electrons**: The concentration and mobility of these free electrons significantly influence electrical conductivity. Metals with more free electrons tend to have higher electrical conductivity.\n- For example, silver has about 5.9 free electrons per atom, while copper has around 2.5, indicating silver conducts better than copper due to its higher electron density.\n\n### 3. **Crystal Structure**\n- **Closer Packing of Atoms**: Metals with a close-packed atomic structure often provide better pathways for electron movement. Copper and aluminum both have face-centered cubic (FCC) structures, but aluminum atoms are larger, leaving less space between them, which slightly reduces aluminum's conductivity compared to copper. Silver also has an FCC structure and is highly conductive due to its free electron sea.\n\n### 4. **Types of Metals**\n- **Inert Metals**: Noble metals like gold, silver, copper, and platinum are known for their high conductivity. This is due to their outer d-orbital electrons being able to delocalize easily.\n- **Transition Metals**: These elements also generally have high conductivity because their d-electrons are mobile.\n- **Non-ferrous Metals**: Metals like aluminum and copper, although not transition metals, still benefit from a large number of free electrons and a suitable crystal structure for good conductivity.\n- **Ferromagnetic Metals**: Iron and nickel conduct electricity relatively well due to their partially filled d-orbitals facilitating electron flow.\n\n### 5. **Impurities and Defects**\n- **Pure vs. Alloyed Metals**: Pure metals generally conduct better than alloyed ones because impurities tend to create localized defects in the crystal lattice, which can impede electron flow.\n- **Temperature Effects**: Lower temperatures typically reduce electrical resistance by minimizing phonon-electron interactions that can scatter free electrons. However, at extremely low temperatures, some metals exhibit superconductivity, where electrical resistance drops to zero due to quantum effects.\n\n### 6. **Work Function and Fermi Energy**\n- **High Work Function Metals**: Metals with a",
+   "detection": {
+    "score": 824.3477350476669,
+    "p_value": 1.3678807016751243e-38,
+    "num_scored_tokens": 512,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 5,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 473,
+   "finish_reason": "stop",
+   "text": "The electrical conductivity of metals primarily depends on the number and mobility of electrons they can provide for conduction. Here are some key factors that influence electrical conductivity in metals:\n\n1. **Electron Configuration**: Metals are characterized by having their outer valence electrons relatively loosely bound to their atomic nuclei. This allows these electrons to move freely throughout the metal lattice, enabling the movement of electric current. The more loosely held these electrons are, the better the conductivity.\n\n2. **Crystal Structure**: The arrangement of the atoms in the metal's crystal structure affects how electrons can move through the material. For example, metals with simple cubic or body-centered cubic structures tend to have higher resistivity compared to face-centered cubic structures like copper and silver. This is because the path for electron flow is more direct and less obstructed in the more tightly packed face-centered cubic structures.\n\n3. **Impurities**: Metals that contain impurities, such as other elements or small amounts of different metals, will generally have reduced conductivity. Impurities can create barriers for electron flow and disrupt the regular movement of electrons through the lattice.\n\n4. **Temperature**: The conductivity of most metals decreases as temperature increases. This is because increasing temperature provides more energy for thermal vibrations in the lattice, which can hinder the flow of electrons. However, at very low temperatures, some metals (like mercury and silver) exhibit significant changes in electronic structure that can actually increase conductivity.\n\n5. **Metallic Bonding**: Metals form metallic bonds, where valence electrons are free to move throughout the lattice, forming what is often called a \"sea of electrons.\" Different metals vary in the extent to which they can delocalize their electrons, with metals like silver and copper having excellent delocalization and thus high conductivity.\n\n6. **Free Electron Density**: The number of available free electrons per unit volume significantly affects the conductivity. For example, in copper, there are approximately 8.5 x 10^28 free electrons per cubic meter, which is one of the highest values among common metals. This high density of free electrons contributes greatly to its good conductivity.\n\nIn summary, metals differing in their atomic structure, composition, and electronic configuration will conduct electricity differently. Materials with more loosely bound electrons and fewer barriers to electron flow will exhibit greater conductivity. This explains why some metals conduct electricity so much better than others.",
+   "detection": {
+    "score": 432.4638217304493,
+    "p_value": 0.9712667419066207,
+    "num_scored_tokens": 469,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 6,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Search engines use complex algorithms to determine which web pages should be shown for a given query and in what order they should appear. These algorithms consider multiple factors to assess the relevance, quality, and authority of each page. Here's an overview of the key processes involved:\n\n1. ** Crawling and Indexing:**\n   - **Crawling:** Search engine bots (also known as spiders or crawlers) traverse the web, following links from one page to another, visiting millions of new pages daily.\n   - **Indexing:** Once crawled, these pages are stored in a massive database called the index. The size of this index is a testament to the vast amount of information available on the internet.\n\n2. ** Understanding Queries:**\n   - Search engines use natural language processing techniques to understand the intent behind the user\u2019s query. This involves parsing words, identifying entities, context, and meaning.\n\n3. ** Evaluating Relevance:**\n   - **Keyword Presence:** While keyword presence is still a factor, it has become more nuanced. Exact matches are no longer the only criterion; rather, search engines look at the context and relevance.\n   - **Content Quality:** The quality, originality, and recency of the content are important. This includes checking for duplicate content and the overall readability of the text.\n   - **Page Structure:** Factors like headings, subheadings, tables of contents, and bullet points help search engines understand the structure of the page, making it easier to determine its relevance to the query.\n\n4. ** Assessing Authority and Trust:**\n   - **Backlinks:** The number and quality of backlinks pointing to a web page can significantly influence its ranking. High-quality, authoritative websites provide stronger backlinks.\n   - **Domain Authority:** The overall authority of a website or domain plays a role. This often depends on the website's age, traffic, engagement, and reputation.\n   - **Page-specific Metrics:** Page authority, content freshness, and user engagement metrics also contribute to a page\u2019s rating.\n\n5. ** User Experience Factors:**\n   - **Load Speed:** Faster-loading pages provide a better user experience and tend to rank higher.\n   - **Mobile Friendliness:** Since mobile searches have become predominant, ensuring that pages are optimized for mobile devices is crucial.\n   - **User Navigation and Interaction:** Factors like bounce rates, click-through rates, and time spent on the site can indicate if users find the content relevant and engaging.\n\n6. ** Personalization and Local Results:**\n   - Search results may be",
+   "detection": {
+    "score": 714.0349177998355,
+    "p_value": 6.295725916069754e-22,
+    "num_scored_tokens": 496,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 6,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Search engines use complex algorithms to determine the most relevant and high-quality web pages to display in response to a user's query. These algorithms typically take into account a variety of factors, including but not limited to:\n\n1. **Relevance**: This involves matching the content of a page to the words (and sometimes phrases) entered in the search query. Search engines analyze the text on a webpage, its metadata, and other elements like headings and alternative text in images to gauge relevance.\n\n2. **Page Quality**: Factors such as the quality and depth of content, whether it provides value to users, and if it appears to be written by credible sources can all affect a page\u2019s ranking.\n\n3. **Authoritativeness**: Search engines consider the authority of the website, often determined by the authority and number of sites that link back to it, a concept known as backlinks. Pages from well-known, reputable websites tend to rank higher since they are seen as authoritative sources.\n\n4. **Popularity/Click-Through Rate (CTR)**: Higher engagement with a webpage, meaning more clicks or visits from search results, can positively influence its ranking as search engines may see this as a signal of relevance and satisfaction.\n\n5. **User Experience (UX)**: The design and usability of a page contribute to its ranking. Factors like site speed, mobile-friendliness, and whether navigation is easy can all impact how well a website ranks.\n\n6. **Freshness/Recency**: Some search engines also consider how recently content was published or updated. New content might be given preference over outdated information for certain queries.\n\n7. **Technical SEO**: Technical aspects like secure HTTPS connections, correct use of meta tags and alt text, well-structured URLs, and proper handling of robots.txt and sitemaps are important for a good user experience and can affect rankings.\n\n8. **Local vs. Global Relevance**: For local search queries, geographical data plays a significant role. Websites relevant to a specific area or region will be prioritized based on their location and the user's location.\n\n9. **Content Diversity and Uniqueness**: Original or unique content that offers valuable insights is preferred over duplicate or recycled content. This helps reduce the prevalence of low-quality or spammy sites.\n\n10. **Evolving User Intent**: As users' needs change, so do the factors that affect rankings. For example, users now frequently look for voice search results, interactive content, and videos, which can impact the type of content favored by search engines.\n\nSearch engines continuously update",
+   "detection": {
+    "score": 522.162183273586,
+    "p_value": 0.3064167804912072,
+    "num_scored_tokens": 512,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 7,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Yeast is a crucial component in the baking process, playing a key role in making bread dough rise and contributing significantly to the final texture of the loaf. Here's a detailed explanation of how this happens:\n\n### The Role of Yeast in Rising Dough\n\n#### 1. **Glycolysis and Fermentation**\n   - **Yeast cells** consume sugars present in the flour to produce energy through glycolysis.\n   - During fermentation, yeast converts these sugars into carbon dioxide (CO\u2082) gas and ethanol.\n\n#### 2. **Production of CO\u2082 Gas**\n   - As yeast metabolizes the sugars, it releases bubbles of CO\u2082 gas.\n   - These gas bubbles get trapped within the gluten network of the dough, causing it to puff up or rise.\n\n#### 3. **Oxidation of Ethanol (Optional Step)**\n   - Under certain conditions, some of the produced ethanol can be further oxidized by enzymes in the dough to form acetic acid, which contributes to the development of flavor and aroma, but primarily does not add significant volume.\n\n### Texture Changes Due to Yeast-Rising\n\n#### 1. **Increased Volume**\n   - The carbon dioxide gas expands when heated, leading to an open-cell structure in the dough that provides a light, airy crumb when baked.\n\n#### 2. **Improved Texture**\n   - The CO\u2082 gas forms small air pockets in the dough, giving the finished loaf a more tender and softer crumb compared to unleavened bread like flatbreads.\n   - The gluten network is stretched and formed during rising, setting the stage for an elastic and chewy texture in the finished loaf.\n\n#### 3. **Development of Flavor and Aroma**\n   - Not only does yeast contribute to the structure of the bread, but it also enhances the flavor. The process of fermentation creates subtle notes of yeasty aroma, which are characteristic of fresh-baked bread.\n\n#### 4. **Formation of Crust**\n   - When the loaf is baked, the gases expand even more due to heat, and upon cooling, the gas dissipates, leaving behind a network of tiny holes \u2013 the crumb. This helps to develop a crust with good texture and a pleasant mouthfeel, being crisp on the outside yet soft within.\n\n### Practical Considerations\n\n- **Yeast Type**: Different yeasts can have varying effects on texture. Active dry yeast typically gives a more structured crumb with less spread, while instant yeast can result in a fluffier, more open cr",
+   "detection": {
+    "score": 824.1358116026606,
+    "p_value": 3.871805325222686e-41,
+    "num_scored_tokens": 502,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 7,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Yeast is a single-celled microorganism that plays a crucial role in the bread-making process. When yeast is added to flour, water, and other ingredients to make bread dough, it undergoes a process called fermentation. This process is responsible for making the dough rise and significantly changing its texture.\n\n### Why Yeast Makes Bread Dough Rise\n\n1. **Fermentation:** When yeast consumes sugar from the dough, it metabolizes it through a process called anaerobic respiration, producing carbon dioxide (CO2) gas and ethanol. In bread making, the alcohol is typically not consumed as it evaporates during baking.\n\n2. **CO2 Production:** As yeast ferments, it generates CO2, which forms bubbles within the dough. These bubbles expand when heated and allow the dough to rise. The CO2 gas creates a foamy network throughout the dough, causing it to become airy and lighter in texture.\n\n3. **Sourdough vs. Commercial Yeast:** Traditional sourdoughs use wild yeast and lactic acid bacteria, while commercial bread often relies on baker\u2019s yeast. Sourdough takes longer to rise due to the slower fermentation process by wild yeasts. However, both processes yield the same result in terms of rising bread.\n\n### Changes in Texture\n\nAs the dough rises, several changes occur that affect the final texture of the bread:\n\n1. **Airspace Creation:** The formation of CO2 bubbles provides the dough with an airy structure. This results in a lighter, more open crumb texture in the baked loaf.\n\n2. **Water Content Redistribution:** Rising causes the water in the dough to be better distributed. The gluten network stretches and becomes more elastic, allowing the dough to rise without breaking apart.\n\n3. **Gluten Development:** During proofing (the rising phase), gluten networks continue to develop. This development is essential for creating the proper structure that holds in gases and gives the bread its characteristic elasticity and chewiness.\n\n4. **Moisture Absorption:** Yeast fermentation also involves the production of enzymes that promote the breakdown of starches into sugars and the absorption of moisture. This process contributes to the even distribution of moisture, leading to a more consistent texture throughout the loaf.\n\n5. **Final Product:** After baking, the yeast\u2019s activity ceases, and the bread stabilizes. The gases released expand the dough, leading to a soft, fluffy, and open crumb structure. The crust will have a nice texture, being crispy on the outside and tender on the inside, depending on how",
+   "detection": {
+    "score": 504.74686547652567,
+    "p_value": 0.5581704937648193,
+    "num_scored_tokens": 508,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 8,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Tectonic plates, which are massive sections of the Earth's lithosphere (the rigid outer layer consisting of the crust and upper mantle), move over the asthenosphere (the more plastic layer beneath the lithosphere) due to various forces. These movements can be explained through several key processes:\n\n1. **Convection Currents in the Mantle**:\n   - The convection currents in the Earth\u2019s mantle, driven by the heat from the planet's core, cause the tectonic plates to move. As hot material rises towards the surface, cools, and then sinks back down again, it creates a circular or convection current pattern within the mantle.\n   \n2. **Magnetic Field Influence**:\n   - Early Earth scientists theorized that the magnetic fields of tectonic movements could influence plate motion. While this theory is less prominent now, magnetic striping on ocean floors does indicate patterns related to past plate movements.\n\n3. **Slab Pull and Ridge Push**:\n   - The leading edge of one plate is often subducted or pushed under another plate at a convergent boundary. This process, called slab pull, can drag the plate along the subduction zone, causing the plate to move.\n   - At divergent boundaries, where plates are moving apart, new crust is formed through volcanic activity. This process, known as ridge push, also contributes to the movement of tectonic plates apart from each other.\n\n4. **Friction Between Plates**:\n   - As tectonic plates move, friction at the boundaries can cause stress to build up along fault lines. This stress accumulation is what ultimately leads to earthquakes.\n\n5. **Earthquakes Occurring Along Fault Lines**:\n   - Faults are breaks in the Earth's crust along which blocks of rock can slide past one another. When stress along a fault builds up to a certain point due to the movement of tectonic plates, it causes the rocks on either side to suddenly break and shift. This rapid release of energy during such an event results in an earthquake.\n   - Fault lines can be categorized based on fault types: normal faults (where the blocks move vertically), reverse faults (where the blocks move horizontally toward each other), and strike-slip faults (where the blocks move horizontally past each other).\n\n6. **Examples of Major Tectonic Plate Movements**:\n   - The Pacific Ring of Fire is an area with many active volcanoes and frequent earthquakes as a result of tectonic activity.\n   - The San Andreas Fault in California,",
+   "detection": {
+    "score": 711.955963233204,
+    "p_value": 2.2415818717213323e-23,
+    "num_scored_tokens": 487,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 8,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Tectonic plate movement is driven by a combination of processes within the Earth's mantle, which is the layer lying beneath the crust. The mantle is partially molten, allowing convection currents to form due to heat from the Earth's core. These currents push against the overlying lithosphere (the rigid outer part of the Earth), which is divided into several large and small rigid segments known as tectonic plates.\n\n### Mechanisms of Plate Movement:\n1. **Divergent Plates**: At mid-ocean ridges, two plates move apart from each other. As they separate, magma rises up through cracks and cools on the seafloor, creating new crust. This process is called divergent spreading.\n2. **Convergent Plates**: When plates collide, one may be forced underneath another. This is often seen at subduction zones, where the denser oceanic plate forces its way down into the mantle. On the other hand, continental plates may collide more directly and form mountain ranges.\n3. **Transform Plates**: In some areas, plates slide past each other horizontally in a process known as strike-slip movement. The San Andreas Fault in California is a prime example.\n\n### Fault Lines and Earthquakes:\nFault lines are fractures or discontinuities in the Earth's crust where blocks of rock on either side have moved relative to each other. They are commonly found at plate boundaries where stress accumulates as tectonic plates move.\n\n**Stress Accumulation and Release**:\n- **Strain and Stress**: As plates move, they create deformation within the crust (strain), and this strain translates into stress on the rocks. Over time, stress builds up within the rocks along the fault line.\n- **Seismic Waves**: When the built-up stress exceeds the strength of the rocks, there is a sudden release of energy, sending out seismic waves that cause shaking at the surface\u2014this is an earthquake.\n\n### Types of Faults:\n- **Normal Faults**: One block of rock drops relative to the other. These are typically found in extensional environments like rift valleys.\n- **Reverse (Thrust) Faults**: One block of rock is pushed over another, which happens in compressional environments.\n- **Strike-Slip Faults**: Rocks on either side of the fault slip past each other horizontally. The San Andreas Fault is a well-known example of this type.\n\n### Examples and Impact:\n- **Ring of Fire**: About 80% of the world's active volcanoes and many of its earthquakes occur along",
+   "detection": {
+    "score": 492.97509010667136,
+    "p_value": 0.6856128183389305,
+    "num_scored_tokens": 503,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 9,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Astronomers have indeed developed sophisticated methods to detect and study black holes despite the fact that they do not emit light on their own. This is achieved through observing the effects of black holes on their surroundings and by using various types of radiation that can be emitted from matter in close proximity to a black hole. Here are some key methods used by astronomers:\n\n1. **Gravitational Lensing**: Although black holes themselves do not emit light, their immense gravitational pull can bend the paths of light rays traveling nearby. Astronomers can observe this effect, known as gravitational lensing, where light from more distant stars or galaxies is bent around the black hole, creating an unusual appearance of the background objects.\n\n2. **Accretion Discs**: As matter falls into a black hole, particles of gas and dust form a disk around it called an accretion disc. The intense heat generated by friction and gravitational compression in these discs causes them to emit X-rays, visible light, and other forms of electromagnetic radiation. By studying the brightness and patterns of these emissions, researchers can infer the presence and properties of the black hole at the center of the accretion disc.\n\n3. **Star Orbits**: Observations of the orbits of stars and gas clouds near supermassive black holes within galaxies can also indicate the presence of a black hole. The motion of these objects can reveal the gravitational influence of a massive, compact object, suggesting the existence of a black hole.\n\n4. **Emission Jets and Winds**: Some black holes, especially those in active galactic nuclei (AGN), are associated with powerful jets of particles ejected at high speeds along the black hole's rotational axis. These jets emit significant amounts of radio waves and other forms of electromagnetic radiation. By detecting and studying these emission jets, astronomers can locate and characterize black holes.\n\n5. **Stellar Interactions**: When stars come within a certain distance of a black hole, tidal forces exerted by the black hole can cause the star to stretch and potentially disrupt it, leading to phenomena like a tidal disruption event. The aftermath of such an event can provide clear evidence of the presence of a black hole.\n\n6. **Gravitational Waves**: In addition to observing light and other electromagnetic radiation, the detection of gravitational waves\u2014ripples in spacetime caused by some of the most violent and energetic processes in the Universe\u2014is another method astronomers use to identify black holes. Black holes merging or colliding generate these waves, which were first directly detected by LIGO and Virgo in 20",
+   "detection": {
+    "score": 737.2252349623893,
+    "p_value": 4.5419321655484736e-26,
+    "num_scored_tokens": 495,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 9,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Astronomers can detect black holes using several indirect methods, since black holes are indeed regions in space from which nothing escapes, not even light, as per their defining property. Here are some key ways they do so:\n\n1. **Accretion Disk Emission:**\n   - Black holes often have matter falling into them, which forms an accretion disk. As the material in these disks is heated to very high temperatures (due to friction and compression), they emit X-rays, gamma rays, and other forms of radiation. By detecting this radiation, astronomers can infer the presence of a black hole.\n\n2. **Gravitational Lensing:**\n   - The immense gravitational pull of a black hole can bend the path of light passing nearby, much like a lens bends light. This phenomenon, known as gravitational lensing, can be observed to indicate the presence of a black hole.\n\n3. ** Stellar Orbits:**\n   - If there is a star orbiting a point in space, but the light from the star does not reveal any massive object, it could suggest the presence of an invisible object with significant mass, likely a black hole. Scientists use the observed motion of stars or other objects to infer the existence of a black hole.\n\n4. **Polarization of Light:**\n   - When light passes near a black hole, it can experience strong gravitational lensing and also get polarized. By observing changes in the polarization of light coming from distant celestial objects, astronomers can sometimes map out the presence of a black hole.\n\n5. **Hawking Radiation (for hypothetical microblack holes):**\n   - Although theoretically, black holes can emit a form of radiation known as Hawking radiation, this is incredibly weak for even the most massive black holes and has only been observed indirectly via calculations and theoretical models. Currently, this method is more speculative and applies mainly to hypothetical micro-black holes.\n\n6. **Gravitational Waves:**\n   - Black holes can collide with each other, merging to form a single black hole or releasing gravitational waves in the process. These gravity waves can be detected by instruments on Earth like LIGO (Laser Interferometer Gravitational-Wave Observatory) and Virgo, which allow us to observe and study the events that lead to black hole mergers.\n\n7. **Absence of Stars:**\n   - In some cases, the absence of stars that should be present in certain regions of a galaxy suggests the presence of a supermassive black hole at the center, since the black hole",
+   "detection": {
+    "score": 467.74421833272845,
+    "p_value": 0.8778170650163598,
+    "num_scored_tokens": 491,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 10,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 491,
+   "finish_reason": "stop",
+   "text": "Antibiotic resistance can spread very quickly in hospital settings due to several key factors:\n\n1. **High Concentration of Pathogens**: Hospitals typically house individuals who are already sick and may be harboring various pathogens. This high density of microbial organisms creates an environment where resistant strains can thrive.\n\n2. **Proximity of Patients**: In a hospital, patients often have limited mobility and share common areas such as rooms and facilities, including toilets, sinks, and medical equipment. This proximity facilitates the transmission of bacteria from one person to another.\n\n3. **Immunocompromised Patients**: Many hospitalized patients have weakened immune systems due to their underlying health conditions or treatments (such as chemotherapy or organ transplants). These patients are more susceptible to infections, making them more likely to acquire antibiotic-resistant bacteria.\n\n4. **Overuse and Misuse of Antibiotics**: Hospitals frequently administer antibiotics to treat and prevent infections, but overuse can lead to the selection and proliferation of antibiotic-resistant strains. Additionally, if antibiotics are given inappropriately (e.g., when they are not necessary), it can also contribute to resistance.\n\n5. **Hand Hygiene Practices**: Despite the importance of hand hygiene, not all healthcare workers adhere properly to hand washing protocols. Contaminated hands can easily spread microbes, including antibiotic-resistant ones, from patient to patient.\n\n6. **Medical Equipment and Surfaces**: Medical devices like catheters, ventilators, and intravenous lines, as well as surfaces in patient rooms, can serve as reservoirs for bacteria. Poor cleaning practices or reuse of equipment that hasn't been sterilized appropriately can introduce or propagate antibiotic-resistant strains.\n\n7. **Transmission through Airborne Pathogens**: Some pathogens, like certain types of Staphylococcus aureus (including MRSA) and Mycobacterium tuberculosis, can be transmitted through the air, increasing the risk of infection among other patients.\n\n8. **Infections Among Healthcare Workers**: Healthcare workers who become infected with antibiotic-resistant bacteria can inadvertently spread these bacteria to other patients.\n\n9. **Lack of Effective Treatment Options**: Once a strain of bacteria becomes antibiotic-resistant, effective treatment options diminish, leading to longer hospital stays and increased healthcare costs, which can also put further stress on resources and potentially promote a vicious cycle of transmission.\n\nThese factors together contribute to the rapid spread of antibiotic resistance in hospital settings, necessitating stringent infection control measures and judicious use of antibiotics to mitigate this problem.",
+   "detection": {
+    "score": 737.7635740411137,
+    "p_value": 3.0300792495620794e-27,
+    "num_scored_tokens": 490,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 10,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 512,
+   "finish_reason": "length",
+   "text": "Antibiotic resistance can spread rapidly in hospital settings due to several factors, primarily related to the close proximity of patients, improper use of antibiotics, and deficiencies in infection control practices. Here\u2019s an in-depth explanation of these factors:\n\n1. **Close Proximity and High Population Density**:\n   - Hospitals house large numbers of patients, many of whom are immunocompromised due to underlying conditions or recent surgeries. This high density increases the likelihood of pathogen transmission.\n   - Patients may share similar environments like rooms or wards, increasing exposure to resistant organisms.\n\n2. **Reservoir for Resistance**:\n   - Many hospitalized patients are already carrying antibiotic-resistant bacteria acquired from previous treatments or from healthcare workers or visitors.\n   - The high prevalence of resistant pathogens makes it easier for these bacteria to spread within the hospital.\n\n3. **Improper Use of Antibiotics**:\n   - Overuse and misuse of antibiotics, such as prescribing them unnecessarily or not completing full courses, contribute to the development and spread of resistance. Bacteria that survive initial treatment with suboptimal dosing are more likely to become resistant.\n   - Misdiagnosis, incorrect antibiotic selection, or insufficient dosing schedules can also lead to the development of resistance.\n\n4. **Inadequate Infection Control Measures**:\n   - Poor hand hygiene among staff, visitors, and patients can facilitate the spread of resistant bacteria through contact.\n   - Lack of proper sterilization protocols in medical equipment and procedures, such as catheters or ventilators, can also promote the spread of resistant organisms.\n   - Failure to isolate patients with known or suspected infections can allow resistant pathogens to spread throughout the institution.\n\n5. **Patient Mobility**:\n   - Patients who require treatment for their condition often travel between different departments, which can expose them to various antibiotic-resistant organisms.\n   - This mobility can also introduce resistant bacteria into new patient populations and areas of the hospital.\n\n6. **Immunosuppressed Patient Pool**:\n   - Hospitals frequently treat patients with compromised immune systems, whether due to medical conditions, chemotherapy, organ transplants, or other treatments. These patients are more susceptible to acquiring and spreading resistant infections as their bodies have a harder time fighting off pathogens.\n\n7. **Environmental Factors**:\n   - Hospital environments provide a favorable medium for bacterial growth, partly because of frequent use of antimicrobial agents that can actually select for resistant strains over time.\n   - Surfaces and equipment can retain traces of resistant bacteria, allowing for continued contamination even after thorough cleaning.\n\n8. **Healthcare Worker Knowledge and",
+   "detection": {
+    "score": 482.8692660243903,
+    "p_value": 0.8392189953203864,
+    "num_scored_tokens": 503,
+    "is_watermarked": false
+   }
+  },
+  {
+   "arm": "watermarked",
+   "prompt_index": 11,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 400,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it aims to reduce the overall level of spending in an economy, which can help to control inflation. Here\u2019s how this process works:\n\n1. **Cost of Borrowing Increases**: When a central bank raises the interest rate, the cost for banks to borrow from the central bank increases. This increase in borrowing costs is then passed on to consumers and businesses who need to borrow money. As a result, loans become more expensive, which means that consumers and businesses will borrow less.\n\n2. **Reduces Spending and Investment**: With higher borrowing costs, consumers are likely to spend less because they have to repay more over time for their loans (like mortgages or credit cards). Similarly, businesses may be less inclined to invest in new projects or expansions because the cost of financing those projects is higher, which limits economic growth.\n\n3. **Slows Down Growth and Demand**: As spending and investment decline, the overall demand for goods and services decreases. This slower economic activity helps to curb inflationary pressure because there are fewer goods and services being bought than before.\n\n4. **Encourages Savings**: Higher interest rates also make savings more attractive because the returns on savings accounts and other interest-bearing investments increase. More people may choose to save rather than spend, further reducing overall demand.\n\n5. **Decreases Money Supply**: In some cases, a higher interest rate environment can lead to fewer people spending their money and more holding onto it as cash. This can subtly reduce the amount of money circulating in the economy, which can have a slight deflationary effect but is generally managed carefully by a central bank to avoid causing unnecessary economic harm.\n\nBy these mechanisms, a central bank's decision to raise interest rates can act as a brake on economic activity, helping to stabilize or reduce prices when inflation is getting too high. However, implementing such measures requires careful consideration, as raising interest rates too quickly or too much can stifle economic growth and lead to recession if not managed properly.",
+   "detection": {
+    "score": 609.598529994231,
+    "p_value": 1.2611805785705385e-24,
+    "num_scored_tokens": 397,
+    "is_watermarked": true
+   }
+  },
+  {
+   "arm": "opt-out",
+   "prompt_index": 11,
+   "target_length": 512,
+   "temperature": 1.0,
+   "completion_tokens": 384,
+   "finish_reason": "stop",
+   "text": "When a central bank raises interest rates, it aims to reduce spending and borrowing in the economy, which can help to control inflation. Here\u2019s a step-by-step explanation of how this works:\n\n1. **Higher Interest Rates**: When the central bank raises interest rates, it becomes more expensive for businesses and consumers to borrow money. This is because banks charge higher rates when they lend.\n\n2. **Reduced Consumer Spending**: Higher interest rates on loans, credit cards, and mortgages increase the cost of living and borrowing. As a result, consumers may choose to save more rather than spend. This reduction in spending on goods and services can lower demand in the economy.\n\n3. **Reduced Investment**: Higher interest rates also increase the opportunity cost of spending money now versus saving or investing it later. This can lead businesses to cut back on expansion plans and investment in new projects, further reducing overall spending in the economy.\n\n4. **Slowing Economic Growth**: As consumer spending and business investments decrease, the overall pace of economic growth tends to slow down. With less demand for products and services, producers might be less likely to raise prices, helping to curb inflation.\n\n5. **Impact on Inflation**: The slowdown in economic activity due to reduced spending and investment typically leads to lower inflation. When there is less demand than supply in the market, businesses have less incentive to raise prices, and existing price increases may moderate.\n\n6. **Long-term Adjustments**: Over time, as borrowing costs rise, people and businesses adjust their behaviors. This can lead to long-term changes in consumption patterns and investment strategies, which can further contribute to maintaining lower levels of inflation.\n\nIt's important to note that while raising interest rates is generally intended to combat inflation, there's no one-size-fits-all approach, and there can be various economic and social impacts. Central banks must carefully monitor economic conditions and adjust their policies accordingly to achieve balance.",
+   "detection": {
+    "score": 371.20885112692963,
+    "p_value": 0.5573137056323743,
+    "num_scored_tokens": 374,
+    "is_watermarked": false
+   }
+  }
+ ]
+}
